@@ -3,7 +3,7 @@ import React from "react";
 const LogInView = ({ onSubmit }) => {
   return (
     <div>
-      <h1>Sign up</h1>
+      <h1>Login</h1>
       <form onSubmit={onSubmit}>
         <label>
           Email
