@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Route } from "react-router-dom";
 import Home from "./Home";
 import Login from "./LogIn";
 import SignUp from "./SignUp";
-import landing from "./Landing";
+import Landing from "./Landing";
 import { BrowserRouter as Link} from "react-router-dom";
 
 
