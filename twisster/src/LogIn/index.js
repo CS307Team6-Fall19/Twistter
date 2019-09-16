@@ -3,15 +3,17 @@ import { withRouter } from "react-router";
 import app from "../base";
 
 import LogInView from "./LogInView";
-import User from '../User';
+import User from '../DataObjects/User';
 import Landing from "../Landing";
 import { BrowserRouter as Router, Route } from "react-router-dom";
+import ReactDOM from 'react-dom';
 
 const landingRoute = (props) => {
+  
   return (
       <div>
       <Route
-            exact path="/landing"
+            path="/landing"
             component={Landing}
             loggedInUser={props.email}
           />                 
@@ -19,6 +21,10 @@ const landingRoute = (props) => {
     
   );
 };
+
+const landingRender = () =>{
+  //ReactDOM.render(<landingRoute />, document.getElementById('../Landing.js'));
+}
 
 class LogInContainer extends Component {
   
@@ -41,7 +47,8 @@ class LogInContainer extends Component {
 
       console.log(this.us.email);
 
-      landingRoute(this.us);
+      /* landingRender();
+      landingRoute(this.us); */
 
       this.props.history.push("/landing");
 

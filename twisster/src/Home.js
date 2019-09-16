@@ -7,7 +7,7 @@ import { Route, Switch, Redirect } from 'react-router-dom'
 import app from "./base";
 
 import HomeView from "./Home/HomeView";
-import User from './User';
+import User from './DataObjects/User';
 import LogIn from "./LogIn";
 import SignUp from "./SignUp";
 
