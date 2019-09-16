@@ -1,10 +1,12 @@
 import React from "react";
 
-const LogInView = ({ onSubmit }) => {
+const LogInView = ({ onSubmit }) => {  
+  
   return (
     <div>
-      <h1>Login</h1>
-      <form onSubmit={onSubmit}>
+        <h1>Login</h1>
+        <form onSubmit={onSubmit}>      
+        
         <label>
           Email
           <input
