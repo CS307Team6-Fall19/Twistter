@@ -1,5 +1,14 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+## Working features
+On connecting to server, screen shows login and signup buttons.
+
+### Signup
+Can signup with email and password, then redirects to login page.
+
+### Login
+On successful login, page redirects to landing page which shows a welcome message and the user's email.
+
 ## Available Scripts
 
 In the project directory, you can run:
