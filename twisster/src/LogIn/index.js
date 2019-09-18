@@ -39,13 +39,17 @@ class LogInContainer extends Component {
     const { email, password } = event.target.elements;
     try {
 
+      //check to see if email is verified and if not prevent login
+      if (app.auth().currentUser.emailVerified == false) {
+        alert("email is not verified!");
+        return;
+      }
+
       this.user = await app
         .auth()
         .signInWithEmailAndPassword(email.value, password.value);
 
       this.us = new User(this.user);
-
-      console.log(this.us.email);
 
       /* landingRender();
       landingRoute(this.us); */

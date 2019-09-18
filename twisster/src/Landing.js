@@ -12,7 +12,16 @@ class Landing extends Component {
       if (user) {
         console.log("user is not null");
         console.log("user id: " + user.uid);
-        document.getElementById('email').innerHTML = user.email;
+
+        //set a value in firebase database
+        //firebase.database().ref().child('users').child(firebase.auth().currentUser.uid).child('UserProperties').child('email').set('test@gmail.com');
+
+        //get a value in firebase database
+        firebase.database().ref().on('value', function(snapshot) {
+          console.log(snapshot.child('users').child(firebase.auth().currentUser.uid).child('UserProperties').child('email').val());
+        })
+
+        //document.getElementById('email').innerHTML = firebase.database().ref().child('users').child
       } else {
         console.log("user is null");
       }
