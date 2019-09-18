@@ -13,15 +13,20 @@ class Landing extends Component {
         console.log("user is not null");
         console.log("user id: " + user.uid);
 
-        //set a value in firebase database
-        //firebase.database().ref().child('users').child(firebase.auth().currentUser.uid).child('UserProperties').child('email').set('test@gmail.com');
+        //set a value (erase previous values or update) in firebase database
+        firebase.database().ref().child('users').child(firebase.auth().currentUser.uid).child('followedTopics').set({'0': 'blabla'}); //erases everything and pushes new value at location
+        //firebase.database().ref().child('users').child(firebase.auth().currentUser.uid).child('followedTopics').update({'0': 'blabla'}); //updates value at location
 
-        //get a value in firebase database
-        firebase.database().ref().on('value', function(snapshot) {
-          console.log(snapshot.child('users').child(firebase.auth().currentUser.uid).child('UserProperties').child('email').val());
-        })
+        //fetch and update value in firebase database
+        app.database().ref().once('value', (snapshot) => { //.once means fetch value and do this function once
+          document.getElementById('email').innerHTML = snapshot.child('users').child(app.auth().currentUser.uid).child('email').val();
+          var test = snapshot.child('users').child(app.auth().currentUser.uid).child('followedTopics').val();
+          //test.splice(0, 1);
+          //test.push('test6');
+          //console.log(test);
+          //app.database().ref().child('users').child(app.auth().currentUser.uid).child('followedTopics').set(test);
+        });
 
-        //document.getElementById('email').innerHTML = firebase.database().ref().child('users').child
       } else {
         console.log("user is null");
       }

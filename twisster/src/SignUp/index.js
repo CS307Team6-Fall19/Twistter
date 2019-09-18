@@ -29,11 +29,10 @@ class SignUpContainer extends Component {
           alert(error);
         });
 
-        //store user email into database
+        //store user email into database and create empty followedTopics list
         var database = app.database();
         var newUserRef = database.ref().child("users").child(app.auth().currentUser.uid);
-        newUserRef.set({'UserProperties': {'email' : email.value}});
-        //newUserRef.push({'username' : 'gobbblygoooook'});
+        newUserRef.set({'email' : email.value, 'followedTopics' : []});
 
       this.props.history.push("/login");
     } catch (error) {
