@@ -16,12 +16,20 @@ const LogInView = ({ onSubmit }) => {
           />
         </label>
         <label>
+          Username
+          <input
+            name="username"
+            type="username"
+            placeholder="Username"
+          />
+          </label>
+        <label>
           Password
           <input
             name="password"
             type="password"
             placeholder="Password"
-          />
+          />          
         </label>
         <button type="submit">Login</button>
       </form>

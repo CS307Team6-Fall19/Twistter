@@ -15,6 +15,14 @@ const SignUpView = ({ onSubmit }) => {
           />
         </label>
         <label>
+          Username
+          <input
+            name="username"
+            type="username"
+            placeholder="Username"
+          />
+          </label>
+        <label>
           Password
           <input
             name="password"
