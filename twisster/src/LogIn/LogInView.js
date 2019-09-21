@@ -8,21 +8,13 @@ const LogInView = ({ onSubmit }) => {
         <form onSubmit={onSubmit}>      
         
         <label>
-          Email
+          Email/Username
           <input
             name="email"
             type="email"
-            placeholder="Email"
+            placeholder="Email/Username"
           />
         </label>
-        <label>
-          Username
-          <input
-            name="username"
-            type="username"
-            placeholder="Username"
-          />
-          </label>
         <label>
           Password
           <input
