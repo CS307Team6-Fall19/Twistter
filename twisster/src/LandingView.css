@@ -1,0 +1,11 @@
+.header {
+    background-color: aqua;
+    height: 2cm;
+}
+
+h1 {
+    text-align: left;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-style: italic;
+}
+
