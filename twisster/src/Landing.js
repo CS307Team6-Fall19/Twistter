@@ -4,6 +4,7 @@ import Clock from "./DataObjects/Clock"
 import app from "./base";
 import ReactDOM from 'react-dom';
 import firebase from "firebase";
+import LandingView from "./LandingView"
 
 class Landing extends Component {
 
@@ -38,11 +39,12 @@ class Landing extends Component {
   }
   
   render() {
-    return(
+    /*return(
       <div>
       {this.renderWelcome()}
       </div>
-    );
+    );*/
+    return <LandingView />;
   }
 
   renderClock(){
