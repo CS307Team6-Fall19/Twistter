@@ -1,28 +1,37 @@
 import React, { Component } from "react";
 import { withRouter } from "react-router";
-import Clock from "./DataObjects/Clock"
-import app from "./base";
-import ReactDOM from 'react-dom';
+
 import firebase from "firebase";
+import UserData from "./DataObjects/UserData";
+
 
 class Landing extends Component {
+  
+  constructor(props){
+    super(props); 
+    this.goToProfile= this.goToProfile.bind(this);
 
-  componentDidMount () {
+  }
+
+  componentDidMount = () => {
     firebase.auth().onAuthStateChanged(function(user) {
       if (user) {
-        console.log("user is not null");
-        console.log("user id: " + user.uid);
-        document.getElementById('email').innerHTML = user.email;
+        //CHANGE WHEN USER HAS USERNAME
+        this.loggedIn = true;
+        this.userData = new UserData(user.email, this.loggedIn);
+        document.getElementById('username').innerHTML = user.email;
       } else {
         console.log("user is null");
       }
-    });
+    }.bind(this));
   }
 
-  constructor(props){
-      super(props)
+  goToProfile(){
+    this.props.history.push({
+      pathname: "/profile",
+      state: { userData: this.userData }
+    })
   }
-  
   render() {
     return(
       <div>
@@ -31,19 +40,13 @@ class Landing extends Component {
     );
   }
 
-  renderClock(){
-    ReactDOM.render(
-      <Clock />,
-      document.getElementById('root')
-    );
-  }
-
   renderWelcome = () => {
     return(
       <div>
-        <h1>Welcome to Twistter!</h1>
+        <h1>Welcome to your Twistter homepage!</h1>
         <form>
-        <label id='email'>hello</label>
+        <label id='username'>hello</label>
+        <button onClick={this.goToProfile}>Go to your profile</button>
         </form>
       </div>
     );
