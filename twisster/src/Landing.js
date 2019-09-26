@@ -20,8 +20,8 @@ class Landing extends Component {
 
         //fetch and update value in firebase database
         app.database().ref().once('value', (snapshot) => { //.once means fetch value and do this function once
-          document.getElementById('email').innerHTML = snapshot.child('users').child(app.auth().currentUser.uid).child('email').val();
-          var test = snapshot.child('users').child(app.auth().currentUser.uid).child('followedTopics').val();
+          //document.getElementById('email').innerHTML = snapshot.child('users').child(app.auth().currentUser.uid).child('email').val();
+          //var test = snapshot.child('users').child(app.auth().currentUser.uid).child('followedTopics').val();
           //test.splice(0, 1);
           //test.push('test6');
           //console.log(test);
@@ -38,13 +38,29 @@ class Landing extends Component {
       super(props)
   }
   
+
+  goLogout = async event => {
+    firebase.auth.signOut()
+      .then(function() {
+        console.log("Signout succesful");
+      })
+      .catch(function(error) {
+        console.log("Error");
+      })
+
+    this.props.history.push({
+      pathname: "/login"
+    })
+  };
+
+
   render() {
     /*return(
       <div>
       {this.renderWelcome()}
       </div>
     );*/
-    return <LandingView />;
+    return <LandingView onClick = {this.goLogout} />;
   }
 
   renderClock(){

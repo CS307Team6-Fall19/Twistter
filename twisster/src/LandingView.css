@@ -3,9 +3,23 @@
     height: 2cm;
 }
 
-h1 {
+.line {
     text-align: left;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     font-style: italic;
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+.mid {
+    text-align: center;
+}
+
+input {
+    text-align: left;
+}
+
+form1 {
+    align-items: flex-end;
 }
 
