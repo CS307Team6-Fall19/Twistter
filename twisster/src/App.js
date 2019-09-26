@@ -5,7 +5,7 @@ import Home from "./Home";
 import Login from "./LogIn";
 import SignUp from "./SignUp";
 import Landing from "./Landing";
-import { BrowserRouter as Link} from "react-router-dom";
+import ProfilePage from "./ProfilePage";
 
 
 const App = () => {
@@ -16,19 +16,11 @@ const App = () => {
         <Route exact path="/login" component={Login} />
         <Route exact path="/signup" component={SignUp} />
         <Route exact path="/landing" component={Landing} />
+        <Route exact path="/profile" component={ProfilePage} />
       </div>
     </Router>
   );
-  /* return(
-  <div>
-    <nav>
-      <Link to="/home">Home</Link>
-    </nav>
-    <div>
-      <Route path="/home" component={Home} />
-    </div>
-  </div>
-  ); */
+
 };
 
 export default App;
