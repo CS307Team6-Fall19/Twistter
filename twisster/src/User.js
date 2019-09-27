@@ -5,9 +5,17 @@ import app from "./base";
 import ReactDOM from 'react-dom';
 import firebase from "firebase";
 
-class User extends Component
+/* How to use this class and its functions
+var user = new User();
+user.addFollowedUser(username);
+*/
+class User extends React.Component
 {
-    // //Create a new user
+    constructor()
+    {
+        alert("Within the user class");
+    }
+    //Create a new user
     // //@Params
     // //email: user's email
     // //username: user's username
@@ -47,7 +55,7 @@ class User extends Component
     //username: username of the specific user
     //@Return
     //email: email of the specific user
-    retrieveUserEmail(username)
+    retrieveUserEmail(username) 
     {
         console.log("Entered retrieveUserEmail");
         var username_email_map = firebase.database.ref().child("mapUsernameToEmail");
@@ -69,9 +77,8 @@ class User extends Component
         var uid_follow = username_uid_map[usernameFollow];
         //put it in the appropriate spot in the databasee under followedUsers
         //add uid and an empty list of followedTopics
-        var followedUserRef = firebase.database().ref().child("users").child(uid_current).child("followedUsers");
+        var followedUserRef = firebase.database().ref().child("users").child(uid_current).child("followedUsers").child(uid_follow);
         followedUserRef.push ({
-            uid: uid_follow,
             followedTopics: []
         });
         console.log("Exited addFollowedUser");
@@ -79,9 +86,9 @@ class User extends Component
 
     //Description: Add a topic that the current user follows to the already followed user
     //@Params
-    //usernameFollow: username of the individual the current user has followed
-    //topicFollow: the topic that the current user wants to follow from the given usernameFollow
-    addFollowedTopicToFollowedUser(usernameFollow, topicFollow)
+    //usernameFollow: username of the individual the current user has followed, type: string
+    //topicsFollow: the topic(s) that the current user wants to follow from the given usernameFollow, type: array
+    addFollowedTopicToFollowedUser(usernameFollow, topicsFollow)
     {
         console.log("Entered addFollowedTopicToFollowedUser");
         //get the uid of the current user
@@ -90,14 +97,20 @@ class User extends Component
         var username_uid_map = firebase.database.ref().child(mapUsernameToUid);
         var uid_follow = username_uid_map[usernameFollow];
         //add followedTopic to the list of followedTopics within the followedUser
-        var followedUserRef = firebase.database.ref().child("users").child(uid_current).child("followedUsers");
+        app.database().ref().once('value', (snapshot) => {
+            var followedTopics = snapshot.child("users").child(app.auth().currentUser.uid).child("followedUsers").child(uid_follow).child("followedTopics").val();
+            for(index = 0; index < topicsFollow.length; index++)
+            {
+                followedTopics.push(topicsFollow[index]);
+            }
+        });
         console.log("Exited addFollowedTopicToFollowedUser");
     }
-    
+
     //Description: Add a topic to current user (when current user decides to write and post a microblog)
     //@Params
-    //content: a string that represents the blog itself (must be a string of less than 250 characters)
-    //topic(s): a list of topics associated to the blog (must be a list)
+    //content: a string that represents the blog itself (must be a string of less than 250 characters), type: string
+    //topic(s): a list of topics associated to the blog, type: array
     addMicroBlogToCurrentUser(content, topics)
     {
         console.log("Entered addMicroBlogToCurrentUser");
@@ -115,15 +128,19 @@ class User extends Component
         else
         {
             firebase.database().ref().child("users").child(firebase.auth().currentUser.userIdCurr).child("Microblogs").push({
-                uid: uid_current,
                 content: content,
-                topics: topics,
+                topics: [],
                 timestamp: timestamp
+            });
+
+            app.database().ref().once('value', (snapshot) => {
+                var topicsList = snapshort.child("users").child(firebase.auth().currentUser.userIdCurr).child("Microblogs").child("topics").val();
+                for(index = 0; index < topics.length; index++)
+                {
+                    topicsList.push(topics[index]);
+                }
             });
         }
         console.log("Exited addMicroBlogToCurrentUser");
     }
-
-
-
 }
