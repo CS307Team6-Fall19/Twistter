@@ -5,9 +5,12 @@ import app from "./base";
 import ReactDOM from 'react-dom';
 import firebase from "firebase";
 
-/* How to use this class and its functions
+/* 
+HOW TO USE THIS:
 var user = new User();
-user.addFollowedUser(username);
+user.method_name(parameters);
+Ex: user.addFollowedUser(username);
+Ex: var uid = user.retrieveUserUid(username);
 */
 class User extends React.Component
 {
