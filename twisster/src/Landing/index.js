@@ -2,15 +2,17 @@ import React, { Component } from "react";
 import { withRouter } from "react-router";
 
 import firebase from "firebase";
-import UserData from "./DataObjects/UserData";
-
+import UserData from "../DataObjects/UserData";
+import LandingLogoutView from "./LandingLogoutView";
+import LandingProfileView from "./LandingProfileView";
 
 class Landing extends Component {
   
   constructor(props){
     super(props); 
-    this.goToProfile= this.goToProfile.bind(this);
 
+    this.goToProfile = this.goToProfile.bind(this);
+    this.goLogout = this.goLogout.bind(this);
   }
 
   componentDidMount = () => {
@@ -32,25 +34,33 @@ class Landing extends Component {
       state: { userData: this.userData }
     })
   }
+  
   render() {
-    return(
+    return (
       <div>
-      {this.renderWelcome()}
+        <LandingLogoutView onClickLogout={this.goLogout} />
+        <LandingProfileView onClickProfile={this.goToProfile}/>;
+
+        
       </div>
     );
   }
 
-  renderWelcome = () => {
-    return(
-      <div>
-        <h1>Welcome to your Twistter homepage!</h1>
-        <form>
-        <label id='username'>hello</label>
-        <button onClick={this.goToProfile}>Go to your profile</button>
-        </form>
-      </div>
-    );
-  }
+  goLogout = async event => {
+    firebase.auth.signOut()
+      .then(function() {
+        console.log("Signout succesful");
+      })
+      .catch(function(error) {
+        console.log("Error");
+      })
+
+    this.props.history.push({
+      pathname: "/login"
+    })
+  };
+
+  
 }
 
 export default withRouter(Landing);
