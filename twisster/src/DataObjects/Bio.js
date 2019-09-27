@@ -1,6 +1,3 @@
-import React, { Component } from 'react';
-import { withRouter } from "react-router";
-
 class Bio{
     constructor(){
         this.text = "This is your bio!";
