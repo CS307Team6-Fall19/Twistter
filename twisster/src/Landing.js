@@ -5,6 +5,9 @@ import app from "./base";
 import ReactDOM from 'react-dom';
 import firebase from "firebase";
 import LandingView from "./LandingView"
+import login from "./LogIn"
+import { async } from "q";
+import LogInView from "./LogIn/LogInView";
 
 class Landing extends Component {
 
@@ -39,19 +42,28 @@ class Landing extends Component {
   }
   
 
-  goLogout = async event => {
-    firebase.auth.signOut()
+  goLogout = async event  => {
+    jds
+    firebase.auth().signOut()
       .then(function() {
         console.log("Signout succesful");
       })
       .catch(function(error) {
         console.log("Error");
-      })
-
+      });
+    ;
+    
     this.props.history.push({
       pathname: "/login"
-    })
+    });
+ 
+    this.renderLogin();
+
   };
+
+  renderLogin() {
+    return <LogInView/>;
+  }
 
 
   render() {

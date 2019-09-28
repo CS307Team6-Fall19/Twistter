@@ -21,7 +21,7 @@ const LandingView = ({goLogout}) => {
 
                 <form1>
                     <button>Profile</button>
-                    <button onClick = {goLogout}>Logout</button>
+                    <button onClick={goLogout}>Logout</button>
                 </form1>
                 </div>
             </div>
