@@ -96,9 +96,20 @@ const NewTweetBody = (props, {onSubmit}) => {
   )
 }
 
-const TopBar = (props) => {
+const TopBarTwisster = ({onClickProfile}) => {
+  return (
+    <div className="inner-body">
+      <label className="top-bar-twisster" >Twistter</label>
+      <input className="top-bar-search" placeholder="Search"/>
+      <button className="top-bar-button" type="button" onClick={onClickProfile}>Go to your profile</button>    
+    </div>
+  )
+}
+
+const TopBar = ({onClick}) => {
   return(
     <div className="top-bar">
+        <TopBarTwisster onClickProfile={onClick} />
     </div>
   )
 }

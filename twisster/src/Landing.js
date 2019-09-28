@@ -8,6 +8,7 @@ import './Landing.css'
 import { TweetBody } from './DataObjects/Microblog.js'
 import { NewTweetBody } from './DataObjects/Microblog.js'
 import { TopBar } from './DataObjects/Microblog.js'
+//import UserData from "../DataObjects/User";
 
 class Landing extends Component {
 
@@ -49,9 +50,16 @@ class Landing extends Component {
    this.getUser = this.getUser.bind(this)
    this.handleChange = this.handleChange.bind(this);
    this.handleSubmit = this.handleSubmit.bind(this);
+   this.goToProfile = this.goToProfile.bind(this);
 
   }
 
+  goToProfile(){
+    this.props.history.push({
+      pathname: "/profile",
+      state: { userData: this.userData }
+    })
+  }
 /*
   constructor(props){
       super(props)
@@ -106,7 +114,7 @@ class Landing extends Component {
 render() {
     return (
         <div className="main-body">
-        <TopBar />
+        <TopBar onClick={this.goToProfile}/>
         {[...this.state.users].map((user, index) => {
           let name = `${user.name.first} ${user.name.last}`
           let handle = `@${user.name.first}${user.name.last}`
