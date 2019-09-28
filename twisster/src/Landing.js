@@ -105,8 +105,8 @@ class Landing extends Component {
 
 render() {
     return (
-        <div className="top-bar"></div>,
         <div className="main-body">
+        <TopBar />
         {[...this.state.users].map((user, index) => {
           let name = `${user.name.first} ${user.name.last}`
           let handle = `@${user.name.first}${user.name.last}`
