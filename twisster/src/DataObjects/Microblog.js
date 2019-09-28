@@ -76,20 +76,23 @@ const NewTweet = (props) => {
   )
 }
 
-const NewTweetBody = (props, {onSubmit}) => {
+const NewTweetBody = (props) => {
   return(
     <NewTweetBox>
       <div className="inner-body">
         <Image image={props.image}/>
         <div className="body">
           <div className="inner-body">
-            <Name name={props.name}/>
+            <Name 
+            name={props.name}
+            id='name'
+            />
             <Handle handle={props.handle}/>
           </div>
-          <form onSubmit={onSubmit}>
+          <div >
             <textarea className='new-tweet' placeholder="Hello"/>
-            <button className = 'post-button' type="submit">Post</button>
-          </form> 
+            <button className = 'post-button' type="submit" onClick={props.onClick}>Post</button>
+          </div> 
         </div>
       </div>
     </NewTweetBox>

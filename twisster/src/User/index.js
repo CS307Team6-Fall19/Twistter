@@ -84,6 +84,7 @@ class User extends React.Component{
   }
 
   render(){
+    
     if(this.loggedIn == true){
 
       if(this.editMode){
