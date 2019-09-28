@@ -8,6 +8,14 @@ const TweetBox = (props) => {
   )
 }
 
+const NewTweetBox = (props) => {
+  return(
+    <div className='new-tweet-body'>
+    {props.children}
+    </div>
+  )
+}
+
 const Image = (props) => {
   return(
     <img src={props.image} alt="Logo" className="picture">
@@ -56,4 +64,33 @@ const TweetBody = (props) => {
   )
 }
 
+/* New tweet feature */
+// Changed tweet={...} to
+// newTweet
+// 
+const NewTweet = (props) => {
+  return(
+    <div className='new-tweet'>
+    {props.newTweet}
+    </div>
+  )
+}
+
+const NewTweetBody = (props) => {
+  return(
+    <NewTweetBox>
+      <div className="inner-body">
+        <Image image={props.image}/>
+        <div className="body">
+          <div className="inner-body">
+            <Name name={props.name}/>
+            <Handle handle={props.handle}/>
+          </div>
+          <Tweet tweet={props.tweet}/>
+        </div>
+      </div>
+    </NewTweetBox>
+  )
+}
+export { NewTweetBody }
 export { TweetBody }

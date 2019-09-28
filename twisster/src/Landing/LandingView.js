@@ -6,7 +6,6 @@ import ReactDOM from 'react-dom';
 import firebase from "firebase";
 import './Landing.css'
 import { TweetBody } from './DataObjects/Microblog.js'
-import { NewTweetBody } from './DataObjects/Microblog.js'
 
 class Landing extends Component {
 
@@ -45,7 +44,6 @@ class Landing extends Component {
     }
     //this.handleRefresh = this.handleRefresh.bind(this)
    this.getUser = this.getUser.bind(this)
-
   }
 
 /*
@@ -100,25 +98,14 @@ render() {
           let image = user.image
           let tweet = user.tweet
           console.log(image)
-          if (index == 0) {
           return(
-            <NewTweetBody 
-              key={index}
-              name='{name}'
-              handle={handle}
-              tweet={tweet}
-              image={image} />
-            )
-          } else {
-            return(
             <TweetBody 
               key={index}
               name={name}
               handle={handle}
               tweet={tweet}
               image={image} />
-            )
-          }
+          )
         })}      
       </div>
     );

@@ -27,23 +27,6 @@
   margin-bottom: 0.1rem;
 }
 
-.new-tweet-body {
-  display: flex;
-  flex-direction: column;
-  width: 600px;
-  height: 230px;
-  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.5);
-  background-color: #213649;
-  /*margin-left: 50%;*/
-  align-self: center;
-  margin-bottom: 0.1rem;
-}
-
-.new-tweet-body:hover { 
-  background-color: #11171d;
-  border: #ffffff;
-}
-
 .tweet-body:hover { 
   background-color: #11171d;
   border: #ffffff;
@@ -103,28 +86,3 @@
   letter-spacing: -0.6px;
   color: #ffffff;
 }
-
-.new-tweet {
-  margin-left: 15px;
-  margin-top: 7px;
-  width: 445px;
-  height: 122px;
-  font-family: HelveticaNeue;
-  font-size: 14px;
-  font-weight: 300;
-  font-style: normal;
-  font-stretch: normal;
-  line-height: normal;
-  letter-spacing: -0.6px;
-  color: #ffffff;
-  padding: 12px 20px;
-  border: none;
-  resize: none;
-  background-color: 213649
-}
-
-
-
-
-
-
