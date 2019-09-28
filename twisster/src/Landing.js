@@ -7,6 +7,7 @@ import firebase from "firebase";
 import './Landing.css'
 import { TweetBody } from './DataObjects/Microblog.js'
 import { NewTweetBody } from './DataObjects/Microblog.js'
+import { TopBar } from './DataObjects/Microblog.js'
 
 class Landing extends Component {
 
@@ -41,10 +42,13 @@ class Landing extends Component {
     this.state={
       users:
       [ 
-      ]
+      ],
+      value:""
     }
     //this.handleRefresh = this.handleRefresh.bind(this)
    this.getUser = this.getUser.bind(this)
+   this.handleChange = this.handleChange.bind(this);
+   this.handleSubmit = this.handleSubmit.bind(this);
 
   }
 
@@ -60,13 +64,21 @@ class Landing extends Component {
       </div>
     );
   }*/
+
+  handleChange(event) {
+    this.setState({value: event.target.value});
+  }
+
+  handleSubmit(event) {
+    this.getUser()
+  }
+
   componentWillMount() {
     this.getUser()
     this.getUser()
     this.getUser()
     this.getUser()
   }
-
 
   getUser() {
     fetch('https://randomuser.me/api/')
@@ -93,7 +105,8 @@ class Landing extends Component {
 
 render() {
     return (
-      <div className="main-body">
+        <div className="top-bar"></div>,
+        <div className="main-body">
         {[...this.state.users].map((user, index) => {
           let name = `${user.name.first} ${user.name.last}`
           let handle = `@${user.name.first}${user.name.last}`
@@ -106,8 +119,10 @@ render() {
               key={index}
               name='{name}'
               handle={handle}
-              tweet={tweet}
-              image={image} />
+              newTweet={tweet}
+              image={image} 
+              onSubmit={this.handleSubmit}
+              />
             )
           } else {
             return(

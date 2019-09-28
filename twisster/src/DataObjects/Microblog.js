@@ -70,13 +70,13 @@ const TweetBody = (props) => {
 // 
 const NewTweet = (props) => {
   return(
-    <div className='new-tweet'>
-    {props.newTweet}
-    </div>
+    <form>
+     <new-tweet> some text  </new-tweet>
+    </form>
   )
 }
 
-const NewTweetBody = (props) => {
+const NewTweetBody = (props, {onSubmit}) => {
   return(
     <NewTweetBox>
       <div className="inner-body">
@@ -86,11 +86,23 @@ const NewTweetBody = (props) => {
             <Name name={props.name}/>
             <Handle handle={props.handle}/>
           </div>
-          <Tweet tweet={props.tweet}/>
+          <form onSubmit={onSubmit}>
+            <textarea className='new-tweet' placeholder="Hello"/>
+            <button className = 'post-button' type="submit">Post</button>
+          </form> 
         </div>
       </div>
     </NewTweetBox>
   )
 }
+
+const TopBar = (props) => {
+  return(
+    <div className="top-bar">
+    </div>
+  )
+}
+//export { EssayForm }
+export { TopBar }
 export { NewTweetBody }
 export { TweetBody }

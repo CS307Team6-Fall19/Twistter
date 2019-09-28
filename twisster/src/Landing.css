@@ -1,7 +1,16 @@
+.top-bar {
+  width: 1920px;
+  height: 90px;
+  box-shadow: 0 -10px 40px 0 #00000080;
+  background-color: #213649;
+  margin-top: 0px;
+}
+
 .main-body {
   display: flex;
   flex-direction: column;
   background-color: #11171d;
+  margin-top: 90px;
   min-height: 80rem;
 }
 
@@ -117,10 +126,25 @@
   line-height: normal;
   letter-spacing: -0.6px;
   color: #ffffff;
-  padding: 12px 20px;
   border: none;
   resize: none;
-  background-color: 213649
+  background-color: #213649
+}
+
+.new-tweet:hover { 
+  background-color: #11171d;
+  border: #ffffff;
+}
+
+.post-button {
+  margin-top: 1%;
+  margin-left: 65%;
+  width: 150px;
+  height: 30px;
+  border-radius: 25px;
+  border-color: #0076cc;
+  box-shadow: 0 0 10px 0 #00000080;
+  background-color: #0076cc;
 }
 
 
