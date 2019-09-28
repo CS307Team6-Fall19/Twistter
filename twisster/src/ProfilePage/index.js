@@ -13,13 +13,13 @@ class ProfilePage extends React.Component {
 
       this.getUser = this.getUser.bind(this);
 
-      /* if(props.location.pathname != "/profile"){
+      if(props.location.pathname != "/profile"){
         this.path = props.location.pathname;
         this.username = this.path.substring(9, this.path.length);
         
         this.getUser(this.username);
       }
-      else */
+      else
         this.userData = this.props.location.state.userData;
     }
 

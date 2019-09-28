@@ -40,8 +40,6 @@ class Landing extends Component {
       <div>
         <LandingLogoutView onClickLogout={this.goLogout} />
         <LandingProfileView onClickProfile={this.goToProfile}/>;
-
-        
       </div>
     );
   }

@@ -1,17 +1,17 @@
 import React, { Component } from 'react';
 
-import PropTypes from 'prop-types';
 import Bio from "../DataObjects/Bio";
 import LoggedInUserView from './LoggedInUserView';
 import LoggedInUserEditView from './LoggedInUserEditView';
 import VisitedUserView from './VisitedUserView';
-import UserData from "../DataObjects/UserData";
 
 class User extends React.Component{
 
   constructor(props) {
+
     super(props);
 
+    //this.uservm = new UserVM();
     this.email = props.user.userData.email;
     this.loggedIn = props.user.userData.loggedIn;
     //this.uid = props.user.userData.uid;    
