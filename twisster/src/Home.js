@@ -1,15 +1,5 @@
 import React, { Component } from "react";
 import { withRouter } from "react-router";
-import ReactDOM from 'react-dom';
-import { BrowserRouter as BrowserRouter, Router, Link } from "react-router-dom";
-import { Route, Switch, Redirect } from 'react-router-dom'
-
-import app from "./base";
-
-import HomeView from "./Home/HomeView";
-import User from './DataObjects/User';
-import LogIn from "./LogIn";
-import SignUp from "./SignUp";
 
 
 
