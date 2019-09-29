@@ -38,6 +38,11 @@ class SignUpContainer extends Component {
       username_uid_combo[username.value] = firebase.auth().currentUser.uid;
       firebase.database().ref().child('mapUsernameToUID').update(username_uid_combo);
 
+      //add uid / username combination to database
+      let uid_username_combo = {};
+      uid_username_combo[firebase.auth().currentUser.uid] = username.value;
+      firebase.database().ref().child('mapUIDtoUsername').update(uid_username_combo);
+
       //set redirect page
       var actionCodeSettings = {
         url: 'http://localhost:3000/login',
