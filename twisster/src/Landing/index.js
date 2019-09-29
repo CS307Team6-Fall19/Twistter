@@ -9,6 +9,7 @@ import { TopBar } from '../DataObjects/Microblog.js'
 import './Landing.css'
 import LandingLogoutView from "./LandingLogoutView";
 import LandingProfileView from "./LandingProfileView";
+import helperfunctions from "../helperfunctions"
 
 class Landing extends Component {
   
@@ -53,7 +54,19 @@ class Landing extends Component {
   }
 
   handleSubmit(event) {
-    this.getUser()
+
+
+    firebase.database().ref().once('value', (snapshot) => {
+        let mapUsernameToUID = snapshot.child("mapUsernameToUID").val();
+        let uidOfUser = mapUsernameToUID["bloisch"];
+        let Microblogs = snapshot.child("users").child(uidOfUser).child("Microblogs").val();
+        console.log(Microblogs);
+
+        for (var i = 0; i < Microblogs.length; i++) {
+          this.getUser("blosich", Microblogs[i].content);
+        }
+
+    });
   }
 
   componentWillMount() {
@@ -68,13 +81,13 @@ class Landing extends Component {
         console.log("user is null");
       }
     }.bind(this));
-    this.getUser()
-    this.getUser()
-    this.getUser()
-    this.getUser()
+    //this.getUser()
+    //this.getUser()
+    //this.getUser()
+    //this.getUser()
   }
 
- getUser() {
+ getUser(nameInput, tweetInput) {
     fetch('https://randomuser.me/api/')
     .then(response => {
       if(response.ok) return response.json();
@@ -84,9 +97,9 @@ class Landing extends Component {
       this.setState({
         users:[
           {
-            name: data.results[0].name,
-            image: data.results[0].picture.medium,
-            tweet: data.results[0].email,
+            name: nameInput,//data.results[0].name,
+            image: "",//data.results[0].picture.medium,
+            tweet: tweetInput,
           },
           ...this.state.users,
         ]
@@ -108,14 +121,14 @@ class Landing extends Component {
       <div className="main-body">
       <TopBar onClick={this.goToProfile}/>
       <NewTweetBody  
-            name={this.email}
+            name='{name}'
             handle='{handle}'
             newTweet='{tweet}'
             image={this.getUser.image}
             onClick={this.handleSubmit}/>
       {[...this.state.users].map((user, index) => {
-        let name = `${user.name.first} ${user.name.last}`
-        let handle = `@${user.name.first}${user.name.last}`
+        let name = `${user.name}`
+        let handle = `@${user.name}`
         let image = user.image
         let tweet = user.tweet
         console.log(image)
