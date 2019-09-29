@@ -9,7 +9,6 @@ import { TopBar } from '../DataObjects/Microblog.js'
 import './Landing.css'
 import LandingLogoutView from "./LandingLogoutView";
 import LandingProfileView from "./LandingProfileView";
-import helperfunctions from "../helperfunctions"
 
 class Landing extends Component {
   
@@ -53,20 +52,38 @@ class Landing extends Component {
     })
   }
 
+  //gets a list of all the microblogs that the current user has posted and the posts he/she follows
+  getMicroblogsForCurrentUser() {
+    firebase.database().ref().once('value', (snapshot) => {
+      let mapUIDtoUsername = snapshot.child("mapUIDtoUsername").val();
+      let usernameOfUser = mapUIDtoUsername[firebase.auth().currentUser.uid];
+      let Microblogs = snapshot.child("users").child(firebase.auth().currentUser.uid).child("Microblogs").val();
+
+      for (var i = 0; i < Microblogs.length; i++) {
+        this.getUser(usernameOfUser, Microblogs[i].content);
+      }
+    });
+  }
+
+  //whenever we add a new microblog from our draft, that gets uploaded to firebase and must be show
+  //in our current timeline so add that draft, then re-fetch the list of microblogs
   handleSubmit(event) {
 
+    //upload your microblog draft here
+    /*
 
-    firebase.database().ref().once('value', (snapshot) => {
-        let mapUsernameToUID = snapshot.child("mapUsernameToUID").val();
-        let uidOfUser = mapUsernameToUID["bloisch"];
-        let Microblogs = snapshot.child("users").child(uidOfUser).child("Microblogs").val();
-        console.log(Microblogs);
 
-        for (var i = 0; i < Microblogs.length; i++) {
-          this.getUser("blosich", Microblogs[i].content);
-        }
+    */
 
-    });
+
+    //fetches the latest list of microblogs
+    this.state.users = []; //erase previous list of microblogs and re-fetch them from server and populate the page
+    this.getMicroblogsForCurrentUser();
+  }
+
+  //get list of microblogs when page first loads
+  componentDidMount() {
+    this.getMicroblogsForCurrentUser();
   }
 
   componentWillMount() {
@@ -81,10 +98,6 @@ class Landing extends Component {
         console.log("user is null");
       }
     }.bind(this));
-    //this.getUser()
-    //this.getUser()
-    //this.getUser()
-    //this.getUser()
   }
 
  getUser(nameInput, tweetInput) {
