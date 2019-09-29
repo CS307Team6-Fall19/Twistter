@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Route } from "react-router-dom"
 
 import ProfilePageView from "./ProfilePageView";
 import UserData from "../DataObjects/UserData";
+import TopBar from "../TopBar";
 
 class ProfilePage extends React.Component {
   
@@ -29,7 +30,12 @@ class ProfilePage extends React.Component {
 
     render(){
         
-        return <ProfilePageView userData={this.userData}/>;
+      return (
+        <div>
+          <TopBar/>
+        <ProfilePageView userData={this.userData}/>
+        </div>
+      );
     }
 
     

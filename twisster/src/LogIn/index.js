@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { withRouter } from "react-router";
 import app from "../base";
+import TopBar from "../TopBar"
 
 import LogInView from "./LogInView";
 
@@ -33,7 +34,12 @@ class LogInContainer extends Component {
     
   };
   render() {
-    return <LogInView onSubmit={this.handleLogIn} />;
+    return( 
+      <div>
+        <TopBar />
+        <LogInView onSubmit={this.handleLogIn} />
+      </div>
+    );
   }
 }
 

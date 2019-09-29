@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { withRouter } from "react-router";
-
+import TopBar from "./TopBar"
 
 
 class Home extends Component {
@@ -22,6 +22,7 @@ class Home extends Component {
   render() {
     return (
       <div>
+        <TopBar />
         <h1>Home</h1>
         <form>
         <button onClick={this.goLogIn}>Login</button>
