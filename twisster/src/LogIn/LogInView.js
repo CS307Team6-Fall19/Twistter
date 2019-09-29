@@ -11,7 +11,7 @@ const LogInView = ({ onSubmit }) => {
           Email/Username
           <input
             name="email"
-            type="email"
+            //type="email"
             placeholder="Email/Username"
           />
         </label>
