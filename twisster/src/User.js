@@ -128,19 +128,23 @@ class User extends React.Component
             console.log("ERROR: content of microblog cannot exceed 250 characters -- will not store in firebase");
         }
         //add uid, microblog content, and list of topics to Microblogs
+        var topicsList = [];
+        for(var index = 0; index < topics.length; index++)
+        {
+            topicsList.push(topics[index]);
+        }
+        var microblog = {'content': content, 'topics': topicsList, 'timestamp': timestamp};
         else
         {
-            firebase.database().ref().child("users").child(firebase.auth().currentUser.userIdCurr).child("Microblogs").push({
-                content: content,
-                topics: [],
-                timestamp: timestamp
-            });
-
             app.database().ref().once('value', (snapshot) => {
-                var topicsList = snapshort.child("users").child(firebase.auth().currentUser.userIdCurr).child("Microblogs").child("topics").val();
-                for(index = 0; index < topics.length; index++)
+                var microblog_list = snapshot.child("users").child(app.auth().currentUser.uid).child("Microblogs").val();
+                if(microblog_list.length == 0)
                 {
-                    topicsList.push(topics[index]);
+                    firebase.database().ref().child("users").child(firebase.auth().currentUser.uid).child("Microblogs").set({'0': microblog});
+                }
+                else
+                {
+                    firebase.database().ref().child("users").child(firebase.auth().currentUser.uid).child("Microblogs").push(microblog);
                 }
             });
         }
