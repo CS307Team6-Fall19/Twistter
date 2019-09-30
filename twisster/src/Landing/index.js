@@ -76,9 +76,15 @@ class Landing extends Component {
     console.log(content);
     HelperFunctions.addMicroBlogToCurrentUser(content, []);
 
+    window.setTimeout(() => {
+      this.updateMicroblogsList();
+    }, 1000);
+  }
+
+  updateMicroblogsList() {
     //fetches the latest list of microblogs
     this.state.users = []; //erase previous list of microblogs and re-fetch them from server and populate the page
-
+    console.log()
     firebase.database().ref().once('value', (snapshot) => {
       var mapUIDtoUsername = snapshot.child("mapUIDtoUsername").val();
       var usernameOfUser = mapUIDtoUsername[firebase.auth().currentUser.uid];
@@ -89,9 +95,6 @@ class Landing extends Component {
           this.getUser(usernameOfUser, Microblogs[i].content);
         }
       }
-      
-      this.props.history.push({
-        pathname: "/landing"});
     });
   }
 
