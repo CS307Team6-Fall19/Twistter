@@ -5,6 +5,7 @@ import LoggedInUserView from './LoggedInUserView';
 import LoggedInUserEditView from './LoggedInUserEditView';
 import VisitedUserView from './VisitedUserView';
 import helperfunctions from '../helperfunctions.js'
+import firebase from 'firebase'
 
 class User extends React.Component{
 
@@ -21,31 +22,47 @@ class User extends React.Component{
  
     this.bio = new Bio();
 
-
     this.editProfile = this.editProfile.bind(this);
     this.saveChanges = this.saveChanges.bind(this);
     this.setNewBio = this.setNewBio.bind(this);
   }
 
   getEmail(){
+    
       return this.email;
   }
 
-  getCurrentBio() {
-    var bio_cont = helperfunctions.getCurrentBio(firebase.auth().currentUser.uid);
-    if (bio_cont == undefined) {
-      this.bio.setText(bio_cont);
-    }
-    return this.bio.getText();
-  }
+  async getBio(userEmail) {
 
-  getBio(username) {
+    var bio_text;
+    await firebase.database().ref().once('value', (snapshot) => {
+      var user_email_list = snapshot.child('mapUsernameToEmail').val();
+      var username;
+      for (var user in user_email_list) {
+          if (user_email_list[user] == userEmail) {
+              username = user;
+              break;
+          }
+      }
 
-    var bio_cont = helperfunctions.getBio(username);
-    if (bio_cont == undefined) {
-      this.bio.setText(bio_cont);
-    }
-    return this.bio.getText();
+      var user_uid_list = snapshot.child('mapUsernameToUID').val();
+      var uid_val = user_uid_list[username];
+      console.log(user_uid_list);
+      console.log(uid_val);
+      var bio_cont = snapshot.child("users").child(uid_val).child("bio").val();
+      console.log("bio_cont: ", bio_cont);
+      if (bio_cont != undefined) {
+        this.bio.setText(bio_cont);
+        bio_text = bio_cont;
+      }
+    });
+    /*then(result => function(result)
+    {
+      console.log(": " + result);
+    })*/
+
+    console.log(bio_text);
+    document.getElementById('bio').innerHTML = this.bio.getText();
   }
 
   getUid(){
@@ -69,41 +86,33 @@ class User extends React.Component{
   }
 
   setNewBio(){ 
-    this.bio.setText(document.getElementById('bioTextBox').value);
+    var bio_cont = document.getElementById('bioTextBox').value;
+    helperfunctions.postCurrentUserBio(bio_cont);
+    this.bio.setText(bio_cont);
   }
 
   componentDidUpdate = () => {
 
     if(this.loggedIn){
       document.getElementById('email').innerHTML = this.getEmail();
-      document.getElementById('bio').innerHTML = this.getBio();
+      this.getBio(this.getEmail());
     }
     else{
       document.getElementById('welcome').innerHTML = "Welcome to " + this.getEmail() + " 's profile!";
-      document.getElementById('bio').innerHTML = this.getBio();
+      this.getBio(this.getEmail());
     }
   }
 
   componentDidMount = () => {
 
+    console.log("inside component did mount");
     if(this.loggedIn){
       document.getElementById('email').innerHTML = this.getEmail();
-      document.getElementById('bio').innerHTML = this.getCurrentBio();
+      this.getBio(this.getEmail());
     }
     else {
       document.getElementById('welcome').innerHTML = "Welcome to " + this.getEmail() + " 's profile!";
-      var username;
-      //get username coresponding to email of user bio the current user is visiting
-      await firebase.ref().once('value', (snapshot) => {
-        usernameToEmailList = snapshot.child("mapUsernameToEmail").val();
-        for(var user in usernameToEmailList) {
-          if (usernameToEmailList[user] == this.getEmail()) {
-            username = user;
-            break;
-          }
-        }
-      });
-      document.getElementById('bio').innerHTML = this.getBio(this.getEmail());
+      this.getBio(this.getEmail());
     }
   }
 

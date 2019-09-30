@@ -58,9 +58,11 @@ class Landing extends Component {
       let mapUIDtoUsername = snapshot.child("mapUIDtoUsername").val();
       let usernameOfUser = mapUIDtoUsername[firebase.auth().currentUser.uid];
       let Microblogs = snapshot.child("users").child(firebase.auth().currentUser.uid).child("Microblogs").val();
-
-      for (var i = 0; i < Microblogs.length; i++) {
-        this.getUser(usernameOfUser, Microblogs[i].content);
+      if(Microblogs != null)
+      {
+        for (var i = 0; i < Microblogs.length; i++) {
+          this.getUser(usernameOfUser, Microblogs[i].content);
+        }
       }
     });
   }

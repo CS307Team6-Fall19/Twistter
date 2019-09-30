@@ -20,8 +20,10 @@ class ProfilePage extends React.Component {
         
         this.getUser(this.username);
       }
-      else
+      else{
+        console.log(this.props.location.state);
         this.userData = this.props.location.state.userData;
+      }
     }
 
     getUser(username){
