@@ -5,9 +5,9 @@ class Microblog extends React.Component{
     constructor(props) {
       super(props);
 
-      this.name = 'name';
-      this.handle = 'handle';
-      this.tweet = 'tweet';
+      this.name = props.props.user.userData.username;
+      this.handle = 'My handle';
+      this.tweet = 'This is the tweet';
       this.image = 'image';
     }
 
@@ -15,10 +15,11 @@ class Microblog extends React.Component{
         return(
             <MicroblogView 
                 key={this.index}
-              name={this.name}
-              handle={this.handle}
-              tweet={this.tweet}
-              image={this.image} />
+                name={this.name}
+                handle={this.handle}
+                tweet={this.tweet}
+                image={this.image} 
+            />
         );
     }
 }

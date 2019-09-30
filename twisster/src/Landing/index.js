@@ -5,6 +5,7 @@ import firebase from "firebase";
 import UserData from "../DataObjects/UserData";
 import { TweetBody } from '../DataObjects/Microblog.js'
 import { NewTweetBody } from '../DataObjects/Microblog.js'
+import Microblog from '../Microblog';
 import { TopBar } from '../DataObjects/Microblog.js'
 import './Landing.css'
 import LandingLogoutView from "./LandingLogoutView";
@@ -60,8 +61,11 @@ class Landing extends Component {
       let usernameOfUser = mapUIDtoUsername[firebase.auth().currentUser.uid];
       let Microblogs = snapshot.child("users").child(firebase.auth().currentUser.uid).child("Microblogs").val();
 
-      for (var i = 0; i < Microblogs.length; i++) {
-        this.getUser(usernameOfUser, Microblogs[i].content);
+      if(Microblogs != null){
+        for (var i = 0; i < Microblogs.length; i++) {
+
+          this.getUser(usernameOfUser, Microblogs[i].content);
+        }
       }
     });
   }
@@ -164,7 +168,7 @@ class Landing extends Component {
         let tweet = user.tweet
         console.log(image)
           return(
-          <TweetBody 
+          <Microblog 
             key={index}
             name={name}
             handle={handle}

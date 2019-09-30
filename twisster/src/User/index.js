@@ -5,6 +5,7 @@ import LoggedInUserView from './LoggedInUserView';
 import LoggedInUserEditView from './LoggedInUserEditView';
 import VisitedUserView from './VisitedUserView';
 import Microblog from '../Microblog'
+
 class User extends React.Component{
 
   constructor(props) {
@@ -56,7 +57,7 @@ class User extends React.Component{
 
   setNewBio(){
     
-      this.bio.setText(document.getElementById('bioTextBox').value);
+    this.bio.setText(document.getElementById('bioTextBox').value);
       
   }
 
@@ -96,7 +97,7 @@ class User extends React.Component{
         return (
           <div>
             <LoggedInUserView onClick={this.editProfile}/>;
-            <Microblog />
+            <Microblog props={this.props}/>
           </div>
         );
       }
