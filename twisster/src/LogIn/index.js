@@ -4,6 +4,7 @@ import app from "../base";
 import TopBar from "../TopBar"
 
 import LogInView from "./LogInView";
+import firebase from "firebase";
 
 class LogInContainer extends Component {
   
@@ -52,6 +53,20 @@ class LogInContainer extends Component {
         .auth()
         .signInWithEmailAndPassword(username_or_email, password.value);
 
+      if (!this.user.user.emailVerified) {
+        alert("email is not verified! resending verification link...");
+        firebase.auth().currentUser.sendEmailVerification({
+          url: 'http://localhost:3000/login',
+          handleCodeInApp: true
+        })
+        .then(function() {
+          console.log("sent verification email");
+        })
+        .catch(function(error) {
+          alert(error);
+        });
+        return;
+      }
       
       this.props.history.push({
         pathname: "/landing"
