@@ -38,6 +38,7 @@ class User extends React.Component{
     this.editProfile = this.editProfile.bind(this);
     this.saveChanges = this.saveChanges.bind(this);
     this.setNewBio = this.setNewBio.bind(this);
+    this.followUserIAmViewing = this.followUserIAmViewing.bind(this);
     //this.getMicroblogs = this.getMicroblogs.bind(this);
     
   }
@@ -116,6 +117,10 @@ class User extends React.Component{
       
   }
 
+  followUserIAmViewing(){
+    console.log(this.username);
+  }
+
   componentDidUpdate = () => {
 
     if(this.loggedIn){
@@ -157,7 +162,7 @@ class User extends React.Component{
         let topics = user.topics
         console.log(user.tweet)
           return(
-          <Microblog 
+          <TweetBody 
             key={index}
             name={name}
             handle={handle}
@@ -199,7 +204,7 @@ class User extends React.Component{
     else if(this.loggedIn == false){
       return (
           <div>
-            <VisitedUserView/>;
+            <VisitedUserView onClickFollow={this.followUserIAmViewing}/>;
             {[...this.state.users].map((user, index) => {
         let name = `${user.name}`
         let handle = `@${user.name}`

@@ -9,6 +9,7 @@ class Microblog extends React.Component{
       this.handle = props.handle;
       this.tweet = props.tweet;
       this.image = props.image;
+      this.topics = props.topics;
     }
 
     render(){
@@ -19,6 +20,7 @@ class Microblog extends React.Component{
                 handle={this.handle}
                 tweet={this.tweet}
                 image={this.image} 
+                topics={this.topics}
             />
         );
     }
