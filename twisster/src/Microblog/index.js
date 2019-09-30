@@ -5,10 +5,10 @@ class Microblog extends React.Component{
     constructor(props) {
       super(props);
 
-      this.name = props.props.user.userData.username;
-      this.handle = 'My handle';
-      this.tweet = 'This is the tweet';
-      this.image = 'image';
+      this.name = props.name;
+      this.handle = props.handle;
+      this.tweet = props.tweet;
+      this.image = props.image;
     }
 
     render(){

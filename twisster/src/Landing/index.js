@@ -5,11 +5,11 @@ import firebase from "firebase";
 import UserData from "../DataObjects/UserData";
 import { TweetBody } from '../DataObjects/Microblog.js'
 import { NewTweetBody } from '../DataObjects/Microblog.js'
-import Microblog from '../Microblog';
 import { TopBar } from '../DataObjects/Microblog.js'
 import './Landing.css'
 import LandingLogoutView from "./LandingLogoutView";
 import LandingProfileView from "./LandingProfileView";
+import HelperFunctions from "../helperfunctions";
 
 class Landing extends Component {
   
@@ -22,7 +22,7 @@ class Landing extends Component {
       ]
     }
 
-    this.getUser = this.getUser.bind(this)
+    this.getUser = this.getUser.bind(this);
     //this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
 
@@ -60,10 +60,9 @@ class Landing extends Component {
       let mapUIDtoUsername = snapshot.child("mapUIDtoUsername").val();
       let usernameOfUser = mapUIDtoUsername[firebase.auth().currentUser.uid];
       let Microblogs = snapshot.child("users").child(firebase.auth().currentUser.uid).child("Microblogs").val();
-
-      if(Microblogs != null){
+      if(Microblogs != null)
+      {
         for (var i = 0; i < Microblogs.length; i++) {
-
           this.getUser(usernameOfUser, Microblogs[i].content);
         }
       }
@@ -73,17 +72,30 @@ class Landing extends Component {
   //whenever we add a new microblog from our draft, that gets uploaded to firebase and must be show
   //in our current timeline so add that draft, then re-fetch the list of microblogs
   handleSubmit(event) {
+    var content = document.getElementById("content").value;
+    console.log(content);
+    HelperFunctions.addMicroBlogToCurrentUser(content, []);
 
-    //upload your microblog draft here
-    /*
+    window.setTimeout(() => {
+      this.updateMicroblogsList();
+    }, 1000);
+  }
 
-
-    */
-
-
+  updateMicroblogsList() {
     //fetches the latest list of microblogs
     this.state.users = []; //erase previous list of microblogs and re-fetch them from server and populate the page
-    this.getMicroblogsForCurrentUser();
+    
+    firebase.database().ref().once('value', (snapshot) => {
+      var mapUIDtoUsername = snapshot.child("mapUIDtoUsername").val();
+      var usernameOfUser = mapUIDtoUsername[firebase.auth().currentUser.uid];
+      var Microblogs = snapshot.child("users").child(firebase.auth().currentUser.uid).child("Microblogs").val();
+
+      if (Microblogs != null) {
+        for (var i = 0; i < Microblogs.length; i++) {
+          this.getUser(usernameOfUser, Microblogs[i].content);
+        }
+      }
+    });
   }
 
   //get list of microblogs when page first loads
@@ -166,9 +178,9 @@ class Landing extends Component {
         let handle = `@${user.name}`
         let image = user.image
         let tweet = user.tweet
-        console.log(image)
+        console.log(user.tweet)
           return(
-          <Microblog 
+          <TweetBody 
             key={index}
             name={name}
             handle={handle}
