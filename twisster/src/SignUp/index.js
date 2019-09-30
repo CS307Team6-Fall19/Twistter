@@ -15,9 +15,11 @@ class SignUpContainer extends Component {
       var username_exists = false;
       await firebase.database().ref().once('value', (snapshot) => {
         var user_email_list = snapshot.child('mapUsernameToEmail').val();
-        if (user_email_list[username.value] != undefined) {
-          alert('Username already exists');
-          username_exists = true;
+        if (user_email_list != undefined) {
+          if (user_email_list[username.value] != undefined) {
+            alert('Username already exists');
+            username_exists = true;
+          }
         }
       });
 
