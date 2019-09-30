@@ -27,6 +27,7 @@ class Landing extends Component {
     this.handleSubmit = this.handleSubmit.bind(this);
 
     this.goToProfile = this.goToProfile.bind(this);
+    this.searchForUser = this.searchForUser.bind(this);
     this.goLogout = this.goLogout.bind(this);
 
     //this.email = this.email.bind(this);
@@ -94,10 +95,20 @@ class Landing extends Component {
   componentWillMount() {
     firebase.auth().onAuthStateChanged(function(user) {
       if (user) {
+
         //CHANGE WHEN USER HAS USERNAME
         this.loggedIn = true;
-        this.userData = new UserData(user.email, this.loggedIn);
-        this.email = user.email;
+
+        firebase.database().ref().once('value', (snapshot) => {
+          var UIDtoUsername = snapshot.child('mapUIDtoUsername').val();
+          var username = UIDtoUsername[user.uid];
+
+          this.userData = new UserData(username, this.loggedIn);
+          this.email = user.email;
+        });
+
+        
+        
        // document.getElementById('name').innerHTML = user.email;
       } else {
         console.log("user is null");
@@ -128,6 +139,10 @@ class Landing extends Component {
     });
   }
 
+  searchForUser(){
+    console.log("hello");
+  }
+
   render() {
     /* return (
       <div>
@@ -137,13 +152,16 @@ class Landing extends Component {
     ); */
     return (
       <div className="main-body">
-      <TopBar onClick={this.goToProfile}/>
+      <TopBar onClick={this.goToProfile} /* OnClickProfile={this.goToProfile} *//>
       <NewTweetBody  
             name='{name}'
             handle='{handle}'
             newTweet='{tweet}'
             image={this.getUser.image}
-            onClick={this.handleSubmit}/>
+            onClick={this.handleSubmit}
+            
+      />
+
       {[...this.state.users].map((user, index) => {
         let name = `${user.name}`
         let handle = `@${user.name}`

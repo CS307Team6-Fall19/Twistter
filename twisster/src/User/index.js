@@ -4,7 +4,7 @@ import Bio from "../DataObjects/Bio";
 import LoggedInUserView from './LoggedInUserView';
 import LoggedInUserEditView from './LoggedInUserEditView';
 import VisitedUserView from './VisitedUserView';
-
+import Microblog from '../Microblog'
 class User extends React.Component{
 
   constructor(props) {
@@ -12,7 +12,7 @@ class User extends React.Component{
     super(props);
 
     //this.uservm = new UserVM();
-    this.email = props.user.userData.email;
+    this.username = props.user.userData.username;
     this.loggedIn = props.user.userData.loggedIn;
     //this.uid = props.user.userData.uid;    
     this.state = { editMode : 0 };
@@ -25,8 +25,8 @@ class User extends React.Component{
     this.setNewBio = this.setNewBio.bind(this);
   }
 
-  getEmail(){
-      return this.email;
+  getUsername(){
+      return this.username;
   }
 
   getBio(){
@@ -45,6 +45,7 @@ class User extends React.Component{
   }
 
   saveChanges(){
+
     this.setNewBio();
     document.getElementById('bio').innerHTML = this.getBio();
     this.editMode = false;
@@ -62,11 +63,11 @@ class User extends React.Component{
   componentDidUpdate = () => {
 
     if(this.loggedIn){
-      document.getElementById('email').innerHTML = this.getEmail();
+      document.getElementById('username').innerHTML = this.getUsername();
       document.getElementById('bio').innerHTML = this.getBio();
     }
     else{
-      document.getElementById('welcome').innerHTML = "Welcome to " + this.getEmail() + " 's profile!";
+      document.getElementById('welcome').innerHTML = "Welcome to " + this.getUsername() + " 's profile!";
       document.getElementById('bio').innerHTML = this.getBio();
     }
   }
@@ -74,11 +75,11 @@ class User extends React.Component{
   componentDidMount = () => {
 
     if(this.loggedIn){
-      document.getElementById('email').innerHTML = this.getEmail();
+      document.getElementById('username').innerHTML = this.getUsername();
       document.getElementById('bio').innerHTML = this.getBio();
     }
     else {
-      document.getElementById('welcome').innerHTML = "Welcome to " + this.getEmail() + " 's profile!";
+      document.getElementById('welcome').innerHTML = "Welcome to " + this.getUsername() + " 's profile!";
       document.getElementById('bio').innerHTML = this.getBio();
     }
   }
@@ -92,7 +93,12 @@ class User extends React.Component{
       }
 
       else{
-        return <LoggedInUserView onClick={this.editProfile}/>;
+        return (
+          <div>
+            <LoggedInUserView onClick={this.editProfile}/>;
+            <Microblog />
+          </div>
+        );
       }
     }
 
