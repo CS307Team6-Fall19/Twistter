@@ -53,9 +53,38 @@ class Landing extends Component {
     })
   }
 
+  //gets a list of all the microblogs that the current user has posted and the posts he/she follows
+  getMicroblogsForCurrentUser() {
+    firebase.database().ref().once('value', (snapshot) => {
+      let mapUIDtoUsername = snapshot.child("mapUIDtoUsername").val();
+      let usernameOfUser = mapUIDtoUsername[firebase.auth().currentUser.uid];
+      let Microblogs = snapshot.child("users").child(firebase.auth().currentUser.uid).child("Microblogs").val();
+
+      for (var i = 0; i < Microblogs.length; i++) {
+        this.getUser(usernameOfUser, Microblogs[i].content);
+      }
+    });
+  }
+
+  //whenever we add a new microblog from our draft, that gets uploaded to firebase and must be show
+  //in our current timeline so add that draft, then re-fetch the list of microblogs
   handleSubmit(event) {
-    console.log(document.getElementById('postText').value);
-    this.getUser()
+
+    //upload your microblog draft here
+    /*
+
+
+    */
+
+
+    //fetches the latest list of microblogs
+    this.state.users = []; //erase previous list of microblogs and re-fetch them from server and populate the page
+    this.getMicroblogsForCurrentUser();
+  }
+
+  //get list of microblogs when page first loads
+  componentDidMount() {
+    this.getMicroblogsForCurrentUser();
   }
 
   componentWillMount() {
@@ -80,13 +109,9 @@ class Landing extends Component {
         console.log("user is null");
       }
     }.bind(this));
-    this.getUser()
-    this.getUser()
-    this.getUser()
-    this.getUser()
   }
 
- getUser() {
+ getUser(nameInput, tweetInput) {
     fetch('https://randomuser.me/api/')
     .then(response => {
       if(response.ok) return response.json();
@@ -96,9 +121,9 @@ class Landing extends Component {
       this.setState({
         users:[
           {
-            name: data.results[0].name,
-            image: data.results[0].picture.medium,
-            tweet: data.results[0].email,
+            name: nameInput,//data.results[0].name,
+            image: "",//data.results[0].picture.medium,
+            tweet: tweetInput,
           },
           ...this.state.users,
         ]
@@ -124,7 +149,7 @@ class Landing extends Component {
       <div className="main-body">
       <TopBar onClick={this.goToProfile} /* OnClickProfile={this.goToProfile} *//>
       <NewTweetBody  
-            name={this.email}
+            name='{name}'
             handle='{handle}'
             newTweet='{tweet}'
             image={this.getUser.image}
@@ -133,8 +158,8 @@ class Landing extends Component {
       />
 
       {[...this.state.users].map((user, index) => {
-        let name = `${user.name.first} ${user.name.last}`
-        let handle = `@${user.name.first}${user.name.last}`
+        let name = `${user.name}`
+        let handle = `@${user.name}`
         let image = user.image
         let tweet = user.tweet
         console.log(image)
