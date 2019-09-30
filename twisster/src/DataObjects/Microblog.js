@@ -90,7 +90,7 @@ const NewTweetBody = (props) => {
             <Handle handle={props.handle}/>
           </div>
           <div >
-            <textarea className='new-tweet' placeholder="Hello"/>
+            <textarea className='new-tweet' id="content" placeholder="Hello"/>
             <button className = 'post-button' type="submit" onClick={props.onClick}>Post</button>
           </div> 
         </div>
@@ -99,12 +99,13 @@ const NewTweetBody = (props) => {
   )
 }
 
-const TopBarTwisster = ({onClickProfile}) => {
+const TopBarTwisster = (props) => {
   return (
     <div className="inner-body">
       <label className="top-bar-twisster" >Twistter</label>
       <input className="top-bar-search" placeholder="Search"/>
-      <button className="top-bar-button" type="button" onClick={onClickProfile}>Go to your profile</button>    
+      <button name="search" onClick={props.onClickSearch}>Search</button>
+      <button className="top-bar-button" type="button" onClick={props.onClickProfile}>Go to your profile</button>    
     </div>
   )
 }

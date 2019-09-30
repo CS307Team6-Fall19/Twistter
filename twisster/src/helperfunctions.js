@@ -3,12 +3,10 @@ import { withRouter } from "react-router";
 import ReactDOM from 'react-dom';
 import firebase from "firebase";
 
-/* 
-HOW TO USE THIS:
-var user = new User();
-user.method_name(parameters);
-Ex: user.addFollowedUser(username);
-Ex: var uid = user.retrieveUserUid(username);
+/*
+TODO
+How to use this class:
+
 */
 const helperfunctions =
     {
@@ -138,7 +136,7 @@ const helperfunctions =
             else
             {
                 microblog_list.push(microblog);
-                firebase.database().ref().child("users").child(firebase.auth().currentUser.uid).child("Microblogs").set(microblog);
+                firebase.database().ref().child("users").child(firebase.auth().currentUser.uid).child("Microblogs").set(microblog_list);
             }
         });
         console.log("Exited addMicroBlogToCurrentUser");

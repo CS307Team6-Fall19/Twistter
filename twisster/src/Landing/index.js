@@ -9,6 +9,7 @@ import { TopBar } from '../DataObjects/Microblog.js'
 import './Landing.css'
 import LandingLogoutView from "./LandingLogoutView";
 import LandingProfileView from "./LandingProfileView";
+import HelperFunctions from "../helperfunctions";
 
 class Landing extends Component {
   
@@ -21,11 +22,12 @@ class Landing extends Component {
       ]
     }
 
-    this.getUser = this.getUser.bind(this)
+    this.getUser = this.getUser.bind(this);
     //this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
 
     this.goToProfile = this.goToProfile.bind(this);
+    this.searchForUser = this.searchForUser.bind(this);
     this.goLogout = this.goLogout.bind(this);
 
     //this.email = this.email.bind(this);
@@ -58,9 +60,11 @@ class Landing extends Component {
       let mapUIDtoUsername = snapshot.child("mapUIDtoUsername").val();
       let usernameOfUser = mapUIDtoUsername[firebase.auth().currentUser.uid];
       let Microblogs = snapshot.child("users").child(firebase.auth().currentUser.uid).child("Microblogs").val();
-
-      for (var i = 0; i < Microblogs.length; i++) {
-        this.getUser(usernameOfUser, Microblogs[i].content);
+      if(Microblogs != null)
+      {
+        for (var i = 0; i < Microblogs.length; i++) {
+          this.getUser(usernameOfUser, Microblogs[i].content);
+        }
       }
     });
   }
@@ -68,7 +72,9 @@ class Landing extends Component {
   //whenever we add a new microblog from our draft, that gets uploaded to firebase and must be show
   //in our current timeline so add that draft, then re-fetch the list of microblogs
   handleSubmit(event) {
-
+    var content = document.getElementById("content").value;
+    console.log(content);
+    HelperFunctions.addMicroBlogToCurrentUser(content, []);
     //upload your microblog draft here
     /*
 
@@ -103,10 +109,20 @@ class Landing extends Component {
   componentWillMount() {
     firebase.auth().onAuthStateChanged(function(user) {
       if (user) {
+
         //CHANGE WHEN USER HAS USERNAME
         this.loggedIn = true;
-        this.userData = new UserData(user.email, this.loggedIn);
-        this.email = user.email;
+
+        firebase.database().ref().once('value', (snapshot) => {
+          var UIDtoUsername = snapshot.child('mapUIDtoUsername').val();
+          var username = UIDtoUsername[user.uid];
+
+          this.userData = new UserData(username, this.loggedIn);
+          this.email = user.email;
+        });
+
+        
+        
        // document.getElementById('name').innerHTML = user.email;
       } else {
         console.log("user is null");
@@ -137,6 +153,10 @@ class Landing extends Component {
     });
   }
 
+  searchForUser(){
+    console.log("hello");
+  }
+
   render() {
     /* return (
       <div>
@@ -146,13 +166,16 @@ class Landing extends Component {
     ); */
     return (
       <div className="main-body">
-      <TopBar onClick={this.goToProfile}/>
+      <TopBar onClick={this.goToProfile} /* OnClickProfile={this.goToProfile} *//>
       <NewTweetBody  
             name='{name}'
             handle='{handle}'
             newTweet='{tweet}'
             image={this.getUser.image}
-            onClick={this.handleSubmit}/>
+            onClick={this.handleSubmit}
+            
+      />
+
       {[...this.state.users].map((user, index) => {
         let name = `${user.name}`
         let handle = `@${user.name}`
