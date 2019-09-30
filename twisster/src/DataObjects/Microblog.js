@@ -47,6 +47,14 @@ const Tweet = (props) => {
   )
 }
 
+const Topics = (props) => {
+  return(
+    <div className="topics">
+      {props.topics}
+    </div>
+  )
+}
+
 const TweetBody = (props) => {
   return(
     <TweetBox>
@@ -58,6 +66,7 @@ const TweetBody = (props) => {
             <Handle handle={props.handle}/>
           </div>
           <Tweet tweet={props.tweet}/>
+          <Topics topics={props.topics}/>
         </div>
       </div>
     </TweetBox>
@@ -91,7 +100,10 @@ const NewTweetBody = (props) => {
           </div>
           <div >
             <textarea id='content' className='new-tweet' placeholder="Hello"/>
-            <button className = 'post-button' type="submit" onClick={props.onClick}>Post</button>
+            <textarea id='showTopics' className='new-topic' placeholder="Topics Listed Here"/>
+            <textarea id='addTopics' className='new-topic' placeholder="Add Topics Here"/>
+            <button type="submit" onClick={props.onClick}>Post</button>
+            <button type="submit" onClick={props.onClickTopic}>Add New Topics</button>
           </div> 
         </div>
       </div>

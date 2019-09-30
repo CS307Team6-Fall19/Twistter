@@ -25,6 +25,7 @@ class Landing extends Component {
     this.getUser = this.getUser.bind(this);
     //this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.addNewTopics = this.addNewTopics.bind(this);
 
     this.goToProfile = this.goToProfile.bind(this);
     this.searchForUser = this.searchForUser.bind(this);
@@ -63,10 +64,22 @@ class Landing extends Component {
       if(Microblogs != null)
       {
         for (var i = 0; i < Microblogs.length; i++) {
-          this.getUser(usernameOfUser, Microblogs[i].content);
+          this.getUser(usernameOfUser, Microblogs[i].content, Microblogs[i].topics);
         }
       }
     });
+  }
+
+  //when Add New Topics button is pressed, transfer the input from the input box to the topics box in drafting
+  addNewTopics(event) {
+    if (document.getElementById("addTopics").value != "" && document.getElementById("addTopics").value != ",") {
+      if (document.getElementById("showTopics").value == "") {
+        document.getElementById("showTopics").value = document.getElementById("addTopics").value;
+      } else {
+        document.getElementById("showTopics").value = document.getElementById("showTopics").value + ", " + document.getElementById("addTopics").value;
+      }
+      document.getElementById("addTopics").value = "";
+    }
   }
 
   //whenever we add a new microblog from our draft, that gets uploaded to firebase and must be show
@@ -74,7 +87,11 @@ class Landing extends Component {
   handleSubmit(event) {
     var content = document.getElementById("content").value;
     console.log(content);
-    HelperFunctions.addMicroBlogToCurrentUser(content, []);
+    HelperFunctions.addMicroBlogToCurrentUser(content, [document.getElementById("showTopics").value]);
+
+    document.getElementById("content").value = "";
+    document.getElementById("showTopics").value = "";
+    document.getElementById("addTopics").value = "";
 
     window.setTimeout(() => {
       this.updateMicroblogsList();
@@ -92,7 +109,7 @@ class Landing extends Component {
 
       if (Microblogs != null) {
         for (var i = 0; i < Microblogs.length; i++) {
-          this.getUser(usernameOfUser, Microblogs[i].content);
+          this.getUser(usernameOfUser, Microblogs[i].content, Microblogs[i].topics);
         }
       }
     });
@@ -127,27 +144,20 @@ class Landing extends Component {
     }.bind(this));
   }
 
- getUser(nameInput, tweetInput) {
-    fetch('https://randomuser.me/api/')
-    .then(response => {
-      if(response.ok) return response.json();
-      throw new Error('Request failed.');
-    })
-    .then(data => {
+ getUser(nameInput, tweetInput, topicsInput) {
+
       this.setState({
         users:[
           {
             name: nameInput,//data.results[0].name,
             image: "",//data.results[0].picture.medium,
             tweet: tweetInput,
+            topics: topicsInput
           },
           ...this.state.users,
         ]
-      });
-    })
-    .catch(error => {
-      console.log(error);
-    });
+      })
+
   }
 
   searchForUser(){
@@ -165,11 +175,12 @@ class Landing extends Component {
       <div className="main-body">
       <TopBar onClick={this.goToProfile} /* OnClickProfile={this.goToProfile} *//>
       <NewTweetBody  
-            name='{name}'
+            name='{username}'
             handle='{handle}'
             newTweet='{tweet}'
             image={this.getUser.image}
             onClick={this.handleSubmit}
+            onClickTopic={this.addNewTopics}
             
       />
 
@@ -178,14 +189,15 @@ class Landing extends Component {
         let handle = `@${user.name}`
         let image = user.image
         let tweet = user.tweet
-        console.log(user.tweet)
+        let topics = user.topics
           return(
           <TweetBody 
             key={index}
             name={name}
             handle={handle}
             tweet={tweet}
-            image={image} />
+            image={image}
+            topics={topics} />
           )
       })}      
     </div>

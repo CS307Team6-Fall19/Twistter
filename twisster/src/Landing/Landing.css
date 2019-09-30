@@ -101,7 +101,22 @@
   margin-left: 15px;
   margin-top: 7px;
   width: 445px;
-  height: 88px;
+  height: 78px;
+  font-family: HelveticaNeue;
+  font-size: 14px;
+  font-weight: 300;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: normal;
+  letter-spacing: -0.6px;
+  color: #ffffff;
+}
+
+.topics {
+  margin-left: 15px;
+  margin-top: 7px;
+  width: 445px;
+  height: 10px;
   font-family: HelveticaNeue;
   font-size: 14px;
   font-weight: 300;
@@ -130,12 +145,31 @@
   background-color: #213649
 }
 
+.new-topic {
+  margin-left: 15px;
+  margin-top: 1px;
+  width: 300px;
+  height: 20px;
+  font-family: HelveticaNeue;
+  font-size: 14px;
+  font-weight: 300;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: normal;
+  letter-spacing: -0.6px;
+  color: #ffffff;
+  border: none;
+  resize: none;
+  background-color: #213649
+}
+
 .new-tweet:hover { 
   background-color: #11171d;
   border: #ffffff;
 }
 
 .post-button {
+  float: right;
   margin-top: 1%;
   margin-left: 65%;
   width: 150px;

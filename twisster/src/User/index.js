@@ -51,7 +51,7 @@ class User extends React.Component{
       if(Microblogs != null)
       {
         for (var i = 0; i < Microblogs.length; i++) {
-          this.getUser(this.username, Microblogs[i].content);
+          this.getUser(this.username, Microblogs[i].content, Microblogs[i].topics);
         }
       }
     });
@@ -62,7 +62,7 @@ class User extends React.Component{
     this.getMicroblogsForCurrentUser();
   }
 
-  getUser(nameInput, tweetInput) {
+  getUser(nameInput, tweetInput, topicsInput) {
     
       this.setState({
         users:[
@@ -70,6 +70,7 @@ class User extends React.Component{
             name: nameInput,//data.results[0].name,
             image: "",//data.results[0].picture.medium,
             tweet: tweetInput,
+            topics: topicsInput
           },
           ...this.state.users,
         ]
@@ -153,6 +154,7 @@ class User extends React.Component{
         let handle = `@${user.name}`
         let image = user.image
         let tweet = user.tweet
+        let topics = user.topics
         console.log(user.tweet)
           return(
           <Microblog 
@@ -160,7 +162,8 @@ class User extends React.Component{
             name={name}
             handle={handle}
             tweet={tweet}
-            image={image} />
+            image={image} 
+            topics={topics}/>
           )
       })}     
         </div>
@@ -176,6 +179,7 @@ class User extends React.Component{
         let handle = `@${user.name}`
         let image = user.image
         let tweet = user.tweet
+        let topics = user.topics
         console.log(user.tweet)
           return(
           <TweetBody 
@@ -183,7 +187,8 @@ class User extends React.Component{
             name={name}
             handle={handle}
             tweet={tweet}
-            image={image} />
+            image={image}
+            topics={topics} />
           )
       })}    
         </div>
@@ -200,6 +205,7 @@ class User extends React.Component{
         let handle = `@${user.name}`
         let image = user.image
         let tweet = user.tweet
+        let topics = user.topics
         console.log(user.tweet)
           return(
           <TweetBody 
@@ -207,7 +213,8 @@ class User extends React.Component{
             name={name}
             handle={handle}
             tweet={tweet}
-            image={image} />
+            image={image}
+            topics={topics} />
           )
       })}    
         </div>
