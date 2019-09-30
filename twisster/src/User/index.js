@@ -5,6 +5,7 @@ import Bio from "../DataObjects/Bio";
 import LoggedInUserView from './LoggedInUserView';
 import LoggedInUserEditView from './LoggedInUserEditView';
 import VisitedUserView from './VisitedUserView';
+import helperfunctions from '../helperfunctions.js'
 import Microblog from '../Microblog'
 import { TweetBody } from '../DataObjects/Microblog.js'
 import HelperFunctions from "../helperfunctions";
@@ -63,31 +64,46 @@ class User extends React.Component{
     this.getMicroblogsForCurrentUser();
   }
 
+  getEmail(){
+    return this.email;
+  }
   getUser(nameInput, tweetInput, topicsInput) {
     
-      this.setState({
-        users:[
-          {
-            name: nameInput,//data.results[0].name,
-            image: "",//data.results[0].picture.medium,
-            tweet: tweetInput,
-            topics: topicsInput
-          },
-          ...this.state.users,
-        ]
-      });
-    }
-    
-  
-    
-  
+    this.setState({
+      users:[
+        {
+          name: nameInput,//data.results[0].name,
+          image: "",//data.results[0].picture.medium,
+          tweet: tweetInput,
+          topics: topicsInput
+        },
+        ...this.state.users,
+      ]
+    });
+  }  
 
   getUsername(){
       return this.username;
   }
 
-  getBio(){
-    return this.bio.getText();
+  async getBio(username) {
+
+    var bio_text;
+
+    await firebase.database().ref().once('value', (snapshot) => {
+      var user_uid_list = snapshot.child('mapUsernameToUID').val();
+      var uid_val = user_uid_list[username];
+      console.log(user_uid_list);
+      console.log(uid_val);
+      var bio_cont = snapshot.child("users").child(uid_val).child("bio").val();
+      console.log("bio_cont: ", bio_cont);
+      if (bio_cont != undefined) {
+        this.bio.setText(bio_cont);
+        bio_text = bio_cont;
+      }
+    });
+
+    document.getElementById('bio').innerHTML = this.bio.getText();
   }
 
   getUid(){
@@ -111,10 +127,10 @@ class User extends React.Component{
     })
   }
 
-  setNewBio(){
-    
-    this.bio.setText(document.getElementById('bioTextBox').value);
-      
+  setNewBio(){ 
+    var bio_cont = document.getElementById('bioTextBox').value;
+    helperfunctions.postCurrentUserBio(bio_cont);
+    this.bio.setText(bio_cont);
   }
 
   getFollowersAndFollowing() {
@@ -171,11 +187,11 @@ class User extends React.Component{
 
     if(this.loggedIn){
       document.getElementById('username').innerHTML = this.getUsername();
-      document.getElementById('bio').innerHTML = this.getBio();
+      this.getBio(this.getUsername());
     }
     else{
       document.getElementById('welcome').innerHTML = "Welcome to " + this.getUsername() + " 's profile!";
-      document.getElementById('bio').innerHTML = this.getBio();
+      this.getBio(this.getUsername());
     }
   }
 
@@ -184,13 +200,14 @@ class User extends React.Component{
 
     console.log("componentdidmount()");
 
+    console.log("inside component did mount");
     if(this.loggedIn){
       document.getElementById('username').innerHTML = this.getUsername();
-      document.getElementById('bio').innerHTML = this.getBio();
+      this.getBio(this.getUsername());
     }
     else {
       document.getElementById('welcome').innerHTML = "Welcome to " + this.getUsername() + " 's profile!";
-      document.getElementById('bio').innerHTML = this.getBio();
+      this.getBio(this.getUsername());
     }
   }
 

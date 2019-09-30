@@ -1,15 +1,21 @@
-import React, { Component } from "react";
-import { withRouter } from "react-router";
-import ReactDOM from 'react-dom';
+/* import React, { Component } from "react";
+import app from "./base";
 import firebase from "firebase";
 
-/*
-TODO
-How to use this class:
-
+/* 
+HOW TO USE THIS:
+var user = new UserVM();
+user.method_name(parameters);
+Ex: user.addFollowedUser(username);
+Ex: var uid = user.retrieveUserUid(username);
 */
-const helperfunctions =
+
+class UserVM extends React.Component
+{
+    constructor()
     {
+        alert("Within the user class");
+    }
     //Create a new user
     // //@Params
     // //email: user's email
@@ -30,45 +36,45 @@ const helperfunctions =
     //     firebase.database.ref().child('mapUsernameToUid').update(username_uid_combo);
     //     console.log("Exited createNewUser");
     // }
-
+    
     //Description: Retrieve uid of a specific user
     //@Params
     //username: username of the specific user
     //@Return
     //uid_follow: uid of the specific user
-    retrieveUserUid: function(username)
+    retrieveUserUid(username)
     {
         console.log("Entered retrieveUserUid");
         var username_uid_map = firebase.database.ref().child("mapUsernameToUid");
         var uid_follow = username_uid_map[username];
         console.log("Exited retrieveUserUid");
         return uid_follow;
-    },
+    }
 
     //Description: Retrieve email of a specific user
     //@Params
     //username: username of the specific user
     //@Return
     //email: email of the specific user
-    retrieveUserEmail: function(username) 
+    retrieveUserEmail(username) 
     {
         console.log("Entered retrieveUserEmail");
         var username_email_map = firebase.database.ref().child("mapUsernameToEmail");
         var email = username_email_map[username];
         console.log("Exited retrieveUserEmail");
         return email;
-    },
+    }
 
     //Description: Add a user to follow to the current user's list of followers
     //@Params
     //usernameFollow: username of the individual you want to follow
-    addFollowedUser: function(usernameFollow)
+    addFollowedUser(usernameFollow)
     {
         console.log("Entered addFollowedUser");
         //get the uid of the current user
         var uid_current = firebase.auth().currentUser.uid;
         //get the uid of the user to follow
-        var username_uid_map = firebase.database.ref().child("mapUsernameToUid");
+        var username_uid_map = firebase.database.ref().child(mapUsernameToUid);
         var uid_follow = username_uid_map[usernameFollow];
         //put it in the appropriate spot in the databasee under followedUsers
         //add uid and an empty list of followedTopics
@@ -77,36 +83,36 @@ const helperfunctions =
             followedTopics: []
         });
         console.log("Exited addFollowedUser");
-    },
+    }
 
     //Description: Add a topic that the current user follows to the already followed user
     //@Params
     //usernameFollow: username of the individual the current user has followed, type: string
     //topicsFollow: the topic(s) that the current user wants to follow from the given usernameFollow, type: array
-    addFollowedTopicToFollowedUser: function(usernameFollow, topicsFollow)
+    addFollowedTopicToFollowedUser(usernameFollow, topicsFollow)
     {
         console.log("Entered addFollowedTopicToFollowedUser");
         //get the uid of the current user
         var uid_current = firebase.auth().currentUser.uid;
         //get the uid of the user to follow
-        var username_uid_map = firebase.database.ref().child("mapUsernameToUid");
+        var username_uid_map = firebase.database.ref().child(mapUsernameToUid);
         var uid_follow = username_uid_map[usernameFollow];
         //add followedTopic to the list of followedTopics within the followedUser
-        firebase.database().ref().once('value', (snapshot) => {
-            var followedTopics = snapshot.child("users").child(firebase.auth().currentUser.uid).child("followedUsers").child(uid_follow).child("followedTopics").val();
-            for(var index = 0; index < topicsFollow.length; index++)
+        app.database().ref().once('value', (snapshot) => {
+            var followedTopics = snapshot.child("users").child(app.auth().currentUser.uid).child("followedUsers").child(uid_follow).child("followedTopics").val();
+            for(index = 0; index < topicsFollow.length; index++)
             {
                 followedTopics.push(topicsFollow[index]);
             }
         });
         console.log("Exited addFollowedTopicToFollowedUser");
-    },
+    }
 
     //Description: Add a topic to current user (when current user decides to write and post a microblog)
     //@Params
     //content: a string that represents the blog itself (must be a string of less than 250 characters), type: string
     //topic(s): a list of topics associated to the blog, type: array
-    addMicroBlogToCurrentUser: function(content, topics)
+    addMicroBlogToCurrentUser(content, topics)
     {
         console.log("Entered addMicroBlogToCurrentUser");
         //get the current user's uid
@@ -120,66 +126,47 @@ const helperfunctions =
             console.log("ERROR: content of microblog cannot exceed 250 characters -- will not store in firebase");
         }
         //add uid, microblog content, and list of topics to Microblogs
-        var topicsList = [];
-        for(var index = 0; index < topics.length; index++)
+        else
         {
-            topicsList.push(topics[index]);
+            firebase.database().ref().child("users").child(firebase.auth().currentUser.userIdCurr).child("Microblogs").push({
+                content: content,
+                topics: [],
+                timestamp: timestamp
+            });
+
+            app.database().ref().once('value', (snapshot) => {
+                var topicsList = snapshort.child("users").child(firebase.auth().currentUser.userIdCurr).child("Microblogs").child("topics").val();
+                for(index = 0; index < topics.length; index++)
+                {
+                    topicsList.push(topics[index]);
+                }
+            });
         }
-        var microblog = {'content': content, 'topics': topicsList, 'timestamp': timestamp};
-        firebase.database().ref().once('value', (snapshot) => {
-            var microblog_list = snapshot.child("users").child(firebase.auth().currentUser.uid).child("Microblogs").val();
-            console.log(microblog_list);
-            if(microblog_list == null || microblog_list.length == 0)
-            {
-                firebase.database().ref().child("users").child(firebase.auth().currentUser.uid).child("Microblogs").set({'0': microblog});
-            }
-            else
-            {
-                microblog_list.push(microblog);
-                firebase.database().ref().child("users").child(firebase.auth().currentUser.uid).child("Microblogs").set(microblog_list);
-            }
-        });
         console.log("Exited addMicroBlogToCurrentUser");
-    },
-    
+    }
+
     //Description: fetch another Users bio (when current user visits another profile)
     //@Params
     //username: string containing Username of profile page current User is visiting
-    getBio: function(username) 
-    {
+    getAnotherBio(username) {
         var bio_content;
         //fetch user's uid from the username to uid list and then fetch bio from coresponding uid.
-        firebase.database().ref().once('value', (snapshot) => {
+        await firebase.ref().once('value', (snapshot) => {
             var user_uid_list = snapshot.child('mapUsernameToUID').val();
             var uid_val = user_uid_list[username];
             bio_content = snapshot.child("users").child(uid_val).child("bio").val();
         });
 
         return bio_content;
-    },
+    }
 
     //Description: save current Users bio on database.
     //@Params
     //content: string which contians users bio.
-    postCurrentUserBio: async function(content) {
-        //save current users bio on firebase
-        await firebase.database().ref().child("users").child(firebase.auth().currentUser.uid).child("bio").set(content);
+    postCurrentUserBio(content) {
+        //fetch current user's uid
+        var currentUser_uid = firebase.auth().currentUser.uid;
+        // save changes on fire base;
+        app.database().ref().child("users").child(currentUser_uid).child("bio").update(content);
     }
-
-    /*
-    //gets a list of all the microblogs that the current user has posted and the posts he/she follows
-    getMicroblogsForCurrentUserAsync: async function() {
-    let result;
-    await firebase.database().ref().once('value', (snapshot) => {
-      var mapUIDtoUsername = snapshot.child("mapUIDtoUsername").val();
-      var usernameOfUser = mapUIDtoUsername[firebase.auth().currentUser.uid];
-      var Microblogs = snapshot.child("users").child(firebase.auth().currentUser.uid).child("Microblogs").val();
-
-      result = {usernameOfUser, Microblogs};
-    });
-
-    return result;
-    }*/
-}
-
-export default helperfunctions;
+} 
