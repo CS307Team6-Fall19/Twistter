@@ -3,12 +3,10 @@ import { withRouter } from "react-router";
 import ReactDOM from 'react-dom';
 import firebase from "firebase";
 
-/* 
-HOW TO USE THIS:
-var user = new User();
-user.method_name(parameters);
-Ex: user.addFollowedUser(username);
-Ex: var uid = user.retrieveUserUid(username);
+/*
+TODO
+How to use this class:
+
 */
 const helperfunctions =
     {
@@ -142,7 +140,22 @@ const helperfunctions =
             }
         });
         console.log("Exited addMicroBlogToCurrentUser");
-    }
+    },
+
+    /*
+    //gets a list of all the microblogs that the current user has posted and the posts he/she follows
+    getMicroblogsForCurrentUserAsync: async function() {
+    let result;
+    await firebase.database().ref().once('value', (snapshot) => {
+      var mapUIDtoUsername = snapshot.child("mapUIDtoUsername").val();
+      var usernameOfUser = mapUIDtoUsername[firebase.auth().currentUser.uid];
+      var Microblogs = snapshot.child("users").child(firebase.auth().currentUser.uid).child("Microblogs").val();
+
+      result = {usernameOfUser, Microblogs};
+    });
+
+    return result;
+    }*/
 }
 
 export default helperfunctions;
