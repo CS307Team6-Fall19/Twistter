@@ -75,12 +75,6 @@ class Landing extends Component {
     var content = document.getElementById("content").value;
     console.log(content);
     HelperFunctions.addMicroBlogToCurrentUser(content, []);
-    //upload your microblog draft here
-    /*
-
-
-    */
-
 
     //fetches the latest list of microblogs
     this.state.users = []; //erase previous list of microblogs and re-fetch them from server and populate the page
