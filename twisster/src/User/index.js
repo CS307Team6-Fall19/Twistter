@@ -117,11 +117,57 @@ class User extends React.Component{
       
   }
 
+  getFollowersAndFollowing() {
+    firebase.database().ref().once('value', (snapshot) => {
+
+      var mapUsernameToUID = snapshot.child("mapUsernameToUID").val();
+      var UIDofUserIAmViewing = mapUsernameToUID[this.username];
+
+      var usersTheUserIsFollowing = snapshot.child("users").child(UIDofUserIAmViewing).child("following").val();
+      var followersTheUserHas = snapshot.child("users").child(UIDofUserIAmViewing).child("followers").val();
+
+      document.getElementById('followers').innerHTML = followersTheUserHas;
+      document.getElementById('following').innerHTML = usersTheUserIsFollowing;
+
+    });
+  }
+
+  //adds the follower I am viewing to the list of users I follow AND
+  //adds me as a follower to the user I am viewing
   followUserIAmViewing(){
-    console.log(this.username);
+    firebase.database().ref().once('value', (snapshot) => {
+      var usersIAmFollowing = snapshot.child("users").child(firebase.auth().currentUser.uid).child("following").val();
+      var mapUsernameToUID = snapshot.child("mapUsernameToUID").val();
+      var UIDofUserIfollowed = mapUsernameToUID[this.username];
+      var followersOfUserIamFollowing = snapshot.child("users").child(UIDofUserIfollowed).child("followers").val();
+
+      var mapUIDToUsername = snapshot.child("mapUIDtoUsername").val();
+      var myUsername = mapUIDToUsername[firebase.auth().currentUser.uid];
+
+      if (mapUsernameToUID[this.username] != firebase.auth().currentUser.uid) {
+        if (usersIAmFollowing == null) {
+          firebase.database().ref().child("users").child(firebase.auth().currentUser.uid).child("following").set(this.username);
+        } else {
+          usersIAmFollowing = usersIAmFollowing + ", " + this.username;
+          firebase.database().ref().child("users").child(firebase.auth().currentUser.uid).child("following").set(usersIAmFollowing);
+        }
+
+        if (followersOfUserIamFollowing == null) {
+          firebase.database().ref().child("users").child(UIDofUserIfollowed).child("followers").set(myUsername);
+        } else {
+          followersOfUserIamFollowing = followersOfUserIamFollowing + ", " + myUsername;
+          firebase.database().ref().child("users").child(UIDofUserIfollowed).child("followers").set(followersOfUserIamFollowing);
+        }
+      }
+      
+      this.getFollowersAndFollowing();
+
+    });
   }
 
   componentDidUpdate = () => {
+
+    console.log("componentdidupdate()");
 
     if(this.loggedIn){
       document.getElementById('username').innerHTML = this.getUsername();
@@ -134,6 +180,9 @@ class User extends React.Component{
   }
 
   componentDidMount = () => {
+    this.getFollowersAndFollowing();
+
+    console.log("componentdidmount()");
 
     if(this.loggedIn){
       document.getElementById('username').innerHTML = this.getUsername();
