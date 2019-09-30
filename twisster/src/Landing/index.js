@@ -78,7 +78,21 @@ class Landing extends Component {
 
     //fetches the latest list of microblogs
     this.state.users = []; //erase previous list of microblogs and re-fetch them from server and populate the page
-    this.getMicroblogsForCurrentUser();
+
+    firebase.database().ref().once('value', (snapshot) => {
+      var mapUIDtoUsername = snapshot.child("mapUIDtoUsername").val();
+      var usernameOfUser = mapUIDtoUsername[firebase.auth().currentUser.uid];
+      var Microblogs = snapshot.child("users").child(firebase.auth().currentUser.uid).child("Microblogs").val();
+
+      if (Microblogs != null) {
+        for (var i = 0; i < Microblogs.length; i++) {
+          this.getUser(usernameOfUser, Microblogs[i].content);
+        }
+      }
+      
+      this.props.history.push({
+        pathname: "/landing"});
+    });
   }
 
   //get list of microblogs when page first loads
