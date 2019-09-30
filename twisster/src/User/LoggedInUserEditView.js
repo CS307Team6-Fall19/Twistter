@@ -7,6 +7,10 @@ const LoggedInUserEditView = ({ onClick })=> {
           <form>
           <label>Username:</label><label id='username'>username</label>
           <br></br>
+          <label>Followers:</label><label id='followers'></label>
+          <br></br>
+          <label>Following:</label><label id='following'></label>
+          <br></br>
           <label>Bio:</label><label id='bio'>bio</label>
           <br></br>
           <input
