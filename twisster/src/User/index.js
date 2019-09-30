@@ -6,7 +6,6 @@ import LoggedInUserView from './LoggedInUserView';
 import LoggedInUserEditView from './LoggedInUserEditView';
 import VisitedUserView from './VisitedUserView';
 import helperfunctions from '../helperfunctions.js'
-import firebase from 'firebase'
 import Microblog from '../Microblog'
 import { TweetBody } from '../DataObjects/Microblog.js'
 import HelperFunctions from "../helperfunctions";
@@ -89,7 +88,7 @@ class User extends React.Component{
   async getBio(username) {
 
     var bio_text;
-    
+
     await firebase.database().ref().once('value', (snapshot) => {
       var user_uid_list = snapshot.child('mapUsernameToUID').val();
       var uid_val = user_uid_list[username];
@@ -136,11 +135,11 @@ class User extends React.Component{
   componentDidUpdate = () => {
 
     if(this.loggedIn){
-      document.getElementById('email').innerHTML = this.getEmail();
+      document.getElementById('username').innerHTML = this.getUsername();
       this.getBio(this.getUsername());
     }
     else{
-      document.getElementById('welcome').innerHTML = "Welcome to " + this.getEmail() + " 's profile!";
+      document.getElementById('welcome').innerHTML = "Welcome to " + this.getUsername() + " 's profile!";
       this.getBio(this.getUsername());
     }
   }
@@ -149,11 +148,11 @@ class User extends React.Component{
 
     console.log("inside component did mount");
     if(this.loggedIn){
-      document.getElementById('email').innerHTML = this.getEmail();
+      document.getElementById('username').innerHTML = this.getUsername();
       this.getBio(this.getUsername());
     }
     else {
-      document.getElementById('welcome').innerHTML = "Welcome to " + this.getEmail() + " 's profile!";
+      document.getElementById('welcome').innerHTML = "Welcome to " + this.getUsername() + " 's profile!";
       this.getBio(this.getUsername());
     }
   }
