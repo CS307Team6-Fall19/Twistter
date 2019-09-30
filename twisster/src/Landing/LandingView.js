@@ -59,10 +59,8 @@ class Landing extends Component {
     );
   }*/
   componentWillMount() {
-    this.getUser()
-    this.getUser()
-    this.getUser()
-    this.getUser()
+   var user2 = new User();
+   user2.addMicroBlogToCurrentUser();
   }
 
 

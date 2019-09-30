@@ -9,6 +9,7 @@ import { TopBar } from '../DataObjects/Microblog.js'
 import './Landing.css'
 import LandingLogoutView from "./LandingLogoutView";
 import LandingProfileView from "./LandingProfileView";
+import HelperFunctions from "../helperfunctions";
 
 class Landing extends Component {
   
@@ -21,7 +22,7 @@ class Landing extends Component {
       ]
     }
 
-    this.getUser = this.getUser.bind(this)
+    this.getUser = this.getUser.bind(this);
     //this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
 
@@ -58,9 +59,11 @@ class Landing extends Component {
       let mapUIDtoUsername = snapshot.child("mapUIDtoUsername").val();
       let usernameOfUser = mapUIDtoUsername[firebase.auth().currentUser.uid];
       let Microblogs = snapshot.child("users").child(firebase.auth().currentUser.uid).child("Microblogs").val();
-
-      for (var i = 0; i < Microblogs.length; i++) {
-        this.getUser(usernameOfUser, Microblogs[i].content);
+      if(Microblogs != null)
+      {
+        for (var i = 0; i < Microblogs.length; i++) {
+          this.getUser(usernameOfUser, Microblogs[i].content);
+        }
       }
     });
   }
@@ -68,7 +71,9 @@ class Landing extends Component {
   //whenever we add a new microblog from our draft, that gets uploaded to firebase and must be show
   //in our current timeline so add that draft, then re-fetch the list of microblogs
   handleSubmit(event) {
-
+    var content = document.getElementById("content").value;
+    console.log(content);
+    HelperFunctions.addMicroBlogToCurrentUser(content, []);
     //upload your microblog draft here
     /*
 
