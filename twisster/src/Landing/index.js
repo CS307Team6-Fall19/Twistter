@@ -84,7 +84,7 @@ class Landing extends Component {
   updateMicroblogsList() {
     //fetches the latest list of microblogs
     this.state.users = []; //erase previous list of microblogs and re-fetch them from server and populate the page
-    console.log()
+    
     firebase.database().ref().once('value', (snapshot) => {
       var mapUIDtoUsername = snapshot.child("mapUIDtoUsername").val();
       var usernameOfUser = mapUIDtoUsername[firebase.auth().currentUser.uid];
