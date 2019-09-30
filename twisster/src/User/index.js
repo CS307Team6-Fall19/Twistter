@@ -4,6 +4,7 @@ import Bio from "../DataObjects/Bio";
 import LoggedInUserView from './LoggedInUserView';
 import LoggedInUserEditView from './LoggedInUserEditView';
 import VisitedUserView from './VisitedUserView';
+import helperfunctions from '../helperfunctions.js'
 
 class User extends React.Component{
 
@@ -20,6 +21,7 @@ class User extends React.Component{
  
     this.bio = new Bio();
 
+
     this.editProfile = this.editProfile.bind(this);
     this.saveChanges = this.saveChanges.bind(this);
     this.setNewBio = this.setNewBio.bind(this);
@@ -29,7 +31,20 @@ class User extends React.Component{
       return this.email;
   }
 
-  getBio(){
+  getCurrentBio() {
+    var bio_cont = helperfunctions.getCurrentBio(firebase.auth().currentUser.uid);
+    if (bio_cont == undefined) {
+      this.bio.setText(bio_cont);
+    }
+    return this.bio.getText();
+  }
+
+  getBio(username) {
+
+    var bio_cont = helperfunctions.getBio(username);
+    if (bio_cont == undefined) {
+      this.bio.setText(bio_cont);
+    }
     return this.bio.getText();
   }
 
@@ -53,10 +68,8 @@ class User extends React.Component{
     })
   }
 
-  setNewBio(){
-    
-      this.bio.setText(document.getElementById('bioTextBox').value);
-      
+  setNewBio(){ 
+    this.bio.setText(document.getElementById('bioTextBox').value);
   }
 
   componentDidUpdate = () => {
@@ -75,11 +88,22 @@ class User extends React.Component{
 
     if(this.loggedIn){
       document.getElementById('email').innerHTML = this.getEmail();
-      document.getElementById('bio').innerHTML = this.getBio();
+      document.getElementById('bio').innerHTML = this.getCurrentBio();
     }
     else {
       document.getElementById('welcome').innerHTML = "Welcome to " + this.getEmail() + " 's profile!";
-      document.getElementById('bio').innerHTML = this.getBio();
+      var username;
+      //get username coresponding to email of user bio the current user is visiting
+      await firebase.ref().once('value', (snapshot) => {
+        usernameToEmailList = snapshot.child("mapUsernameToEmail").val();
+        for(var user in usernameToEmailList) {
+          if (usernameToEmailList[user] == this.getEmail()) {
+            username = user;
+            break;
+          }
+        }
+      });
+      document.getElementById('bio').innerHTML = this.getBio(this.getEmail());
     }
   }
 

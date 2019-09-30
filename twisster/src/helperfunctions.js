@@ -142,6 +142,46 @@ const helperfunctions =
             }
         });
         console.log("Exited addMicroBlogToCurrentUser");
+    },
+
+    //Description: fetch current Users bio (when current user visits another profile)
+    //@Params
+    //username: string containing Username of profile page current User is visiting
+    getCurrentBio: function(uid_val) 
+    {
+        var bio_content;
+        //fetch user's uid from the username to uid list and then fetch bio from coresponding uid.
+        await firebase.ref().once('value', (snapshot) => {
+            bio_content = snapshot.child("users").child(uid_val).child("bio").val();
+        });
+
+        return bio_content;
+    },
+    
+    //Description: fetch another Users bio (when current user visits another profile)
+    //@Params
+    //username: string containing Username of profile page current User is visiting
+    getBio: function(username) 
+    {
+        var bio_content;
+        //fetch user's uid from the username to uid list and then fetch bio from coresponding uid.
+        await firebase.ref().once('value', (snapshot) => {
+            var user_uid_list = snapshot.child('mapUsernameToUID').val();
+            var uid_val = user_uid_list[username];
+            bio_content = snapshot.child("users").child(uid_val).child("bio").val();
+        });
+
+        return bio_content;
+    },
+
+    //Description: save current Users bio on database.
+    //@Params
+    //content: string which contians users bio.
+    postCurrentUserBio: function(content) {
+        //fetch current user's uid
+        var currentUser_uid = firebase.auth().currentUser.uid;
+        // save changes on fire base;
+        app.database().ref().child("users").child(currentUser_uid).child("bio").update(content);
     }
 }
 
