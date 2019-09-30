@@ -90,7 +90,7 @@ const NewTweetBody = (props) => {
             <Handle handle={props.handle}/>
           </div>
           <div >
-            <textarea id='postText' className='new-tweet' placeholder="Hello"/>
+            <textarea id='content' className='new-tweet' placeholder="Hello"/>
             <button className = 'post-button' type="submit" onClick={props.onClick}>Post</button>
           </div> 
         </div>

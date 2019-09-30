@@ -44,9 +44,9 @@ class User extends React.Component{
 
   getMicroblogsForCurrentUser() {
     firebase.database().ref().once('value', (snapshot) => {
-      let mapUsernametoUID = snapshot.child("mapUsernametoUID").val();
+      let mapUsernameToUID = snapshot.child("mapUsernameToUID").val();
       //let mapUIDtoUsername = snapshot.child("mapUIDtoUsername").val();
-      let uidOfUser = mapUsernametoUID[this.username];
+      let uidOfUser = mapUsernameToUID[this.username];
       let Microblogs = snapshot.child("users").child(uidOfUser).child("Microblogs").val();
       if(Microblogs != null)
       {

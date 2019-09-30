@@ -138,7 +138,7 @@ const helperfunctions =
             else
             {
                 microblog_list.push(microblog);
-                firebase.database().ref().child("users").child(firebase.auth().currentUser.uid).child("Microblogs").set(microblog);
+                firebase.database().ref().child("users").child(firebase.auth().currentUser.uid).child("Microblogs").set(microblog_list);
             }
         });
         console.log("Exited addMicroBlogToCurrentUser");
