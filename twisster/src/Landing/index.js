@@ -9,6 +9,7 @@ import { TopBar } from '../DataObjects/Microblog.js'
 import './Landing.css'
 import LandingLogoutView from "./LandingLogoutView";
 import LandingProfileView from "./LandingProfileView";
+import HelperFunctions from "../helperfunctions";
 
 class Landing extends Component {
   
@@ -21,11 +22,13 @@ class Landing extends Component {
       ]
     }
 
-    this.getUser = this.getUser.bind(this)
+    this.getUser = this.getUser.bind(this);
     //this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.addNewTopics = this.addNewTopics.bind(this);
 
     this.goToProfile = this.goToProfile.bind(this);
+    this.searchForUser = this.searchForUser.bind(this);
     this.goLogout = this.goLogout.bind(this);
 
     //this.email = this.email.bind(this);
@@ -61,26 +64,55 @@ class Landing extends Component {
       if(Microblogs != null)
       {
         for (var i = 0; i < Microblogs.length; i++) {
-          this.getUser(usernameOfUser, Microblogs[i].content);
+          this.getUser(usernameOfUser, Microblogs[i].content, Microblogs[i].topics);
         }
       }
     });
   }
 
+  //when Add New Topics button is pressed, transfer the input from the input box to the topics box in drafting
+  addNewTopics(event) {
+    if (document.getElementById("addTopics").value != "" && document.getElementById("addTopics").value != ",") {
+      if (document.getElementById("showTopics").value == "") {
+        document.getElementById("showTopics").value = document.getElementById("addTopics").value;
+      } else {
+        document.getElementById("showTopics").value = document.getElementById("showTopics").value + ", " + document.getElementById("addTopics").value;
+      }
+      document.getElementById("addTopics").value = "";
+    }
+  }
+
   //whenever we add a new microblog from our draft, that gets uploaded to firebase and must be show
   //in our current timeline so add that draft, then re-fetch the list of microblogs
   handleSubmit(event) {
+    var content = document.getElementById("content").value;
+    console.log(content);
+    HelperFunctions.addMicroBlogToCurrentUser(content, [document.getElementById("showTopics").value]);
 
-    //upload your microblog draft here
-    /*
+    document.getElementById("content").value = "";
+    document.getElementById("showTopics").value = "";
+    document.getElementById("addTopics").value = "";
 
+    window.setTimeout(() => {
+      this.updateMicroblogsList();
+    }, 1000);
+  }
 
-    */
-
-
+  updateMicroblogsList() {
     //fetches the latest list of microblogs
     this.state.users = []; //erase previous list of microblogs and re-fetch them from server and populate the page
-    this.getMicroblogsForCurrentUser();
+    
+    firebase.database().ref().once('value', (snapshot) => {
+      var mapUIDtoUsername = snapshot.child("mapUIDtoUsername").val();
+      var usernameOfUser = mapUIDtoUsername[firebase.auth().currentUser.uid];
+      var Microblogs = snapshot.child("users").child(firebase.auth().currentUser.uid).child("Microblogs").val();
+
+      if (Microblogs != null) {
+        for (var i = 0; i < Microblogs.length; i++) {
+          this.getUser(usernameOfUser, Microblogs[i].content, Microblogs[i].topics);
+        }
+      }
+    });
   }
 
   //get list of microblogs when page first loads
@@ -91,10 +123,20 @@ class Landing extends Component {
   componentWillMount() {
     firebase.auth().onAuthStateChanged(function(user) {
       if (user) {
+
         //CHANGE WHEN USER HAS USERNAME
         this.loggedIn = true;
-        this.userData = new UserData(user.email, this.loggedIn);
-        this.email = user.email;
+
+        firebase.database().ref().once('value', (snapshot) => {
+          var UIDtoUsername = snapshot.child('mapUIDtoUsername').val();
+          var username = UIDtoUsername[user.uid];
+
+          this.userData = new UserData(username, this.loggedIn);
+          this.email = user.email;
+        });
+
+        
+        
        // document.getElementById('name').innerHTML = user.email;
       } else {
         console.log("user is null");
@@ -102,27 +144,24 @@ class Landing extends Component {
     }.bind(this));
   }
 
- getUser(nameInput, tweetInput) {
-    fetch('https://randomuser.me/api/')
-    .then(response => {
-      if(response.ok) return response.json();
-      throw new Error('Request failed.');
-    })
-    .then(data => {
+ getUser(nameInput, tweetInput, topicsInput) {
+
       this.setState({
         users:[
           {
             name: nameInput,//data.results[0].name,
             image: "",//data.results[0].picture.medium,
             tweet: tweetInput,
+            topics: topicsInput
           },
           ...this.state.users,
         ]
-      });
-    })
-    .catch(error => {
-      console.log(error);
-    });
+      })
+
+  }
+
+  searchForUser(){
+    console.log("hello");
   }
 
   render() {
@@ -134,26 +173,31 @@ class Landing extends Component {
     ); */
     return (
       <div className="main-body">
-      <TopBar onClick={this.goToProfile}/>
+      <TopBar onClick={this.goToProfile} /* OnClickProfile={this.goToProfile} *//>
       <NewTweetBody  
-            name='{name}'
+            name='{username}'
             handle='{handle}'
             newTweet='{tweet}'
             image={this.getUser.image}
-            onClick={this.handleSubmit}/>
+            onClick={this.handleSubmit}
+            onClickTopic={this.addNewTopics}
+            
+      />
+
       {[...this.state.users].map((user, index) => {
         let name = `${user.name}`
         let handle = `@${user.name}`
         let image = user.image
         let tweet = user.tweet
-        console.log(image)
+        let topics = user.topics
           return(
           <TweetBody 
             key={index}
             name={name}
             handle={handle}
             tweet={tweet}
-            image={image} />
+            image={image}
+            topics={topics} />
           )
       })}      
     </div>

@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+/* import React, { Component } from "react";
 import { withRouter } from "react-router";
 import Clock from "./DataObjects/Clock";
 import app from "./base";
@@ -12,6 +12,7 @@ user.method_name(parameters);
 Ex: user.addFollowedUser(username);
 Ex: var uid = user.retrieveUserUid(username);
 */
+/*
 class User extends React.Component
 {
     constructor()
@@ -150,4 +151,4 @@ class User extends React.Component
         }
         console.log("Exited addMicroBlogToCurrentUser");
     }
-}
+} */

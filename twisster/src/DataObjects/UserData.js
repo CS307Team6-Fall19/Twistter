@@ -1,13 +1,13 @@
 class UserData{  
 
     constructor(username, loggedIn){
-        this.email = username;
+        this.username = username;
         this.loggedIn = loggedIn;
         
     }
 
-    getEmail(){
-        return this.email;
+    getUsername(){
+        return this.username;
     }
 
     getUid(){

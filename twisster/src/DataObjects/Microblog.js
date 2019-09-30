@@ -47,6 +47,14 @@ const Tweet = (props) => {
   )
 }
 
+const Topics = (props) => {
+  return(
+    <div className="topics">
+      {props.topics}
+    </div>
+  )
+}
+
 const TweetBody = (props) => {
   return(
     <TweetBox>
@@ -58,6 +66,7 @@ const TweetBody = (props) => {
             <Handle handle={props.handle}/>
           </div>
           <Tweet tweet={props.tweet}/>
+          <Topics topics={props.topics}/>
         </div>
       </div>
     </TweetBox>
@@ -90,8 +99,11 @@ const NewTweetBody = (props) => {
             <Handle handle={props.handle}/>
           </div>
           <div >
-            <textarea className='new-tweet' placeholder="Hello"/>
-            <button className = 'post-button' type="submit" onClick={props.onClick}>Post</button>
+            <textarea id='content' className='new-tweet' placeholder="Hello"/>
+            <textarea id='showTopics' className='new-topic' placeholder="Topics Listed Here"/>
+            <textarea id='addTopics' className='new-topic' placeholder="Add Topics Here"/>
+            <button type="submit" onClick={props.onClick}>Post</button>
+            <button type="submit" onClick={props.onClickTopic}>Add New Topics</button>
           </div> 
         </div>
       </div>
@@ -99,12 +111,13 @@ const NewTweetBody = (props) => {
   )
 }
 
-const TopBarTwisster = ({onClickProfile}) => {
+const TopBarTwisster = (props) => {
   return (
     <div className="inner-body">
       <label className="top-bar-twisster" >Twistter</label>
       <input className="top-bar-search" placeholder="Search"/>
-      <button className="top-bar-button" type="button" onClick={onClickProfile}>Go to your profile</button>    
+      <button name="search" onClick={props.onClickSearch}>Search</button>
+      <button className="top-bar-button" type="button" onClick={props.onClickProfile}>Go to your profile</button>    
     </div>
   )
 }

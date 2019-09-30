@@ -3,12 +3,10 @@ import { withRouter } from "react-router";
 import ReactDOM from 'react-dom';
 import firebase from "firebase";
 
-/* 
-HOW TO USE THIS:
-var user = new User();
-user.method_name(parameters);
-Ex: user.addFollowedUser(username);
-Ex: var uid = user.retrieveUserUid(username);
+/*
+TODO
+How to use this class:
+
 */
 const helperfunctions =
     {
@@ -138,7 +136,7 @@ const helperfunctions =
             else
             {
                 microblog_list.push(microblog);
-                firebase.database().ref().child("users").child(firebase.auth().currentUser.uid).child("Microblogs").set(microblog);
+                firebase.database().ref().child("users").child(firebase.auth().currentUser.uid).child("Microblogs").set(microblog_list);
             }
         });
         console.log("Exited addMicroBlogToCurrentUser");
@@ -147,24 +145,16 @@ const helperfunctions =
     //Description: fetch another Users bio (when current user visits another profile)
     //@Params
     //username: string containing Username of profile page current User is visiting
-    getBio: function(email) 
+    getBio: function(username) 
     {
         var bio_content;
         //fetch user's uid from the username to uid list and then fetch bio from coresponding uid.
         firebase.database().ref().once('value', (snapshot) => {
-            var user_email_list = snapshot.child('mapUsernameToUID').val();
-            var username;
-            for (var user in user_email_list) {
-                if (user_email_list[user] == email) {
-                    username = user;
-                    break;
-                }
-            }
             var user_uid_list = snapshot.child('mapUsernameToUID').val();
             var uid_val = user_uid_list[username];
             bio_content = snapshot.child("users").child(uid_val).child("bio").val();
         });
-        console.log("Sup: " + bio_content);
+
         return bio_content;
     },
 
@@ -172,23 +162,24 @@ const helperfunctions =
     //@Params
     //content: string which contians users bio.
     postCurrentUserBio: async function(content) {
-        //fetch current user's uid
-        // var currentUser_uid;
-        // firebase.database().ref().once('value', (snapshot) => {
-        //     var user_email_list = snapshot.child('mapUsernameToUID').val();
-        //     var username;
-        //     for (var user in user_email_list) {
-        //         if (user_email_list[user] == user_email) {
-        //             username = user;
-        //             break;
-        //         }
-        //     }
-        //     var user_uid_list = snapshot.child('mapUsernameToUID').val();
-        //     currentUser_uid = user_uid_list[username];
-        // });
-        // save changes on fire base;
+        //save current users bio on firebase
         await firebase.database().ref().child("users").child(firebase.auth().currentUser.uid).child("bio").set(content);
     }
+
+    /*
+    //gets a list of all the microblogs that the current user has posted and the posts he/she follows
+    getMicroblogsForCurrentUserAsync: async function() {
+    let result;
+    await firebase.database().ref().once('value', (snapshot) => {
+      var mapUIDtoUsername = snapshot.child("mapUIDtoUsername").val();
+      var usernameOfUser = mapUIDtoUsername[firebase.auth().currentUser.uid];
+      var Microblogs = snapshot.child("users").child(firebase.auth().currentUser.uid).child("Microblogs").val();
+
+      result = {usernameOfUser, Microblogs};
+    });
+
+    return result;
+    }*/
 }
 
 export default helperfunctions;
