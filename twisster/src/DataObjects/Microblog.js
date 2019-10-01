@@ -100,7 +100,7 @@ const NewTweetBody = (props) => {
           </div>
           <div >
             <textarea id='content' className='new-tweet' placeholder="Hello"/>
-            <textarea id='showTopics' className='new-topic' placeholder="Topics Listed Here"/>
+            <textarea disabled id='showTopics' className='new-topic' placeholder="Topics Listed Here"/>
             <textarea id='addTopics' className='new-topic' placeholder="Add Topics Here"/>
             <button type="submit" onClick={props.onClick}>Post</button>
             <button type="submit" onClick={props.onClickTopic}>Add New Topics</button>
