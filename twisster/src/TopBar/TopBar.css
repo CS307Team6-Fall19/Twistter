@@ -29,3 +29,12 @@
     height: 48px;
     background-color: #ffffff;
   }
+
+  .top-bar-logout{
+    position: absolute;
+    right: 0px;
+    float: right;
+    width: 48px;
+    height: 48px;
+    background-color: #ffffff;
+  }
