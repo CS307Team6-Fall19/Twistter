@@ -65,6 +65,8 @@ class SignUpContainer extends Component {
       var newUserRef = database.ref().child("users").child(firebase.auth().currentUser.uid);
       newUserRef.set({'email' : email.value, 'followedTopics' : ['topic1']});
 
+      firebase.auth().signOut();
+
       this.props.history.push("/login");
     } catch (error) {
       alert(error);
