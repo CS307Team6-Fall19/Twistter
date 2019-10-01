@@ -108,6 +108,8 @@
   font-style: normal;
   font-stretch: normal;
   line-height: normal;
+  border: none;
+  resize: none;
   letter-spacing: -0.6px;
   color: #ffffff;
 }

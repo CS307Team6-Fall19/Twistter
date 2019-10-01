@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { withRouter } from "react-router";
-import TopBar from "./TopBar"
+import TopBarLoginSignup from "./TopBarLoginSignup"
 
 
 class Home extends Component {
@@ -22,7 +22,7 @@ class Home extends Component {
   render() {
     return (
       <div>
-        <TopBar />
+        <TopBarLoginSignup />
         <h1>Home</h1>
         <form>
         <button onClick={this.goLogIn}>Login</button>

@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { withRouter } from "react-router";
 import firebase from "firebase";
-import TopBar from "../TopBar"
+import TopBarLoginSignup from "../TopBarLoginSignup"
 import SignUpView from "./SignUpView";
 
 class SignUpContainer extends Component {
@@ -75,7 +75,7 @@ class SignUpContainer extends Component {
 
     return (
       <div>
-        <TopBar />
+        <TopBarLoginSignup />
         <SignUpView onSubmit={this.handleSignUp} />
       </div>
     );

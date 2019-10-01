@@ -206,13 +206,15 @@ class Landing extends Component {
             image={image}
             topics={topics} />
           )
-      })}      
+      })}   
+
+         
     </div>
   );
   }
 
   goLogout = async event => {
-    firebase.auth.signOut()
+    firebase.auth().signOut()
       .then(function() {
         console.log("Signout succesful");
       })

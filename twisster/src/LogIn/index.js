@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { withRouter } from "react-router";
 import app from "../base";
-import TopBar from "../TopBar"
+import TopBarLoginSignup from "../TopBarLoginSignup"
 
 import LogInView from "./LogInView";
 import firebase from "firebase";
@@ -80,7 +80,7 @@ class LogInContainer extends Component {
   render() {
     return( 
       <div>
-        <TopBar />
+        <TopBarLoginSignup />
         <LogInView onSubmit={this.handleLogIn} />
       </div>
     );
