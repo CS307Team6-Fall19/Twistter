@@ -87,7 +87,14 @@ class Landing extends Component {
   handleSubmit(event) {
     var content = document.getElementById("content").value;
     console.log(content);
-    HelperFunctions.addMicroBlogToCurrentUser(content, [document.getElementById("showTopics").value]);
+    if(content.length > 250 || content.length <= 0)
+    {
+      alert("Cannot post microblog");
+    }
+    else
+    {
+      HelperFunctions.addMicroBlogToCurrentUser(content, [document.getElementById("showTopics").value]);
+    }
 
     document.getElementById("content").value = "";
     document.getElementById("showTopics").value = "";
