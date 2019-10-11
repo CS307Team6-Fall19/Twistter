@@ -11,6 +11,8 @@ const VisitedUserView = ({ onClickFollow })=> {
           <br></br>
           <label>Following:</label><label id='following'></label>
           <br></br>
+          <label>Followed Topics:</label><label id='followedTopics'></label>
+          <br></br>          
           <button type='button' id="followbutton" onClick={onClickFollow}>Follow</button>
           <br></br>
           <label>Bio:</label><label id='bio'>bio</label>

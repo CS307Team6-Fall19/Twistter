@@ -11,6 +11,8 @@ const LoggedInUserEditView = ({ onClick })=> {
           <br></br>
           <label>Following:</label><label id='following'></label>
           <br></br>
+          <label>Followed Topics:</label><label id='followedTopics'></label>
+          <br></br>
           <label>Bio:</label><label id='bio'>bio</label>
           <br></br>
           <input

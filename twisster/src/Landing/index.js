@@ -93,7 +93,13 @@ class Landing extends Component {
     }
     else
     {
-      HelperFunctions.addMicroBlogToCurrentUser(content, [document.getElementById("showTopics").value]);
+      alert("WASSUP " + document.getElementById("showTopics").value);
+      var topics = new Array();
+      var topicsStr = document.getElementById("showTopics").value;
+      topics = topicsStr.split(",");
+      alert(topics);
+      alert(typeof topics);
+      HelperFunctions.addMicroBlogToCurrentUser(content, topics);
     }
 
     document.getElementById("content").value = "";

@@ -40,6 +40,7 @@ class User extends React.Component{
     this.saveChanges = this.saveChanges.bind(this);
     this.setNewBio = this.setNewBio.bind(this);
     this.followUserIAmViewing = this.followUserIAmViewing.bind(this);
+    this.getFollowedTopics();
     //this.getMicroblogs = this.getMicroblogs.bind(this);
     
   }
@@ -145,6 +146,17 @@ class User extends React.Component{
       document.getElementById('followers').innerHTML = followersTheUserHas;
       document.getElementById('following').innerHTML = usersTheUserIsFollowing;
 
+    });
+  }
+
+  getFollowedTopics() {
+    firebase.database().ref().once('value', (snapshot) => {
+      var mapUsernameToUID = snapshot.child("mapUsernameToUID").val();
+      var currentUser = mapUsernameToUID[this.username];
+
+      var followedTopics = snapshot.child("users").child(currentUser).child("followedTopics").val();
+      alert(followedTopics);
+      document.getElementById("followedTopics").innerHTML = followedTopics;
     });
   }
 
