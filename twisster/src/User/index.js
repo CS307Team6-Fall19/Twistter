@@ -9,6 +9,7 @@ import { thisExpression } from '@babel/types';
 import LoggedInUserView from "./UserProfileViews/LoggedInUserView";
 import LoggedInUserEditView from "./UserProfileViews/LoggedInUserEditView"
 import VisitedUserView from "./UserProfileViews/VisitedUserView"
+import { resolve } from 'q';
 
 class User extends React.Component{
 
@@ -78,7 +79,7 @@ class User extends React.Component{
         if(this.state.mustUpdate == 1){
             this.setState({
                 mustUpdate : 0
-                })
+            })
         }
     }
 
@@ -95,6 +96,8 @@ class User extends React.Component{
 
         this.microblogs = await helperfunctions.getMicroblogsForUser(this.username);
         userProfile.microblogs = this.microblogs;
+
+        resolve("done");
     }
 
     render() {
