@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { withRouter } from "react-router";
 import ReactDOM from 'react-dom';
 import firebase from "firebase";
+import { resolve } from "dns";
 
 /*
 TODO
@@ -145,7 +146,7 @@ const helperfunctions =
     //Description: fetch another Users bio (when current user visits another profile)
     //@Params
     //username: string containing Username of profile page current User is visiting
-    getBio: function(username) 
+    /* getBio: function(username) 
     {
         var bio_content;
         //fetch user's uid from the username to uid list and then fetch bio from coresponding uid.
@@ -156,15 +157,86 @@ const helperfunctions =
         });
 
         return bio_content;
+    }, */
+
+    getBio: async function(username) {
+
+      var bio_text;
+  
+      const bio = await firebase.database().ref().once('value', (snapshot) => {
+        var user_uid_list = snapshot.child('mapUsernameToUID').val();
+        var uid_val = user_uid_list[username];
+        var bio_cont = snapshot.child("users").child(uid_val).child("bio").val();
+        if (bio_cont != undefined) {
+          //resolve(bio_cont);
+          bio_text = bio_cont;
+          return bio_cont;
+        }
+      });
+
+        resolve("done")
+        return bio_text;
     },
 
+    getFollowersAndFollowing: async function(username){
+
+        var result;
+        await firebase.database().ref().once('value', (snapshot) => {
+    
+          var mapUsernameToUID = snapshot.child("mapUsernameToUID").val();
+          var UIDofUserIAmViewing = mapUsernameToUID[username];
+          var usersTheUserIsFollowing = snapshot.child("users").child(UIDofUserIAmViewing).child("following").val();
+          var followersTheUserHas = snapshot.child("users").child(UIDofUserIAmViewing).child("followers").val();
+
+          var followers = followersTheUserHas;
+          var following = usersTheUserIsFollowing;
+
+          result = {followers, following};
+          
+        });
+
+        resolve("done")
+        return result;
+    },
+
+    followUserIAmViewing: async function(username){
+
+        await firebase.database().ref().once('value', (snapshot) => {
+          var usersIAmFollowing = snapshot.child("users").child(firebase.auth().currentUser.uid).child("following").val();
+          var mapUsernameToUID = snapshot.child("mapUsernameToUID").val();
+          var UIDofUserIfollowed = mapUsernameToUID[username];
+          var followersOfUserIamFollowing = snapshot.child("users").child(UIDofUserIfollowed).child("followers").val();
+    
+          var mapUIDToUsername = snapshot.child("mapUIDtoUsername").val();
+          var myUsername = mapUIDToUsername[firebase.auth().currentUser.uid];
+    
+          if (mapUsernameToUID[username] != firebase.auth().currentUser.uid) {
+            if (usersIAmFollowing == null) {
+              firebase.database().ref().child("users").child(firebase.auth().currentUser.uid).child("following").set(username);
+            } else {
+              usersIAmFollowing = usersIAmFollowing + ", " + username;
+              firebase.database().ref().child("users").child(firebase.auth().currentUser.uid).child("following").set(usersIAmFollowing);
+            }
+    
+            if (followersOfUserIamFollowing == null) {
+              firebase.database().ref().child("users").child(UIDofUserIfollowed).child("followers").set(myUsername);
+            } else {
+              followersOfUserIamFollowing = followersOfUserIamFollowing + ", " + myUsername;
+              firebase.database().ref().child("users").child(UIDofUserIfollowed).child("followers").set(followersOfUserIamFollowing);
+            }
+          }
+        });
+
+        resolve("done");
+      },
     //Description: save current Users bio on database.
     //@Params
     //content: string which contians users bio.
     postCurrentUserBio: async function(content) {
         //save current users bio on firebase
         await firebase.database().ref().child("users").child(firebase.auth().currentUser.uid).child("bio").set(content);
-    }
+        resolve("done");
+    },
 
     /*
     //gets a list of all the microblogs that the current user has posted and the posts he/she follows
@@ -180,6 +252,40 @@ const helperfunctions =
 
     return result;
     }*/
+
+    getMicroblogsForCurrentUser: async function(username) {
+        var Microblogs;
+        firebase.database().ref().once('value', (snapshot) => {
+          let mapUsernameToUID = snapshot.child("mapUsernameToUID").val();
+          //let mapUIDtoUsername = snapshot.child("mapUIDtoUsername").val();
+          let uidOfUser = mapUsernameToUID[username];
+          Microblogs = snapshot.child("users").child(uidOfUser).child("Microblogs").val();
+          if(Microblogs != null)
+          {
+              
+            
+          }
+        });
+        return Microblogs;
+      },
+
+      getMicroblogsForUser: async function(username) {
+        var Microblogs;
+        const t = await firebase.database().ref().once('value', (snapshot) => {
+          let mapUsernameToUID = snapshot.child("mapUsernameToUID").val();
+          //let mapUIDtoUsername = snapshot.child("mapUIDtoUsername").val();
+          let uidOfUser = mapUsernameToUID[username];
+          Microblogs = snapshot.child("users").child(uidOfUser).child("Microblogs").val();
+          if(Microblogs != null)
+          {
+              
+            
+          }
+        });
+        resolve("done");
+
+        return Microblogs;
+      }
 }
 
 export default helperfunctions;
