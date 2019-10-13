@@ -13,41 +13,34 @@ class Microblog extends React.Component{
       this.microblogData.handle = props.username;
       this.microblogData.tweet = props.data.content;
       this.microblogData.image = "props.image";
-      this.microblogData.topics = "props.topics";
+      
+
+      var topics = "";
+      for(var i = 0; i < props.data.topics.length-1; i++){
+            topics += props.data.topics[i];
+            topics += ", "
+      }
+      topics += props.data.topics[props.data.topics.length-1];
+
+      this.microblogData.topics = topics;
       
     }
 
-    /* render(){
-        return(
-            <MicroblogView 
-                name={this.name}
-                handle={this.handle}
-                tweet={this.tweet}
-                image={this.image} 
-                topics={this.topics}
-            />
-        );
-    } */
     render(){
         let name = `${this.microblogData.name}`
         let handle = `@${this.microblogData.name}`
         let image = this.microblogData.image
         let tweet = this.microblogData.tweet
-        //let topics = user.topics
+        let topics = this.microblogData.topics
         return(
             
             <MicroblogView 
-                /* name={this.microblogData.name} 
-                handle={this.microblogData.same}
-                tweet={this.microblogData.tweet}
-                image={this.microblogData.image}
-                topics={this.microblogData.topics} */
                 key={this.microblogData.key}
                 name={name}
                 handle={handle}
                 image={image}
                 tweet={tweet}
-                //props={this.microblogData}
+                topics={topics}
             /> 
         );
     }
