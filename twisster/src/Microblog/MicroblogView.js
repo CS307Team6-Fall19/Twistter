@@ -2,9 +2,10 @@ import React from "react";
 import MicroblogBox from '../MicroblogBox'
 import './Landing.css'
 
-const Image = (props) => {
+
+const Image = (image) => {
   return(
-    <img src={props.image} alt="Logo" className="picture">
+    <img src={image} alt="Logo" className="picture">
     </img>
   )
 }
@@ -33,6 +34,7 @@ const Tweet = (props) => {
   )
 }
 
+//TODO: ADD TOPICS
 const MicroblogView = (props) => {
   return(
     <MicroblogBox>
@@ -51,4 +53,4 @@ const MicroblogView = (props) => {
 }
 
 
-export default MicroblogView;
+export {MicroblogView};
