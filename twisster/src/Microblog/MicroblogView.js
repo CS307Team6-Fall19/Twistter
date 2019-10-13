@@ -34,7 +34,14 @@ const Tweet = (props) => {
   )
 }
 
-//TODO: ADD TOPICS
+const Topics = (props) => {
+  return(
+    <div className="topics">
+      {props.topics}
+    </div>
+  )
+}
+
 const MicroblogView = (props) => {
   return(
     <MicroblogBox>
@@ -46,6 +53,7 @@ const MicroblogView = (props) => {
             <Handle handle={props.handle}/>
           </div>
           <Tweet tweet={props.tweet}/>
+          <Topics topics={props.topics}/>
         </div>
       </div>
     </MicroblogBox>
