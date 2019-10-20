@@ -1,7 +1,5 @@
 import React, { Component } from "react";
 import { withRouter } from "react-router";
-import ReactDOM from "react-dom"
-import { BrowserRouter as Router, Route } from "react-router-dom"
 
 import ProfilePageView from "./ProfilePageView";
 import UserData from "../DataObjects/UserData";
