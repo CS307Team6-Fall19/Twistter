@@ -118,9 +118,26 @@ const helperfunctions =
         //check if the length of the microblog does not exceed 250 characters
         if(content.length > 250)
         {
-            console.log("ERROR: content of microblog cannot exceed 250 characters -- will not store in firebase");
+            console.log("ERROR: content of microblog cannot exceed 250 characters --> will not store in firebase");
         }
         //add uid, microblog content, and list of topics to Microblogs
+        var wTopics = [];
+        for(var index = 0; index < topics.length; index++)
+        {
+            wTopics.push(topics[index]);
+        }
+        firebase.database().ref().once('value', (snapshot) => {
+            var writtenTopics = snapshot.child("users").child(firebase.auth().currentUser.uid).child("writtenTopics").val();
+            if(writtenTopics == null || writtenTopics.length == 0)
+            {
+                firebase.database().ref().child("users").child(firebase.auth().currentUser.uid).child("writtenTopics").set({'0': wTopics});
+            }
+            else
+            {
+                writtenTopics.push(wTopics);
+                firebase.database().ref().child("users").child(firebase.auth().currentUser.uid).child("writtenTopics").set(wTopics);
+            }
+        });
         var topicsList = [];
         for(var index = 0; index < topics.length; index++)
         {
