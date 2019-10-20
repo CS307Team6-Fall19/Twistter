@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 
 import helperfunctions from '../helperfunctions.js'
 import Microblogs from '../Microblogs'
+import { TweetBody } from '../DataObjects/Microblog.js'
+import HelperFunctions from "../helperfunctions";
+import { thisExpression } from '@babel/types';
 
 import LoggedInUserView from "./UserProfileViews/LoggedInUserView";
 import LoggedInUserEditView from "./UserProfileViews/LoggedInUserEditView"
