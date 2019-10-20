@@ -3,7 +3,7 @@ import { withRouter } from "react-router";
 import ReactDOM from 'react-dom';
 import firebase from "firebase";
 import { resolve } from "dns";
-
+import UserData from "./DataObjects/UserData";
 /*
 TODO
 How to use this class:
@@ -107,7 +107,7 @@ const helperfunctions =
     //@Params
     //content: a string that represents the blog itself (must be a string of less than 250 characters), type: string
     //topic(s): a list of topics associated to the blog, type: array
-    addMicroBlogToCurrentUser: function(content, topics)
+    addMicroBlogToCurrentUser: async function(content, topics)
     {
         console.log("Entered addMicroBlogToCurrentUser");
         //get the current user's uid
@@ -127,7 +127,7 @@ const helperfunctions =
             topicsList.push(topics[index]);
         }
         var microblog = {'content': content, 'topics': topicsList, 'timestamp': timestamp};
-        firebase.database().ref().once('value', (snapshot) => {
+        await firebase.database().ref().once('value', (snapshot) => {
             var microblog_list = snapshot.child("users").child(firebase.auth().currentUser.uid).child("Microblogs").val();
             console.log(microblog_list);
             if(microblog_list == null || microblog_list.length == 0)
@@ -140,6 +140,8 @@ const helperfunctions =
                 firebase.database().ref().child("users").child(firebase.auth().currentUser.uid).child("Microblogs").set(microblog_list);
             }
         });
+
+        resolve("done");
         console.log("Exited addMicroBlogToCurrentUser");
     },
     
@@ -285,7 +287,52 @@ const helperfunctions =
         resolve("done");
 
         return Microblogs;
+      },
+
+      getUserdataOfLoggedInUser: async function() {
+        var userData;
+
+        var loggedIn = true;
+
+        
+
+        firebase.auth().onAuthStateChanged(async function(user) {          
+          if (user) {
+
+            userData = await helperfunctions.getUserdataOfUser(user.uid, loggedIn);
+            resolve("done");
+            return userData;
+          } else {
+            console.log("null");
+            // No user is signed in.
+          }
+        });
+
+        
+        /* while(userData == undefined){
+          console.log("undefined")
+        } */
+        
+      },
+
+      getUserdataOfUser : async function(uid, loggedIn) {
+        var userData;
+
+        
+        await firebase.database().ref().once('value', (snapshot) => {
+          var UIDtoUsername = snapshot.child('mapUIDtoUsername').val();
+          var username = UIDtoUsername[uid];
+          userData = new UserData(username, loggedIn);
+          //this.email = user.email;
+        });
+
+        resolve("done");
+        return userData;
       }
+
+
+
+
 }
 
 export default helperfunctions;
