@@ -100,7 +100,6 @@ class User extends React.Component{
     }
 
     render() {
-
         if(this.state.loaded){
 
             if(this.loggedIn){

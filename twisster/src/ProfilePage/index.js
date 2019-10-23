@@ -15,24 +15,10 @@ class ProfilePage extends React.Component {
       super(props); 
 
       this.getUser = this.getUser.bind(this);
+      this.localProps = props;
 
       this.state = {
         loaded: false
-      }
-
-      if(props.location.pathname != "/profile"){
-        this.path = props.location.pathname;
-        this.username = this.path.substring(9, this.path.length);
-        this.getUser(this.username);
-      }
-      else{
-        if (this.userData == undefined || this.userData == null) {
-          console.log("null");
-          //this.userData = new UserData(username, this.loggedIn);
-        } else {
-          console.log(this.props.location.state);
-          this.userData = this.props.location.state.userData; 
-        }
       }
     }
     
@@ -47,15 +33,23 @@ class ProfilePage extends React.Component {
         var UIDtoUsername = snapshot.child('mapUIDtoUsername').val();
 
         if (firebase.auth().currentUser == undefined || firebase.auth().currentUser == null) {
-          this.setState({loaded : false});
-          this.props.history.push({
-            pathname: "/login"
-          });
-          return;
+
+          if(this.localProps.location.pathname != "/profile"){
+            this.path = this.localProps.location.pathname;
+            this.username = this.path.substring(9, this.path.length);
+            this.getUser(this.username);
+          }
+          else{
+            this.localProps.history.push({
+              pathname: "/login"});
+              return;
+          }
+
+        } else {
+          var username = UIDtoUsername[firebase.auth().currentUser.uid];
+          this.userData = new UserData(username, true);
         }
 
-        var username = UIDtoUsername[firebase.auth().currentUser.uid];
-        this.userData = new UserData(username, true);//this.loggedIn);
       });
 
       resolve("done");
@@ -67,7 +61,6 @@ class ProfilePage extends React.Component {
 
     render(){
       if(this.state.loaded){
-
         return (
           <div>
             <TopBar/>
