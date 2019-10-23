@@ -14,7 +14,7 @@ class ProfilePage extends React.Component {
     constructor(props){
       super(props); 
 
-      this.getUser = this.getUser.bind(this);
+      //this.getUser = this.getUser.bind(this);
       this.localProps = props;
 
       this.state = {
@@ -37,7 +37,7 @@ class ProfilePage extends React.Component {
           if(this.localProps.location.pathname != "/profile"){
             this.path = this.localProps.location.pathname;
             this.username = this.path.substring(9, this.path.length);
-            this.getUser(this.username);
+            this.userData = new UserData(this.username, false);
           }
           else{
             this.localProps.history.push({
@@ -46,8 +46,18 @@ class ProfilePage extends React.Component {
           }
 
         } else {
-          var username = UIDtoUsername[firebase.auth().currentUser.uid];
-          this.userData = new UserData(username, true);
+          if(this.localProps.location.pathname != "/profile"){
+            this.path = this.localProps.location.pathname;
+            this.username = this.path.substring(9, this.path.length);
+
+            if (this.username == UIDtoUsername[firebase.auth().currentUser.uid]) {
+              this.userData = new UserData(this.username, true, true);
+            } else {
+              this.userData = new UserData(this.username, true, false);
+            }
+          } else {
+            this.userData = new UserData(UIDtoUsername[firebase.auth().currentUser.uid], true, true);
+          }
         }
 
       });
@@ -55,9 +65,9 @@ class ProfilePage extends React.Component {
       resolve("done");
   }
 
-    getUser(username){
-      this.userData = new UserData(username, false);
-    }
+    //getUser(username){
+      //this.userData = new UserData(username, false, false);
+    //}
 
     render(){
       if(this.state.loaded){

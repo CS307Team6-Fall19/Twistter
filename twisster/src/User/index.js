@@ -19,6 +19,7 @@ class User extends React.Component{
 
         this.username = props.user.userData.username;
         this.loggedIn = props.user.userData.loggedIn;
+        this.loggedInViewingOwnProfile = props.user.userData.viewingOwnProfile;
 
         this.editProfile = this.editProfile.bind(this);
         this.saveChanges = this.saveChanges.bind(this);
@@ -54,7 +55,7 @@ class User extends React.Component{
     }
 
     followUser(){
-
+        console.log("following");
         helperfunctions.followUserIAmViewing(this.username);
         this.setState({ follow : 0});
     }
@@ -69,6 +70,10 @@ class User extends React.Component{
         await this.downloadUserProfile(this.userProfile);
 
         this.setState({loaded : true});
+
+        if(!this.loggedIn){
+            document.getElementById('followbutton').disabled = true;
+        }
     }
 
     async componentDidUpdate(){
@@ -103,7 +108,11 @@ class User extends React.Component{
         if(this.state.loaded){
 
             if(this.loggedIn){
-                return this.renderLoggedInUser(this.userProfile);
+                if (this.loggedInViewingOwnProfile) {
+                    return this.renderLoggedInUser(this.userProfile);
+                } else {
+                    return this.renderVisitedUser(this.userProfile);
+                }
             }
             else{
                 return this.renderVisitedUser(this.userProfile);
