@@ -73,6 +73,7 @@ class User extends React.Component{
 
         if(!this.loggedIn){
             document.getElementById('followbutton').disabled = true;
+            document.getElementById('logout').disabled = true;
         }
     }
 
