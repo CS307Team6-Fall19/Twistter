@@ -129,8 +129,20 @@ class Landing extends Component {
   }
 
   //get list of microblogs when page first loads
-  componentDidMount() {
-    this.getMicroblogsForCurrentUser();
+  async componentDidMount() {
+    
+    //verify user is logged in before displaying page
+    firebase.auth().onAuthStateChanged((user) => {
+      console.log(user);
+      if (!user) {
+        this.props.history.push({
+          pathname: "/login"
+        });
+        return (null);
+      }
+
+      this.getMicroblogsForCurrentUser();
+    });
   }
 
   componentWillMount() {
