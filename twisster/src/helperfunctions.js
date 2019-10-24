@@ -233,7 +233,7 @@ const helperfunctions =
           
           var followersOfUserIamFollowing = snapshot.child("users").child(followedUserUID).child("followers").val();
 
-          if(followedUserUID != currUserUID)
+          if(followedUserUID !== currUserUID)
           {
             if(usersIAmFollowing == null || usersIAmFollowing.length == 0)
             {
@@ -306,7 +306,7 @@ const helperfunctions =
         }
       });
       resolve("done");
-    }
+    },
     
     //Description: Method to add and remove topics from a followed user
     addAndRemoveTopicsFromFollowedUser: async function(username, topicsFollow, topicsUnFollow)
@@ -330,7 +330,7 @@ const helperfunctions =
         else
         {
            //user has been verified as followed
-          topicsList = [];
+          var topicsList = [];
           for(var i = 0; i < topicsFollow.length; i++)
           {
             topicsList.push(topicsFollow[i]);
