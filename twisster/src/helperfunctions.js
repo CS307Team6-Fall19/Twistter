@@ -221,6 +221,7 @@ const helperfunctions =
 
     //Method to follow user I am viewing
     followUserIAmViewing: async function(username){
+        
         await firebase.database().ref().once('value', (snapshot) => {
           var currUserUID = firebase.auth().currentUser.uid;
           var mapUIDToUsername = snapshot.child("mapUIDtoUsername").val();
@@ -230,7 +231,14 @@ const helperfunctions =
           var followedUserUID = mapUsernameToUID[followedUserName];
 
           var usersIAmFollowing = snapshot.child("users").child(currUserUID).child("following").val();
-          
+          // var usersIAmFollowing = snapshot.child("users").child(currUserUID).child("following").forEach(function(childSnapshot) 
+          // {
+          //   var childKey = childSnapshot.key;
+          //   alert("CHILD KEY: " + childKey);
+          //   var childData = childSnapshot.val();
+          //   alert("CHILD VALUE: " + childData);
+          // });
+
           var followersOfUserIamFollowing = snapshot.child("users").child(followedUserUID).child("followers").val();
 
           if(followedUserUID !== currUserUID)
@@ -409,6 +417,38 @@ const helperfunctions =
 
     return result;
     }*/
+
+    //use this function to get all related microblogs for a user's timeline (including following)
+    getMicroblogsForUserTimeline: async function(username)
+    {
+      var Microblogs = [];
+      firebase.database().ref().once('value', (snapshot) => {
+        var mapUsernameToUID = snapshot.child("mapUsernameToUID").val();
+        var uidOfUser = mapUsernameToUID[username];
+        var followingList = snapshot.child("users").child(uidOfUser).child("following").forEach(function(childSnapshot)
+        {
+          var followedUsername = childSnapshot.key;
+          var followedTopics = childSnapshot.val();
+          var uidOfFollowedUser = mapUsernameToUID[followedUsername];
+          var microblogs = snapshot.child("users").child(uidOfFollowedUser).child("Microblogs").val();
+          for(var i = 0; i < microblogs.length; i++)
+          {
+            var currMicroblog = microblogs[i];
+            var topicsList = currMicroblog.child("topics").val();
+            for(var j = 0; j < topicsList.length; j++)
+            {
+              if(followedTopics.includes(topicsList[i]))
+              {
+                Microblogs.push(currMicroblog);
+              }
+            }
+          }
+        });
+      });
+      resolve("done");
+      //Sort Microblogs based on timestamp
+      return Microblogs;
+    },
 
     getMicroblogsForCurrentUser: async function(username) {
         var Microblogs;
