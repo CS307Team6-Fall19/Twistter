@@ -3,13 +3,16 @@ import React, { PureComponent } from 'react'
 import { withRouter } from "react-router";
 
 import firebase from "firebase";
+import { throwStatement } from '@babel/types';
 class TopBar extends React.Component{
 
     constructor(props) {
   
       super(props);
 
+      this.userData = props.userData;
       this.goLogout = this.goLogout.bind(this);
+      this.goToProfile = this.goToProfile.bind(this);
     }
 
     goLogout = async event => {
@@ -17,7 +20,6 @@ class TopBar extends React.Component{
         .then(function() {
           console.log("Signout succesful");
 
-          
         })
         .catch(function(error) {
           console.log("Error");
@@ -28,10 +30,17 @@ class TopBar extends React.Component{
         })
     };
 
+    goToProfile(){
+      this.props.history.push({
+        pathname: "/profile",
+        state: { userData: this.userData }
+      })
+    };
+
     render(){
         return(
             <div className="top-bar">
-                <TopBarTwisster onClick={this.goLogout} />
+                <TopBarTwisster goLogout={this.goLogout} goToProfile={this.goToProfile} />
             </div>
           )
     }

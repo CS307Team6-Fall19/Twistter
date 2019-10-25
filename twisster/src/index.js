@@ -5,6 +5,12 @@ import App from './App';
 import * as serviceWorker from './serviceWorker';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 
+import { toast } from 'react-toastify';
+import AlertTemplate from 'react-alert-template-basic'
+import { transitions, positions, Provider as AlertProvider } from 'react-alert'
+
+
+
 //ReactDOM.render(<App />, document.getElementById('root'));
 ReactDOM.render((
     <Router>
