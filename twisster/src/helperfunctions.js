@@ -142,6 +142,7 @@ const helperfunctions =
         });
 
         resolve("done");
+        return;
         console.log("Exited addMicroBlogToCurrentUser");
     },
     

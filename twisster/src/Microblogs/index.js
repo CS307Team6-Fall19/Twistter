@@ -21,10 +21,10 @@ class Microblogs extends React.Component{
     }
 
     render() {
-      if(this.microblogs != null){
+      if(this.props.microblogs != null){
         return(
           <div>
-            {this.createMicroblogs(this.microblogs, this.username)}
+            {this.createMicroblogs(this.props.microblogs, this.username)}
           </div>
         )
       }
