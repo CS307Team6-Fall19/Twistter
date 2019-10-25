@@ -30,6 +30,9 @@ class ProfilePage extends React.Component {
     render(){
       return (
         <div>
+
+          
+
           <TopBar/>
           <ProfilePageView userData={this.userData}/>
         </div>

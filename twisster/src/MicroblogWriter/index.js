@@ -2,6 +2,10 @@ import React, { Component } from 'react';
 import {MicroblogWriterView} from "./MicroblogWriterView"
 import helperfunctions from "../helperfunctions";
 
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+
 class MicroblogWriter extends React.Component{
 
     constructor(props) {
@@ -10,6 +14,7 @@ class MicroblogWriter extends React.Component{
 
       this.microblogData = new Object();
 
+      this.microblogPosted = props.microblogPosted;
 
       this.microblogData.name = props.username;
       this.microblogData.handle = props.username;
@@ -36,16 +41,20 @@ class MicroblogWriter extends React.Component{
         console.log(content);
         if(content.length > 250 || content.length <= 0)
         {
-          alert("Cannot post microblog");
+          //alert("Cannot post microblog");
+          toast("Cannot post microblog");
         }
         else
         {
           await helperfunctions.addMicroBlogToCurrentUser(content, [document.getElementById("showTopics").value]);
+          this.microblogPosted();
         }
     
         document.getElementById("content").value = "";
         document.getElementById("showTopics").value = "";
         document.getElementById("addTopics").value = "";
+
+        
     
     }
 

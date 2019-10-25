@@ -7,8 +7,13 @@ import SignUp from "./SignUp";
 import LandingPage from "./LandingPage/index";
 import ProfilePage from "./ProfilePage";
 
+import { toast } from 'react-toastify';
+
+toast.configure();
 
 const App = () => {
+
+  const notify = () => toast("Wow so easy !");
   return (
     <Router>
       <div>

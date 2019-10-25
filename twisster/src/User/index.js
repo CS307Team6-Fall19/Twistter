@@ -2,20 +2,24 @@ import React, { Component } from 'react';
 
 import helperfunctions from '../helperfunctions.js'
 import Microblogs from '../Microblogs'
-import { TweetBody } from '../DataObjects/Microblog.js'
-import HelperFunctions from "../helperfunctions";
-import { thisExpression } from '@babel/types';
 
 import LoggedInUserView from "./UserProfileViews/LoggedInUserView";
 import LoggedInUserEditView from "./UserProfileViews/LoggedInUserEditView"
 import VisitedUserView from "./UserProfileViews/VisitedUserView"
+
+import { ToastContainer, toast } from 'react-toastify';
+
+import 'react-toastify/dist/ReactToastify.css';
+
 import { resolve } from 'q';
 
 class User extends React.Component{
 
+
     constructor(props) {
 
         super(props);
+
 
         this.username = props.user.userData.username;
         this.loggedIn = props.user.userData.loggedIn;
@@ -26,7 +30,6 @@ class User extends React.Component{
         
         this.renderLoggedInUser = this.renderLoggedInUser.bind(this);
         this.renderVisitedUser = this.renderVisitedUser.bind(this);
-        
 
         this.state = {
             loaded: false
@@ -98,6 +101,7 @@ class User extends React.Component{
         userProfile.microblogs = this.microblogs;
 
         resolve("done");
+
     }
 
     render() {
