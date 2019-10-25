@@ -63,45 +63,47 @@ const helperfunctions =
     //Description: Add a user to follow to the current user's list of followers
     //@Params
     //usernameFollow: username of the individual you want to follow
-    addFollowedUser: function(usernameFollow)
-    {
-        console.log("Entered addFollowedUser");
-        //get the uid of the current user
-        var uid_current = firebase.auth().currentUser.uid;
-        //get the uid of the user to follow
-        var username_uid_map = firebase.database.ref().child("mapUsernameToUid");
-        var uid_follow = username_uid_map[usernameFollow];
-        //put it in the appropriate spot in the databasee under followedUsers
-        //add uid and an empty list of followedTopics
-        var followedUserRef = firebase.database().ref().child("users").child(uid_current).child("followedUsers").child(uid_follow);
-        followedUserRef.push ({
-            followedTopics: []
-        });
-        console.log("Exited addFollowedUser");
-    },
+    //DEPRECATED
+    // addFollowedUser: function(usernameFollow)
+    // {
+    //     console.log("Entered addFollowedUser");
+    //     //get the uid of the current user
+    //     var uid_current = firebase.auth().currentUser.uid;
+    //     //get the uid of the user to follow
+    //     var username_uid_map = firebase.database.ref().child("mapUsernameToUid");
+    //     var uid_follow = username_uid_map[usernameFollow];
+    //     //put it in the appropriate spot in the databasee under followedUsers
+    //     //add uid and an empty list of followedTopics
+    //     var followedUserRef = firebase.database().ref().child("users").child(uid_current).child("followedUsers").child(uid_follow);
+    //     followedUserRef.push ({
+    //         followedTopics: []
+    //     });
+    //     console.log("Exited addFollowedUser");
+    // },
 
     //Description: Add a topic that the current user follows to the already followed user
     //@Params
     //usernameFollow: username of the individual the current user has followed, type: string
     //topicsFollow: the topic(s) that the current user wants to follow from the given usernameFollow, type: array
-    addFollowedTopicToFollowedUser: function(usernameFollow, topicsFollow)
-    {
-        console.log("Entered addFollowedTopicToFollowedUser");
-        //get the uid of the current user
-        var uid_current = firebase.auth().currentUser.uid;
-        //get the uid of the user to follow
-        var username_uid_map = firebase.database.ref().child("mapUsernameToUid");
-        var uid_follow = username_uid_map[usernameFollow];
-        //add followedTopic to the list of followedTopics within the followedUser
-        firebase.database().ref().once('value', (snapshot) => {
-            var followedTopics = snapshot.child("users").child(firebase.auth().currentUser.uid).child("followedUsers").child(uid_follow).child("followedTopics").val();
-            for(var index = 0; index < topicsFollow.length; index++)
-            {
-                followedTopics.push(topicsFollow[index]);
-            }
-        });
-        console.log("Exited addFollowedTopicToFollowedUser");
-    },
+    //DEPRECATED
+    // addFollowedTopicToFollowedUser: function(usernameFollow, topicsFollow)
+    // {
+    //     console.log("Entered addFollowedTopicToFollowedUser");
+    //     //get the uid of the current user
+    //     var uid_current = firebase.auth().currentUser.uid;
+    //     //get the uid of the user to follow
+    //     var username_uid_map = firebase.database.ref().child("mapUsernameToUid");
+    //     var uid_follow = username_uid_map[usernameFollow];
+    //     //add followedTopic to the list of followedTopics within the followedUser
+    //     firebase.database().ref().once('value', (snapshot) => {
+    //         var followedTopics = snapshot.child("users").child(firebase.auth().currentUser.uid).child("followedUsers").child(uid_follow).child("followedTopics").val();
+    //         for(var index = 0; index < topicsFollow.length; index++)
+    //         {
+    //             followedTopics.push(topicsFollow[index]);
+    //         }
+    //     });
+    //     console.log("Exited addFollowedTopicToFollowedUser");
+    // },
 
     //Description: Add a topic to current user (when current user decides to write and post a microblog)
     //@Params
@@ -118,9 +120,26 @@ const helperfunctions =
         //check if the length of the microblog does not exceed 250 characters
         if(content.length > 250)
         {
-            console.log("ERROR: content of microblog cannot exceed 250 characters -- will not store in firebase");
+            console.log("ERROR: content of microblog cannot exceed 250 characters --> will not store in firebase");
         }
         //add uid, microblog content, and list of topics to Microblogs
+        var wTopics = [];
+        for(var index = 0; index < topics.length; index++)
+        {
+            wTopics.push(topics[index]);
+        }
+        firebase.database().ref().once('value', (snapshot) => {
+            var writtenTopics = snapshot.child("users").child(firebase.auth().currentUser.uid).child("writtenTopics").val();
+            if(writtenTopics == null || writtenTopics.length == 0)
+            {
+                firebase.database().ref().child("users").child(firebase.auth().currentUser.uid).child("writtenTopics").set({'0': wTopics});
+            }
+            else
+            {
+                writtenTopics.push(wTopics);
+                firebase.database().ref().child("users").child(firebase.auth().currentUser.uid).child("writtenTopics").set(wTopics);
+            }
+        });
         var topicsList = [];
         for(var index = 0; index < topics.length; index++)
         {
@@ -181,6 +200,7 @@ const helperfunctions =
         return bio_text;
     },
 
+    //Method to get list of followers and following
     getFollowersAndFollowing: async function(username){
 
         var result;
@@ -198,40 +218,177 @@ const helperfunctions =
           
         });
 
-        resolve("done")
+        resolve("done");
         return result;
     },
 
+    //Method to follow user I am viewing
     followUserIAmViewing: async function(username){
-
         await firebase.database().ref().once('value', (snapshot) => {
-          var usersIAmFollowing = snapshot.child("users").child(firebase.auth().currentUser.uid).child("following").val();
-          var mapUsernameToUID = snapshot.child("mapUsernameToUID").val();
-          var UIDofUserIfollowed = mapUsernameToUID[username];
-          var followersOfUserIamFollowing = snapshot.child("users").child(UIDofUserIfollowed).child("followers").val();
-    
+          var currUserUID = firebase.auth().currentUser.uid;
           var mapUIDToUsername = snapshot.child("mapUIDtoUsername").val();
-          var myUsername = mapUIDToUsername[firebase.auth().currentUser.uid];
-    
-          if (mapUsernameToUID[username] != firebase.auth().currentUser.uid) {
-            if (usersIAmFollowing == null) {
-              firebase.database().ref().child("users").child(firebase.auth().currentUser.uid).child("following").set(username);
-            } else {
-              usersIAmFollowing = usersIAmFollowing + ", " + username;
-              firebase.database().ref().child("users").child(firebase.auth().currentUser.uid).child("following").set(usersIAmFollowing);
+          var currUserName = mapUIDToUsername[firebase.auth().currentUser.uid];
+          var followedUserName = username;
+          var mapUsernameToUID = snapshot.child("mapUsernameToUID").val();
+          var followedUserUID = mapUsernameToUID[followedUserName];
+
+          var usersIAmFollowing = snapshot.child("users").child(currUserUID).child("following").val();
+          
+          var followersOfUserIamFollowing = snapshot.child("users").child(followedUserUID).child("followers").val();
+
+          if(followedUserUID !== currUserUID)
+          {
+            if(usersIAmFollowing == null || usersIAmFollowing.length == 0)
+            {
+              var topicsList = [];
+              topicsList.push("None");
+              if(snapshot.child("users").child(firebase.auth().currentUser.uid).child("following").hasChild(followedUserName) === false)
+              {
+                firebase.database().ref().child("users").child(firebase.auth().currentUser.uid).child("following").child(followedUserName).set(topicsList);
+              }
             }
-    
-            if (followersOfUserIamFollowing == null) {
-              firebase.database().ref().child("users").child(UIDofUserIfollowed).child("followers").set(myUsername);
-            } else {
-              followersOfUserIamFollowing = followersOfUserIamFollowing + ", " + myUsername;
-              firebase.database().ref().child("users").child(UIDofUserIfollowed).child("followers").set(followersOfUserIamFollowing);
+            else
+            {
+              var topicsList = [];
+              topicsList.push("None");
+              if(snapshot.child("users").child(firebase.auth().currentUser.uid).child("following").hasChild(followedUserName) === false)
+              {
+                firebase.database().ref().child("users").child(firebase.auth().currentUser.uid).child("following").child(followedUserName).set(topicsList);
+              }
+            }
+
+            if(followersOfUserIamFollowing == null || followersOfUserIamFollowing.length === 0)
+            {
+                var usersList = [];
+                usersList.push(currUserName);
+                firebase.database().ref().child("users").child(followedUserUID).child("followers").set(usersList);
+            }
+            else
+            {
+              if(followersOfUserIamFollowing.includes(currUserName) === false)
+              {
+                followersOfUserIamFollowing.push(currUserName);
+                firebase.database().ref().child("users").child(followedUserUID).child("followers").set(followersOfUserIamFollowing);
+              }
             }
           }
         });
 
         resolve("done");
       },
+
+    //Method to unfollow user I am viewing
+    unfollowUserIAmViewing: async function(username)
+    {
+      await firebase.database().ref().once('value', (snapshot) => {
+        var currUserUID = firebase.auth().currentUser.uid;
+        var mapUIDToUsername = snapshot.child("mapUIDtoUsername").val();
+        var currUserName = mapUIDToUsername[firebase.auth().currentUser.uid];
+        var followedUserName = username;
+        var mapUsernameToUID = snapshot.child("mapUsernameToUID").val();
+        var followedUserUID = mapUsernameToUID[followedUserName];
+
+        var usersIAmFollowing = snapshot.child("users").child(currUserUID).child("following").val();
+        var followersOfUserIamFollowing = snapshot.child("users").child(followedUserUID).child("followers").val();
+
+        if(usersIAmFollowing.includes(username))
+        {
+          firebase.database().ref().child("users").child(firebase.auth().currentUser.uid).child("following").child(followedUserName).remove();
+        }
+        if(followersOfUserIamFollowing.includes(currUserName))
+        {
+          var usersList = [];
+          for(var i = 0; i < followersOfUserIamFollowing.length; i++)
+          {
+            if(followersOfUserIamFollowing[i] !== currUserName)
+            {
+              usersList.push(followersOfUserIamFollowing[i]);
+            }
+          }
+          firebase.database().ref().child("users").child(followedUserUID).child("followers").set(usersList);
+        }
+      });
+      resolve("done");
+    },
+    
+    //Description: Method to add and remove topics from a followed user
+    addAndRemoveTopicsFromFollowedUser: async function(username, topicsFollow, topicsUnFollow)
+    {
+      await firebase.database().ref().once('value', (snapshot) => {
+        var currUserUID = firebase.auth().currentUser.uid;
+        var mapUIDToUsername = snapshot.child("mapUIDtoUsername").val();
+        var currUserName = mapUIDToUsername[firebase.auth().currentUser.uid];
+        var followedUserName = username;
+        var mapUsernameToUID = snapshot.child("mapUsernameToUID").val();
+        var followedUserUID = mapUsernameToUID[followedUserName];
+
+        var usersIAmFollowing = snapshot.child("users").child(currUserUID).child("following").val();
+        
+        var followersOfUserIamFollowing = snapshot.child("users").child(followedUserUID).child("followers").val();
+
+        if(usersIAmFollowing.includes(username) === false)
+        {
+          //ERROR: cannot find username - user should be followed before adding/removing topics from that user
+        }
+        else
+        {
+           //user has been verified as followed
+          var topicsList = [];
+          for(var i = 0; i < topicsFollow.length; i++)
+          {
+            topicsList.push(topicsFollow[i]);
+          }
+          for(var i = 0; i < topicsUnFollow.length; i++)
+          {
+            if(topicsList.includes(topicsUnFollow[i]))
+            {
+              var index = topicsList.indexOf(topicsUnFollow[i]);
+              if(index > -1)
+              {
+                topicsList.splice(index, 1);
+              }
+            }
+          }
+          firebase.database().ref().child("users").child(firebase.auth().currentUser.uid).child("following").child(followedUserName).set(topicsList);
+        }
+      });
+      
+      resolve("done");
+    },
+
+    getFollowedAndUnfollowedTopics: async function(username)
+    {
+      var result;
+      await firebase.database().ref().once('value', (snapshot) => {
+        var currUserUID = firebase.auth().currentUser.uid;
+        var mapUIDToUsername = snapshot.child("mapUIDtoUsername").val();
+        var currUserName = mapUIDToUsername[firebase.auth().currentUser.uid];
+        var followedUserName = username;
+        var mapUsernameToUID = snapshot.child("mapUsernameToUID").val();
+        var followedUserUID = mapUsernameToUID[followedUserName];
+
+        var writtenTopics = snapshot.child("users").child(followedUserUID).child("writtenTopics").val();
+
+        var followedTopics = snapshot.child("users").child(currUserUID).child("following").child(followedUserName).val();
+
+        var unfollowedTopics = [];
+        for(var i = 0; i < writtenTopics.length; i++)
+        {
+          if(followedTopics.includes(writtenTopics[i]) === false)
+          {
+            unfollowedTopics.push(writtenTopics[i]);
+          }
+        }
+
+        alert("FOLLOWED TOPICS" + followedTopics);
+        alert("UNFOLLOWED TOPICS" + unfollowedTopics);
+
+        result = {followedTopics, unfollowedTopics};
+      });
+
+      resolve("done");
+      return result;
+    },
     //Description: save current Users bio on database.
     //@Params
     //content: string which contians users bio.

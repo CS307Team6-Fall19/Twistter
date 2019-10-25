@@ -1,9 +1,9 @@
 class UserData{  
 
-    constructor(username, loggedIn){
+    constructor(username, loggedIn, viewingOwnProfile){
         this.username = username;
+        this.viewingOwnProfile = viewingOwnProfile;
         this.loggedIn = loggedIn;
-        
     }
 
     getUsername(){
