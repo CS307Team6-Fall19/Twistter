@@ -8,6 +8,8 @@ import firebase from "firebase";
 import TopBar from "../TopBar";
 import Microblogs from "../Microblogs";
 import { resolve } from "path";
+
+
 class Landing extends Component {
     constructor(props) {
 
@@ -16,6 +18,7 @@ class Landing extends Component {
         
         
         this.state = {
+
             loaded: false
         }
         
@@ -53,6 +56,7 @@ class Landing extends Component {
                 <TopBar userData={this.userData}/>
                 <MicroblogWriter username={this.userData.username} />
                 <Microblogs microblogs={this.microblogs} username={this.userData.username} />
+                
                 </div>
             );
 
