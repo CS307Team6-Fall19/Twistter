@@ -66,9 +66,7 @@ class User extends React.Component{
         this.userProfile.saveChanges = this.saveChanges;
         this.userProfile.editProfile = this.editProfile;
         this.userProfile.followUser = this.followUser;
-
         await this.downloadUserProfile(this.userProfile);
-
         this.setState({loaded : true});
 
         if(!this.loggedIn){
@@ -90,7 +88,6 @@ class User extends React.Component{
 
     async downloadUserProfile(userProfile){
 
-        
         userProfile.username = this.username;
 
         this.bio = await helperfunctions.getBio(this.username);
