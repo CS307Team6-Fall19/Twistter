@@ -75,7 +75,7 @@ class SignUpContainer extends Component {
       //create a new user from the data and set default fields and arrays
       var database = firebase.database();
       var newUserRef = database.ref().child("users").child(firebase.auth().currentUser.uid);
-      newUserRef.set({'email' : email.value, 'followedTopics' : ['topic1']});
+      newUserRef.set({'email' : email.value});
 
       firebase.auth().signOut();
 
