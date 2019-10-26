@@ -27,6 +27,7 @@ class User extends React.Component{
         this.loggedInViewingOwnProfile = props.user.userData.viewingOwnProfile;
 
         this.editProfile = this.editProfile.bind(this);
+        this.deleteAccount = this.deleteAccount.bind(this);
         this.saveChanges = this.saveChanges.bind(this);
         this.followUser = this.followUser.bind(this);
         
@@ -49,10 +50,10 @@ class User extends React.Component{
 
   deleteAccount() {
     helperfunctions.deleteUserData(this.username);
-    var user_uid = firebase.auth().currentUser;
-    user_uid.delete();
     this.loggedIn = false;
-    window.location.replace("/");
+    this.props.history.push({
+        pathname: "/login"
+    });
   }
   
     saveChanges(){
@@ -121,7 +122,7 @@ class User extends React.Component{
 
             if(this.loggedIn){
                 if (this.loggedInViewingOwnProfile) {
-                    return this.renderLoggedInUser(this.userProfile);
+                    return this.renderLoggedInUser(this.userProfile, this.deleteAccount);
                 } else {
                     return this.renderVisitedUser(this.userProfile);
                 }
@@ -136,12 +137,12 @@ class User extends React.Component{
         
     }
 
-    renderLoggedInUser(userProfile){
+    renderLoggedInUser(userProfile, deleteAccount){
 
         if(this.editMode){
             return(
                 <div>
-                    <LoggedInUserEditView userProfile={userProfile} deleteAccount={this.deleteAccount}/>
+                    <LoggedInUserEditView userProfile={userProfile} deleteAccount={deleteAccount}/>
                     <Microblogs microblogs={userProfile.microblogs} username={userProfile.username} />
                 </div>
             );
@@ -150,7 +151,7 @@ class User extends React.Component{
         else{
             return (
                 <div>
-                    <LoggedInUserView userProfile={userProfile} deleteAccount={this.deleteAccount}/>
+                    <LoggedInUserView userProfile={userProfile} deleteAccount={deleteAccount}/>
                     <Microblogs microblogs={userProfile.microblogs} username={userProfile.username} />
                 </div>
             );

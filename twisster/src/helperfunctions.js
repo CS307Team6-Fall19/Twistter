@@ -398,11 +398,15 @@ const helperfunctions =
         resolve("done");
     },
 
+    //Delete users data and authentication
+    //@Params
+    //content: string which contains username
     deleteUserData: async function(username) {
       firebase.database().ref().child("mapUIDtoUsername").child(firebase.auth().currentUser.uid).remove();
       firebase.database().ref().child("mapUsernameToEmail").child(username).remove();
       firebase.database().ref().child("mapUsernameToUID").child(username).remove();
       firebase.database().ref().child("users").child(firebase.auth().currentUser.uid).remove();
+      firebase.auth().currentUser.delete();
     },
 
     /*
