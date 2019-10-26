@@ -164,6 +164,13 @@ const helperfunctions =
     postCurrentUserBio: async function(content) {
         //save current users bio on firebase
         await firebase.database().ref().child("users").child(firebase.auth().currentUser.uid).child("bio").set(content);
+    },
+
+    deleteUserData: async function(username) {
+        firebase.database().ref().child("mapUIDtoUsername").child(firebase.auth().currentUser.uid).remove();
+        firebase.database().ref().child("mapUsernameToEmail").child(username).remove();
+        firebase.database().ref().child("mapUsernameToUID").child(username).remove();
+        firebase.database().ref().child("users").child(firebase.auth().currentUser.uid).remove();
     }
 
     /*

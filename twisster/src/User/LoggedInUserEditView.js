@@ -1,11 +1,12 @@
 import React from "react";
 
-const LoggedInUserEditView = ({ onClick })=> {  
+const LoggedInUserEditView = ({ onClick , onClick2})=> {  
   
     return(
         <div>
           <form>
           <label>Username:</label><label id='username'>username</label>
+          <button type='button' style={{marginLeft: "365px"}} onClick={onClick2}>Delete account</button>
           <br></br>
           <label>Followers:</label><label id='followers'></label>
           <br></br>

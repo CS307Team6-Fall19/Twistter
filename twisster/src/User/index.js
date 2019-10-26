@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { withRouter } from "react-router";
 
 import firebase from "firebase";
 import Bio from "../DataObjects/Bio";
@@ -40,6 +41,7 @@ class User extends React.Component{
     this.saveChanges = this.saveChanges.bind(this);
     this.setNewBio = this.setNewBio.bind(this);
     this.followUserIAmViewing = this.followUserIAmViewing.bind(this);
+    this.deleteAccount = this.deleteAccount.bind(this);
     //this.getMicroblogs = this.getMicroblogs.bind(this);
     
   }
@@ -133,6 +135,14 @@ class User extends React.Component{
     this.bio.setText(bio_cont);
   }
 
+  deleteAccount() {
+    helperfunctions.deleteUserData(this.getUsername());
+    var user_uid = firebase.auth().currentUser;
+    user_uid.delete();
+    this.loggedIn = false;
+    window.location.replace("/");
+  }
+
   getFollowersAndFollowing() {
     firebase.database().ref().once('value', (snapshot) => {
 
@@ -218,8 +228,7 @@ class User extends React.Component{
       if(this.editMode){
         return (
           <div>
-          <LoggedInUserEditView onClick={this.saveChanges}/>
-
+          <LoggedInUserEditView onClick={this.saveChanges} onClick2={this.deleteAccount}/>
           {[...this.state.users].map((user, index) => {
         let name = `${user.name}`
         let handle = `@${user.name}`
@@ -244,7 +253,7 @@ class User extends React.Component{
       else{
         return (
           <div>
-            <LoggedInUserView onClick={this.editProfile}/>;   
+            <LoggedInUserView onClick={this.editProfile} onClick1={this.deleteAccount}/>;   
             {[...this.state.users].map((user, index) => {
         let name = `${user.name}`
         let handle = `@${user.name}`
@@ -298,4 +307,4 @@ class User extends React.Component{
   }
 }
 
-export default User;
+export default withRouter(User);
