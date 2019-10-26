@@ -9,7 +9,9 @@ user.method_name(parameters);
 Ex: user.addFollowedUser(username);
 Ex: var uid = user.retrieveUserUid(username);
 */
+import React, { Component } from 'react';
 
+import firebase from "firebase";
 class UserVM extends React.Component
 {
     constructor()
@@ -148,7 +150,7 @@ class UserVM extends React.Component
     //Description: fetch another Users bio (when current user visits another profile)
     //@Params
     //username: string containing Username of profile page current User is visiting
-    getAnotherBio(username) {
+    async getAnotherBio(username) {
         var bio_content;
         //fetch user's uid from the username to uid list and then fetch bio from coresponding uid.
         await firebase.ref().once('value', (snapshot) => {
@@ -158,6 +160,22 @@ class UserVM extends React.Component
         });
 
         return bio_content;
+    }
+
+    getMicroblogsForCurrentUser() {
+        firebase.database().ref().once('value', (snapshot) => {
+            let mapUsernameToUID = snapshot.child("mapUsernameToUID").val();
+            //let mapUIDtoUsername = snapshot.child("mapUIDtoUsername").val();
+            let uidOfUser = mapUsernameToUID[this.username];
+            let Microblogs = snapshot.child("users").child(uidOfUser).child("Microblogs").val();
+            if(Microblogs != null)
+            {
+                return Microblogs;
+            /* for (var i = 0; i < Microblogs.length; i++) {
+                this.getUser(this.username, Microblogs[i].content, Microblogs[i].topics);
+            } */
+            }
+        });
     }
 
     //Description: save current Users bio on database.
@@ -170,3 +188,4 @@ class UserVM extends React.Component
         app.database().ref().child("users").child(currentUser_uid).child("bio").update(content);
     }
 } 
+export default(UserVM);

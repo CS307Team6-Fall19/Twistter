@@ -1,16 +1,24 @@
 import React, { Component } from "react";
 import { withRouter } from "react-router";
 import app from "../base";
-import TopBar from "../TopBar"
+import TopBarLoginSignup from "../TopBarLoginSignup"
 
 import LogInView from "./LogInView";
 import firebase from "firebase";
 
+import { ToastContainer, toast } from 'react-toastify';
+
+import 'react-toastify/dist/ReactToastify.css';
+
 class LogInContainer extends Component {
+
   
   constructor (props){
     super(props);
+
     this.handleLogIn = this.handleLogIn.bind(this);
+    
+
     
   }
 
@@ -46,6 +54,7 @@ class LogInContainer extends Component {
 
       if (!user_exists) {
         alert('User Account does not exist');
+        toast('User Account does not exist', {containerId: 'B'});
         return;
       }
 
@@ -80,8 +89,11 @@ class LogInContainer extends Component {
   render() {
     return( 
       <div>
-        <TopBar />
+        <ToastContainer enableMultiContainer containerId={'B'} position={toast.POSITION.TOP_RIGHT} />
+
+        <TopBarLoginSignup />
         <LogInView onSubmit={this.handleLogIn} />
+
       </div>
     );
   }

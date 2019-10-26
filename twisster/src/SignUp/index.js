@@ -1,10 +1,22 @@
 import React, { Component } from "react";
 import { withRouter } from "react-router";
 import firebase from "firebase";
-import TopBar from "../TopBar"
+import TopBarLoginSignup from "../TopBarLoginSignup"
 import SignUpView from "./SignUpView";
 
+import { ToastContainer, toast } from 'react-toastify';
+
+import 'react-toastify/dist/ReactToastify.css';
+
+
 class SignUpContainer extends Component {
+  
+
+
+  constructor(props){
+    super(props);
+
+  }
   
   handleSignUp = async event => {
     event.preventDefault();
@@ -65,6 +77,8 @@ class SignUpContainer extends Component {
       var newUserRef = database.ref().child("users").child(firebase.auth().currentUser.uid);
       newUserRef.set({'email' : email.value, 'followedTopics' : ['topic1']});
 
+      firebase.auth().signOut();
+
       this.props.history.push("/login");
     } catch (error) {
       alert(error);
@@ -75,8 +89,10 @@ class SignUpContainer extends Component {
 
     return (
       <div>
-        <TopBar />
+
+        <TopBarLoginSignup />
         <SignUpView onSubmit={this.handleSignUp} />
+
       </div>
     );
   }
