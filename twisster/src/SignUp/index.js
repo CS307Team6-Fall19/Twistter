@@ -4,7 +4,19 @@ import firebase from "firebase";
 import TopBarLoginSignup from "../TopBarLoginSignup"
 import SignUpView from "./SignUpView";
 
+import { ToastContainer, toast } from 'react-toastify';
+
+import 'react-toastify/dist/ReactToastify.css';
+
+
 class SignUpContainer extends Component {
+  
+
+
+  constructor(props){
+    super(props);
+
+  }
   
   handleSignUp = async event => {
     event.preventDefault();
@@ -77,8 +89,10 @@ class SignUpContainer extends Component {
 
     return (
       <div>
+
         <TopBarLoginSignup />
         <SignUpView onSubmit={this.handleSignUp} />
+
       </div>
     );
   }
