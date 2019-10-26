@@ -1,0 +1,40 @@
+.top-bar-twisster {
+    margin-left: 20px;
+    margin-top: 0px;
+    width: 75px;
+    height: 44px;
+    font-family: AvenirNextCondensed-UltraLight;
+    font-size: 48px;
+    font-weight: 200;
+    font-style: normal;
+    font-stretch: condensed;
+    line-height: normal;
+    letter-spacing: normal;
+    color: #ffffff;
+  }
+  
+  .top-bar-search {
+    margin-left: 27%;
+    margin-top: 15px;
+    width: 676px;
+    height: 25px;
+    border-radius: 7px;
+    background-color: #ffffff;
+  }
+  
+  .top-bar-button {
+    margin-left: 28%;
+    margin-top: 5px;
+    width: 48px;
+    height: 48px;
+    background-color: #ffffff;
+  }
+
+  .top-bar-logout{
+    position: absolute;
+    right: 0px;
+    float: right;
+    width: 48px;
+    height: 48px;
+    background-color: #ffffff;
+  }
