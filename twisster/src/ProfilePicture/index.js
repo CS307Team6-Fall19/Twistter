@@ -19,12 +19,30 @@ class ProfilePicture extends Component {
         this.storageRef = firebase.storage.ref();
         this.upLoadImage = this.uploadImage.bind(this);
         this.fetchImage = this.fetchImage.bind(this);
+        this.changePic = this.changePic.bind(this);
 
     }
 
 
-    uploadImage({file}) {
+    uploadImage() {
         
+        var inpFile = document.getElementById('input');
+
+        const file = inpFile.files[0];
+
+        if (file != null) {
+            firebase.database.ref().once('value', (snapshot)  => {
+                var userList = snapshot.child("users").val();
+                this.user = userList[firebase.auth().currentUser.id];
+                user.ref('picture').set(file.name);
+            });
+
+            this.storageRef.put(file).then(function(snapshot) {
+                console.log("file uploaded");
+
+            });
+
+        }
 
     }
 
@@ -51,8 +69,12 @@ class ProfilePicture extends Component {
 
     }
 
-    render() {
+    changePic () {
+        this.toUpload = true;
+    }
 
+    render() {
+        
         if (this.toUpload == false) {
              <div>
                 <ProfilepicView image = {fetchImage} changeProPic = {changePic}></ProfilepicView>
