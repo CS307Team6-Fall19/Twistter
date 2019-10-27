@@ -14,7 +14,7 @@ class ProfilePage extends React.Component {
 
       //this.getUser = this.getUser.bind(this);
       this.localProps = props;
-
+    
       this.state = {
         loaded: false
       }
