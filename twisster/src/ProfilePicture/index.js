@@ -20,7 +20,7 @@ class ProfilePicture extends Component {
 
 
     uploadImage = async event => {
-        
+        console.log("upLoadImage running");
         var inpFile = document.getElementById('input');
 
         const file = inpFile.files[0];
@@ -59,7 +59,7 @@ class ProfilePicture extends Component {
     async fetchImage() {
 
         var picname;
-        console.log("atleast came here");
+        console.log("fetchImage running");
 
         await firebase.database().ref().once('value', (snapshot)  => {
             /*var userList = snapshot.child("users").val();
@@ -73,13 +73,12 @@ class ProfilePicture extends Component {
         console.log(picname);
 
         if (true) {
-            console.log("was here too2")
-
+ 
 
             await firebase.storage().ref().child(picname).getDownloadURL().then(function(url) {
                 var toReturn = url;
                 document.querySelector('img').src = toReturn;
-                return toReturn;
+                //return toReturn;
 
             }).catch(function(error) {
                 switch(error.code) {
@@ -104,12 +103,17 @@ class ProfilePicture extends Component {
             return firebase.storage().ref(picname);
         }
 
+        console.log("ends now");
+
 
     }
 
 
     deletePicture = async event => {
-            const promise = firebase.database().ref().child("users").child(firebase.auth().currentUser.uid).child("picture").set("default.jpg");
+
+        console.log("deletePicture running");
+
+        const promise = firebase.database().ref().child("users").child(firebase.auth().currentUser.uid).child("picture").set("default.jpg");
  
 
         promise.then(response => {
@@ -119,8 +123,8 @@ class ProfilePicture extends Component {
     }
 
     changePic () {
+        console.log("changePic running");
         this.toUpload = true;
-        console.log("Came here right now");
         this.forceUpdate();
     }
 
@@ -133,14 +137,15 @@ class ProfilePicture extends Component {
     render() {
         
         if (this.toUpload == false) {
-
+            console.log("here first");
             return(
-             <div>
+            <div>
                 <ProfilepicView image = {this.fetchImage()} changeProfPic = {this.changePic} deletePic = {this.deletePicture}/>
             </div>
             );
         }
         else {
+            console.log("wrong place");
             return (
             <div>
                 <NewProfilepicView image = {this.fetchImage()} changeProfPic = {this.upLoadImage}></NewProfilepicView>

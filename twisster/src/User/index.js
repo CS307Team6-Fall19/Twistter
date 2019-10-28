@@ -152,7 +152,7 @@ class User extends React.Component{
         else{
             return (
                 <div>
-                    <ProfilePicture/>
+
                     <LoggedInUserView userProfile={userProfile} deleteAccount={deleteAccount}/>
                     <Microblogs microblogs={userProfile.microblogs} username={userProfile.username} />
                 </div>
