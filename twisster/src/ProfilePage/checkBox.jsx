@@ -98,6 +98,7 @@ class CheckboxContainer extends React.Component {
   // }
 
   render() {
+    console.log(this.state.loaded);
     if(this.state.loaded)
     {
       return (
