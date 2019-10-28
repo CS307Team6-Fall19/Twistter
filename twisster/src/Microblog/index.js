@@ -17,15 +17,7 @@ class Microblog extends React.Component{
       this.microblogData.image = "props.image";
       
 
-      /* var topics = "";
-      for(var i = 0; i < props.data.topics.length-1; i++){
-            topics += props.data.topics[i];
-            topics += ", "
-      }
-      topics += props.data.topics[props.data.topics.length-1];
-
-      this.microblogData.topics = topics; */
-
+     
       this.microblogData.topics = props.data.topics;
       
     }
@@ -45,7 +37,7 @@ class Microblog extends React.Component{
                         handle={handle}
                         image={image}
                         tweet={tweet}
-                        /* topics={topics} */
+                        
                     /> 
 
                     <Topics topics={topics} />
