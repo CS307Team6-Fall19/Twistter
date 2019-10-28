@@ -480,7 +480,7 @@ const helperfunctions =
       await firebase.database().ref().once('value', (snapshot) => {
         var mapUsernameToUID = snapshot.child("mapUsernameToUID").val();
         var uidOfUser = mapUsernameToUID[username];
-        var followingList = snapshot.child("users").child(uidOfUser).child("following").forEach(function(childSnapshot)
+        snapshot.child("users").child(uidOfUser).child("following").forEach(function(childSnapshot)
         {
           var followedUsername = childSnapshot.key;
           var followedTopics = childSnapshot.val();
@@ -490,12 +490,14 @@ const helperfunctions =
           {
             var currMicroblog = microblogs[i];
             var topicsList = currMicroblog.topics;
-            for(var j = 0; j < topicsList.length; j++)
-            {
-              if(followedTopics.includes(topicsList[i]))
+            if (topicsList != undefined || topicsList != null) {
+              for(var j = 0; j < topicsList.length; j++)
               {
-                Microblogs.push(currMicroblog);
-                break;
+                if(followedTopics.includes(topicsList[j]))
+                {
+                  Microblogs.push(currMicroblog);
+                  break;
+                }
               }
             }
           }
