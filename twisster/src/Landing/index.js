@@ -41,15 +41,24 @@ class Landing extends Component {
     
     async componentDidMount() {
 
-        var loggedIn = true;
-
-        var user = firebase.auth().currentUser;
-        this.userData = await helperfunctions.getUserdataOfUser(user.uid, loggedIn);
-        
-       
-        this.microblogs = await helperfunctions.getMicroblogsForUser(this.userData.username);
-        this.setState({loaded : true});
-
+        //verify user is logged in before displaying page
+        firebase.auth().onAuthStateChanged(async (user) => {
+            console.log(user);
+            if (!user) {
+            this.props.history.push({
+                pathname: "/login"
+            });
+                return (null);
+            } else {
+                var loggedIn = true;
+                var user = firebase.auth().currentUser;
+                this.userData = await helperfunctions.getUserdataOfUser(user.uid, loggedIn);
+                
+            
+                this.microblogs = await helperfunctions.getMicroblogsForUser(this.userData.username);
+                this.setState({loaded : true});
+            }
+        });
     }
 
     goToProfile(){

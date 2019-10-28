@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { withRouter } from "react-router";
 
 import helperfunctions from '../helperfunctions.js'
 import Microblogs from '../Microblogs'
@@ -26,6 +27,7 @@ class User extends React.Component{
         this.loggedInViewingOwnProfile = props.user.userData.viewingOwnProfile;
 
         this.editProfile = this.editProfile.bind(this);
+        this.deleteAccount = this.deleteAccount.bind(this);
         this.saveChanges = this.saveChanges.bind(this);
         this.followUser = this.followUser.bind(this);
         
@@ -45,7 +47,15 @@ class User extends React.Component{
           editMode : 1
         })
     }
-    
+
+  deleteAccount() {
+    helperfunctions.deleteUserData(this.username);
+    this.loggedIn = false;
+    this.props.history.push({
+        pathname: "/login"
+    });
+  }
+  
     saveChanges(){
     
         var bio_cont = document.getElementById('bioTextBox').value;
@@ -69,14 +79,13 @@ class User extends React.Component{
         this.userProfile.saveChanges = this.saveChanges;
         this.userProfile.editProfile = this.editProfile;
         this.userProfile.followUser = this.followUser;
-
         await this.downloadUserProfile(this.userProfile);
-
         this.setState({loaded : true});
 
         if(!this.loggedIn){
             document.getElementById('followbutton').disabled = true;
             document.getElementById('logout').disabled = true;
+            document.getElementById('profile').disabled = true;
         }
     }
 
@@ -93,7 +102,6 @@ class User extends React.Component{
 
     async downloadUserProfile(userProfile){
 
-        
         userProfile.username = this.username;
 
         this.bio = await helperfunctions.getBio(this.username);
@@ -114,7 +122,7 @@ class User extends React.Component{
 
             if(this.loggedIn){
                 if (this.loggedInViewingOwnProfile) {
-                    return this.renderLoggedInUser(this.userProfile);
+                    return this.renderLoggedInUser(this.userProfile, this.deleteAccount);
                 } else {
                     return this.renderVisitedUser(this.userProfile);
                 }
@@ -129,12 +137,12 @@ class User extends React.Component{
         
     }
 
-    renderLoggedInUser(userProfile){
+    renderLoggedInUser(userProfile, deleteAccount){
 
         if(this.editMode){
             return(
                 <div>
-                    <LoggedInUserEditView userProfile={userProfile}/>
+                    <LoggedInUserEditView userProfile={userProfile} deleteAccount={deleteAccount}/>
                     <Microblogs microblogs={userProfile.microblogs} username={userProfile.username} />
                 </div>
             );
@@ -143,7 +151,7 @@ class User extends React.Component{
         else{
             return (
                 <div>
-                    <LoggedInUserView userProfile={userProfile}/>
+                    <LoggedInUserView userProfile={userProfile} deleteAccount={deleteAccount}/>
                     <Microblogs microblogs={userProfile.microblogs} username={userProfile.username} />
                 </div>
             );
@@ -162,4 +170,5 @@ class User extends React.Component{
 
     
 }
-export default User;
+
+export default withRouter(User);
