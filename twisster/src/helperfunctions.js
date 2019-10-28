@@ -553,10 +553,13 @@ const helperfunctions =
             
           }
         });
-        Microblogs.sort(function(m1, m2)
+        if(Microblogs != null && Microblogs.length !== 0)
         {
-          return m1.timestamp > m2.timestamp ? -1 : 1;
-        });
+          Microblogs.sort(function(m1, m2)
+          {
+            return m1.timestamp > m2.timestamp ? -1 : 1;
+          });
+        }
         return Microblogs;
       },
 
@@ -574,10 +577,13 @@ const helperfunctions =
           }
         });
         resolve("done");
-        Microblogs.sort(function(m1, m2)
+        if(Microblogs != null && Microblogs.length !== 0)
         {
-          return m1.timestamp > m2.timestamp ? -1 : 1;
-        });
+          Microblogs.sort(function(m1, m2)
+          {
+            return m1.timestamp > m2.timestamp ? -1 : 1;
+          });
+        }
         return Microblogs;
       },
 

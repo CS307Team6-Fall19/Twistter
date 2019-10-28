@@ -8,10 +8,13 @@ class CheckboxContainer extends React.Component {
   constructor(props) {
     super(props);
 
-    this.username = props.username;
-    this.state = {
+    this.state = 
+    {
       checkedItems: new Map(),
+      loaded: false
     }
+
+    this.username = props.username;
 
     this.handleChange = this.handleChange.bind(this);
 
@@ -84,7 +87,8 @@ class CheckboxContainer extends React.Component {
 
       checkboxes.push(checkbox_new);
     }
-    this.render();
+    //this.handleChange = this.handleChange.bind(this);
+    this.setState({loaded: true});
   }
   // componentWillMount() {
   //   const isChecked = true;
@@ -94,18 +98,25 @@ class CheckboxContainer extends React.Component {
   // }
 
   render() {
-    return (
-      <React.Fragment>
-        {
-          checkboxes.map(item => (
-            <label key={item.key}>
-              {item.name}
-              <Checkbox name={item.name} checked={this.state.checkedItems.get(item.name)} onChange={this.handleChange} />
-            </label>
-          ))
-        }
-      </React.Fragment>
-    );
+    if(this.state.loaded)
+    {
+      return (
+        <React.Fragment>
+          {
+            checkboxes.map(item => (
+              <label key={item.key}>
+                {item.name}
+                <Checkbox name={item.name} checked={this.state.checkedItems.get(item.name)} onChange={this.handleChange} />
+              </label>
+            ))
+          }
+        </React.Fragment>
+      );
+    }
+    else
+    {
+      return null;
+    }
   }
 }
 
