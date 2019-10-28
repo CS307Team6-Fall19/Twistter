@@ -130,7 +130,7 @@ const helperfunctions =
             var sub_arr = topics[index].split(',');
             for(var index2 = 0; index2 < sub_arr.length; index2++)
             {
-              alert(topics[index2]);
+              //alert(topics[index2]);
               wTopics.push(topics[index2]);
             }
         }
