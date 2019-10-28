@@ -434,7 +434,7 @@ const helperfunctions =
         var followedTopics = snapshot.child("users").child(currUserUID).child("following").child(followedUserName).val();
 
         var unfollowedTopics = [];
-        if(tList != null && tList.length !== 0)
+        if(tList != null && tList.length !== 0 && followedTopics != null && followedTopics.length !== 0)
         {
           for(var i = 0; i < tList.length; i++)
           {
@@ -443,6 +443,14 @@ const helperfunctions =
               unfollowedTopics.push(tList[i]);
             }
           }
+        }
+        else
+        {
+          for(var i = 0; i < tList.length; i++)
+          {
+            unfollowedTopics.push(tList[i]);
+          }
+          followedTopics = [];
         }
 
         console.log("FOLLOWED TOPICS", followedTopics);
@@ -545,6 +553,10 @@ const helperfunctions =
             
           }
         });
+        Microblogs.sort(function(m1, m2)
+        {
+          return m1.timestamp > m2.timestamp ? -1 : 1;
+        });
         return Microblogs;
       },
 
@@ -562,7 +574,10 @@ const helperfunctions =
           }
         });
         resolve("done");
-
+        Microblogs.sort(function(m1, m2)
+        {
+          return m1.timestamp > m2.timestamp ? -1 : 1;
+        });
         return Microblogs;
       },
 
