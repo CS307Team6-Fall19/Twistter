@@ -15,7 +15,7 @@ class Microblogs extends React.Component{
         for (var i = 0; i < microblogsArray.length; i++) {
             // note: we add a key prop here to allow react to uniquely identify each
             // element in this array. see: https://reactjs.org/docs/lists-and-keys.html
-            microblogs.push(<Microblog key={i} data={microblogsArray[i]} username={username} />);
+            microblogs.push(<Microblog key={i} data={microblogsArray[i]} username={microblogsArray[i].user} />);
         }
         return <div>{microblogs}</div>;
     }
