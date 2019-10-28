@@ -124,20 +124,36 @@ const helperfunctions =
         }
         //add uid, microblog content, and list of topics to Microblogs
         var wTopics = [];
+
         for(var index = 0; index < topics.length; index++)
         {
-            wTopics.push(topics[index]);
+            var sub_arr = topics[index].split(',');
+            for(var index2 = 0; index2 < sub_arr.length; index2++)
+            {
+              alert(topics[index2]);
+              wTopics.push(topics[index2]);
+            }
         }
         firebase.database().ref().once('value', (snapshot) => {
             var writtenTopics = snapshot.child("users").child(firebase.auth().currentUser.uid).child("writtenTopics").val();
-            if(writtenTopics == null || writtenTopics.length == 0)
+            if(writtenTopics == null || writtenTopics.length === 0)
             {
-                firebase.database().ref().child("users").child(firebase.auth().currentUser.uid).child("writtenTopics").set({'0': wTopics});
+                firebase.database().ref().child("users").child(firebase.auth().currentUser.uid).child("writtenTopics").set({'0':wTopics[0]});
+                for(var index = 1; index < wTopics.length; index++)
+                {
+                  firebase.database().ref().child("users").child(firebase.auth().currentUser.uid).child("writtenTopics").push(wTopics[index]);
+                }
             }
             else
             {
-                writtenTopics.push(wTopics);
-                firebase.database().ref().child("users").child(firebase.auth().currentUser.uid).child("writtenTopics").set(wTopics);
+                for(var index = 0; index < wTopics.length; index++)
+                {
+                  if(!writtenTopics.includes(wTopics[index]))
+                  {
+                    writtenTopics.push(wTopics[index]);
+                  }
+                }
+                firebase.database().ref().child("users").child(firebase.auth().currentUser.uid).child("writtenTopics").set(writtenTopics);
             }
         });
         var topicsList = [];
@@ -208,12 +224,38 @@ const helperfunctions =
     
           var mapUsernameToUID = snapshot.child("mapUsernameToUID").val();
           var UIDofUserIAmViewing = mapUsernameToUID[username];
-          var usersTheUserIsFollowing = snapshot.child("users").child(UIDofUserIAmViewing).child("following").val();
+          var usersTheUserIsFollowing = [];
+          snapshot.child("users").child(UIDofUserIAmViewing).child("following").forEach((function(child)
+          {
+            usersTheUserIsFollowing.push(child.key);
+          }));
           var followersTheUserHas = snapshot.child("users").child(UIDofUserIAmViewing).child("followers").val();
-
-          var followers = followersTheUserHas;
-          var following = usersTheUserIsFollowing;
-
+          var followers = "";
+          if(followersTheUserHas == null)
+          {
+            followers = "";
+          }
+          else
+          {
+            for(var i = 0; i < followersTheUserHas.length - 1; i++)
+            {
+              followers += followersTheUserHas[i] + ", ";
+            }
+            followers += followersTheUserHas[followersTheUserHas.length - 1];
+          }
+          var following = "";
+          if(usersTheUserIsFollowing == null || usersTheUserIsFollowing === undefined || usersTheUserIsFollowing.length === 0)
+          {
+            following = "";
+          }
+          else
+          {
+            for(var i = 0; i < usersTheUserIsFollowing.length - 1; i++)
+            {
+              following += usersTheUserIsFollowing[i] + ", ";
+            }
+            following += usersTheUserIsFollowing[usersTheUserIsFollowing.length - 1];
+          }
           result = {followers, following};
           
         });
@@ -491,7 +533,7 @@ const helperfunctions =
         await firebase.database().ref().once('value', (snapshot) => {
           var UIDtoUsername = snapshot.child('mapUIDtoUsername').val();
           var username = UIDtoUsername[uid];
-          userData = new UserData(username, loggedIn);
+          userData = new UserData(username, loggedIn, true);
           //this.email = user.email;
         });
 
