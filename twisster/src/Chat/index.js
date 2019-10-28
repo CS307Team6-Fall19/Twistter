@@ -2,144 +2,15 @@ import React, { Component } from "react";
 import "./chat.css";
 import Messages from "./Messages";
 import Input from "./Input";
+import { resolve } from "path";
+import firebase from "firebase";
+import { withRouter } from "react-router";
+import helperfunctions from "../helperfunctions";
 
-function randomName() {
-  const adjectives = [
-    "autumn",
-    "hidden",
-    "bitter",
-    "misty",
-    "silent",
-    "empty",
-    "dry",
-    "dark",
-    "summer",
-    "icy",
-    "delicate",
-    "quiet",
-    "white",
-    "cool",
-    "spring",
-    "winter",
-    "patient",
-    "twilight",
-    "dawn",
-    "crimson",
-    "wispy",
-    "weathered",
-    "blue",
-    "billowing",
-    "broken",
-    "cold",
-    "damp",
-    "falling",
-    "frosty",
-    "green",
-    "long",
-    "late",
-    "lingering",
-    "bold",
-    "little",
-    "morning",
-    "muddy",
-    "old",
-    "red",
-    "rough",
-    "still",
-    "small",
-    "sparkling",
-    "throbbing",
-    "shy",
-    "wandering",
-    "withered",
-    "wild",
-    "black",
-    "young",
-    "holy",
-    "solitary",
-    "fragrant",
-    "aged",
-    "snowy",
-    "proud",
-    "floral",
-    "restless",
-    "divine",
-    "polished",
-    "ancient",
-    "purple",
-    "lively",
-    "nameless"
-  ];
-  const nouns = [
-    "waterfall",
-    "river",
-    "breeze",
-    "moon",
-    "rain",
-    "wind",
-    "sea",
-    "morning",
-    "snow",
-    "lake",
-    "sunset",
-    "pine",
-    "shadow",
-    "leaf",
-    "dawn",
-    "glitter",
-    "forest",
-    "hill",
-    "cloud",
-    "meadow",
-    "sun",
-    "glade",
-    "bird",
-    "brook",
-    "butterfly",
-    "bush",
-    "dew",
-    "dust",
-    "field",
-    "fire",
-    "flower",
-    "firefly",
-    "feather",
-    "grass",
-    "haze",
-    "mountain",
-    "night",
-    "pond",
-    "darkness",
-    "snowflake",
-    "silence",
-    "sound",
-    "sky",
-    "shape",
-    "surf",
-    "thunder",
-    "violet",
-    "water",
-    "wildflower",
-    "wave",
-    "water",
-    "resonance",
-    "sun",
-    "wood",
-    "dream",
-    "cherry",
-    "tree",
-    "fog",
-    "frost",
-    "voice",
-    "paper",
-    "frog",
-    "smoke",
-    "star"
-  ];
-  const adjective = adjectives[Math.floor(Math.random() * adjectives.length)];
-  const noun = nouns[Math.floor(Math.random() * nouns.length)];
-  return adjective + noun;
-}
+// Current Issues ----
+// Refresh does not work well
+// the data is temporary, need to change to user data
+// need to fix the this.userData and how to understand it.
 
 function randomColor() {
   return "#" + Math.floor(Math.random() * 0xffffff).toString(16);
@@ -149,13 +20,38 @@ class Chat extends Component {
   state = {
     messages: [],
     member: {
-      username: randomName(),
+      username: "ABCD",
       color: randomColor()
     }
   };
 
-  constructor() {
-    super();
+  async componentDidMount() {
+    //verify user is logged in before displaying page
+    this.updateUserName();
+  }
+
+  async updateUserName() {
+    firebase.auth().onAuthStateChanged(async user => {
+      if (!user) {
+        this.props.history.push({
+          pathname: "/login"
+        });
+        return null;
+      } else {
+        var loggedIn = true;
+        var user = firebase.auth().currentUser;
+        this.userData = await helperfunctions.getUserdataOfUser(
+          user.uid,
+          loggedIn
+        );
+        this.state.member.username = this.userData.username;
+      }
+    });
+  }
+
+  constructor(props) {
+    super(props);
+    this.updateUserName();
     this.drone = new window.Scaledrone("QeA5YRICL8SUcMYT", {
       data: this.state.member
     });
@@ -198,4 +94,4 @@ class Chat extends Component {
   };
 }
 
-export default Chat;
+export default withRouter(Chat);
