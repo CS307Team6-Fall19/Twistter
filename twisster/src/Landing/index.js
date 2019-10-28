@@ -35,7 +35,7 @@ class Landing extends Component {
 
     async updateMicroblogs(){
         toast("Microblog posted!");
-        this.microblogs = await helperfunctions.getMicroblogsForUser(this.userData.username);
+        this.microblogs = await helperfunctions.getMicroblogsForUserTimeline(this.userData.username);
         resolve("done");
     }
     
@@ -43,7 +43,6 @@ class Landing extends Component {
 
         //verify user is logged in before displaying page
         firebase.auth().onAuthStateChanged(async (user) => {
-            console.log(user);
             if (!user) {
             this.props.history.push({
                 pathname: "/login"
@@ -55,7 +54,7 @@ class Landing extends Component {
                 this.userData = await helperfunctions.getUserdataOfUser(user.uid, loggedIn);
                 
             
-                this.microblogs = await helperfunctions.getMicroblogsForUser(this.userData.username);
+                this.microblogs = await helperfunctions.getMicroblogsForUserTimeline(this.userData.username);
                 this.setState({loaded : true});
             }
         });

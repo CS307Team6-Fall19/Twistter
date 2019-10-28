@@ -1,0 +1,103 @@
+.main-body {
+    display: flex;
+    flex-direction: column;
+    background-color: #11171d;
+    min-height: 80rem;
+}
+
+.body {
+    display: flex;
+    flex-direction: column; 
+}
+
+.inner-body {
+    display: flex;
+    flex-direction: row;
+}
+
+.login-prompt {
+    align-self: center;
+    width: 800px;
+    height: 887px;
+    border-radius: 25px;
+    box-shadow: 0 10px 40px 0 #00000080;
+    border: solid 0 #979797;
+    background-color: #213649;
+}
+
+.logo-twisterr {
+    width: 200px;
+    height: 200px;
+    background-blend-mode: multiply;
+    background-image: linear-gradient(to bottom, var(--very-light-pink), var(--very-light-pink));
+}
+
+.name-twisterr{
+    width: 152px;
+    height: 50px;
+    background-color: #ffffff;
+    font-family: AvenirNext;
+    font-size: 32px;
+    font-weight: 900;
+    font-stretch: condensed;
+    font-style: normal;
+    line-height: 1.56;
+    letter-spacing: 5px;
+    color: #ffffff;
+}
+
+.login-textbox {
+    align-self: center;
+    width: 600px;
+    height: 70px;
+    opacity: 0.15;
+    border-radius: 15px;
+    background-color: var(--very-light-pink);
+}
+
+.login-text {
+    align-self: center;
+    width: 559px;
+    height: 44px;
+    opacity: 0.99;
+    background-blend-mode: multiply;
+    background-image: linear-gradient(to bottom, #000000, #000000);
+    font-family: AvenirNext;
+    font-size: 32px;
+    font-weight: 200;
+    font-stretch: condensed;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    color: #000000;
+}
+
+.login-button {
+    width: 300px;
+    height: 80px;
+    border-radius: 37.5px;
+    border: solid 0 #979797;
+    background-color: #11171d;
+}
+
+.LOGIN {
+    width: 79px;
+    height: 44px;
+    background-color: #ffffff;
+    font-family: AvenirNext;
+    font-size: 32px;
+    font-weight: bold;
+    font-stretch: condensed;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    color: #ffffff;
+  }
+
+ .signup-button {
+    width: 300px;
+    height: 80px;
+    border-radius: 40px;
+    border: solid 1px #979797;
+    background-color: var(--very-light-pink);
+  }

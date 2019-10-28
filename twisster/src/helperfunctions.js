@@ -111,9 +111,15 @@ const helperfunctions =
     //topic(s): a list of topics associated to the blog, type: array
     addMicroBlogToCurrentUser: async function(content, topics)
     {
+        var username = "";
         console.log("Entered addMicroBlogToCurrentUser");
         //get the current user's uid
         var uid_current = firebase.auth().currentUser.uid;
+        await firebase.database().ref().once('value', (snapshot) => {
+          var mapUIDtoUsername = snapshot.child("mapUIDtoUsername").val();
+          username = mapUIDtoUsername[uid_current];
+          console.log("USERNAME:", username);
+        });
         //fetch the current timestamp
         var date = new Date();
         var timestamp = date.getTime();
@@ -124,20 +130,29 @@ const helperfunctions =
         }
         //add uid, microblog content, and list of topics to Microblogs
         var wTopics = [];
+
         for(var index = 0; index < topics.length; index++)
         {
             wTopics.push(topics[index]);
         }
-        firebase.database().ref().once('value', (snapshot) => {
+        await firebase.database().ref().once('value', (snapshot) => {
             var writtenTopics = snapshot.child("users").child(firebase.auth().currentUser.uid).child("writtenTopics").val();
-            if(writtenTopics == null || writtenTopics.length == 0)
+            console.log("TYPE:", typeof(writtenTopics));
+            //console.log("VALUES:", Object.values(writtenTopics));
+            if(writtenTopics == null || writtenTopics.length === 0)
             {
-                firebase.database().ref().child("users").child(firebase.auth().currentUser.uid).child("writtenTopics").set({'0': wTopics});
+                firebase.database().ref().child("users").child(firebase.auth().currentUser.uid).child("writtenTopics").set(wTopics);
             }
             else
             {
-                writtenTopics.push(wTopics);
-                firebase.database().ref().child("users").child(firebase.auth().currentUser.uid).child("writtenTopics").set(wTopics);
+                for(var index = 0; index < wTopics.length; index++)
+                {
+                  if(!writtenTopics.includes(wTopics[index]))
+                  {
+                    writtenTopics.push(wTopics[index]);
+                  }
+                }
+                firebase.database().ref().child("users").child(firebase.auth().currentUser.uid).child("writtenTopics").set(writtenTopics);
             }
         });
         var topicsList = [];
@@ -145,11 +160,11 @@ const helperfunctions =
         {
             topicsList.push(topics[index]);
         }
-        var microblog = {'content': content, 'topics': topicsList, 'timestamp': timestamp};
+        var microblog = {'user': username, 'content': content, 'topics': topicsList, 'timestamp': timestamp};
         await firebase.database().ref().once('value', (snapshot) => {
             var microblog_list = snapshot.child("users").child(firebase.auth().currentUser.uid).child("Microblogs").val();
-            console.log(microblog_list);
-            if(microblog_list == null || microblog_list.length == 0)
+            //console.log(microblog_list);
+            if(microblog_list == null || microblog_list.length === 0)
             {
                 firebase.database().ref().child("users").child(firebase.auth().currentUser.uid).child("Microblogs").set({'0': microblog});
             }
@@ -208,12 +223,38 @@ const helperfunctions =
     
           var mapUsernameToUID = snapshot.child("mapUsernameToUID").val();
           var UIDofUserIAmViewing = mapUsernameToUID[username];
-          var usersTheUserIsFollowing = snapshot.child("users").child(UIDofUserIAmViewing).child("following").val();
+          var usersTheUserIsFollowing = [];
+          snapshot.child("users").child(UIDofUserIAmViewing).child("following").forEach((function(child)
+          {
+            usersTheUserIsFollowing.push(child.key);
+          }));
           var followersTheUserHas = snapshot.child("users").child(UIDofUserIAmViewing).child("followers").val();
-
-          var followers = followersTheUserHas;
-          var following = usersTheUserIsFollowing;
-
+          var followers = "";
+          if(followersTheUserHas == null)
+          {
+            followers = "";
+          }
+          else
+          {
+            for(var i = 0; i < followersTheUserHas.length - 1; i++)
+            {
+              followers += followersTheUserHas[i] + ", ";
+            }
+            followers += followersTheUserHas[followersTheUserHas.length - 1];
+          }
+          var following = "";
+          if(usersTheUserIsFollowing == null || usersTheUserIsFollowing === undefined || usersTheUserIsFollowing.length === 0)
+          {
+            following = "";
+          }
+          else
+          {
+            for(var i = 0; i < usersTheUserIsFollowing.length - 1; i++)
+            {
+              following += usersTheUserIsFollowing[i] + ", ";
+            }
+            following += usersTheUserIsFollowing[usersTheUserIsFollowing.length - 1];
+          }
           result = {followers, following};
           
         });
@@ -224,6 +265,7 @@ const helperfunctions =
 
     //Method to follow user I am viewing
     followUserIAmViewing: async function(username){
+        
         await firebase.database().ref().once('value', (snapshot) => {
           var currUserUID = firebase.auth().currentUser.uid;
           var mapUIDToUsername = snapshot.child("mapUIDtoUsername").val();
@@ -233,7 +275,14 @@ const helperfunctions =
           var followedUserUID = mapUsernameToUID[followedUserName];
 
           var usersIAmFollowing = snapshot.child("users").child(currUserUID).child("following").val();
-          
+          // var usersIAmFollowing = snapshot.child("users").child(currUserUID).child("following").forEach(function(childSnapshot) 
+          // {
+          //   var childKey = childSnapshot.key;
+          //   alert("CHILD KEY: " + childKey);
+          //   var childData = childSnapshot.val();
+          //   alert("CHILD VALUE: " + childData);
+          // });
+
           var followersOfUserIamFollowing = snapshot.child("users").child(followedUserUID).child("followers").val();
 
           if(followedUserUID !== currUserUID)
@@ -281,20 +330,19 @@ const helperfunctions =
     unfollowUserIAmViewing: async function(username)
     {
       await firebase.database().ref().once('value', (snapshot) => {
-        var currUserUID = firebase.auth().currentUser.uid;
         var mapUIDToUsername = snapshot.child("mapUIDtoUsername").val();
         var currUserName = mapUIDToUsername[firebase.auth().currentUser.uid];
         var followedUserName = username;
         var mapUsernameToUID = snapshot.child("mapUsernameToUID").val();
         var followedUserUID = mapUsernameToUID[followedUserName];
 
-        var usersIAmFollowing = snapshot.child("users").child(currUserUID).child("following").val();
         var followersOfUserIamFollowing = snapshot.child("users").child(followedUserUID).child("followers").val();
 
-        if(usersIAmFollowing.includes(username))
+        if(firebase.database().ref().child("users").child(firebase.auth().currentUser.uid).child("following").child(followedUserName) != null)
         {
           firebase.database().ref().child("users").child(firebase.auth().currentUser.uid).child("following").child(followedUserName).remove();
         }
+
         if(followersOfUserIamFollowing.includes(currUserName))
         {
           var usersList = [];
@@ -308,6 +356,7 @@ const helperfunctions =
           firebase.database().ref().child("users").child(followedUserUID).child("followers").set(usersList);
         }
       });
+
       resolve("done");
     },
     
@@ -424,6 +473,49 @@ const helperfunctions =
     return result;
     }*/
 
+    //use this function to get all related microblogs for a user's timeline (including following)
+    getMicroblogsForUserTimeline: async function(username)
+    {
+      var Microblogs = [];
+      await firebase.database().ref().once('value', (snapshot) => {
+        var mapUsernameToUID = snapshot.child("mapUsernameToUID").val();
+        var uidOfUser = mapUsernameToUID[username];
+        snapshot.child("users").child(uidOfUser).child("following").forEach(function(childSnapshot)
+        {
+          var followedUsername = childSnapshot.key;
+          var followedTopics = childSnapshot.val();
+          var uidOfFollowedUser = mapUsernameToUID[followedUsername];
+          var microblogs = snapshot.child("users").child(uidOfFollowedUser).child("Microblogs").val();
+          if(microblogs != undefined || microblogs != null)
+          {
+            for(var i = 0; i < microblogs.length; i++)
+            {
+              var currMicroblog = microblogs[i];
+              var topicsList = currMicroblog.topics;
+              if (topicsList != undefined || topicsList != null) {
+                for(var j = 0; j < topicsList.length; j++)
+                {
+                  if(followedTopics.includes(topicsList[j]))
+                  {
+                    Microblogs.push(currMicroblog);
+                    break;
+                  }
+                }
+              }
+            }
+          }
+        });
+      });
+
+      resolve("done");
+      //Sort Microblogs based on timestamp
+      Microblogs.sort(function(m1, m2)
+      {
+        return m1.timestamp > m2.timestamp ? -1 : 1;
+      });
+      return Microblogs;
+    },
+
     getMicroblogsForCurrentUser: async function(username) {
         var Microblogs;
         firebase.database().ref().once('value', (snapshot) => {
@@ -491,7 +583,7 @@ const helperfunctions =
         await firebase.database().ref().once('value', (snapshot) => {
           var UIDtoUsername = snapshot.child('mapUIDtoUsername').val();
           var username = UIDtoUsername[uid];
-          userData = new UserData(username, loggedIn);
+          userData = new UserData(username, loggedIn, true);
           //this.email = user.email;
         });
 
