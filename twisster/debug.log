@@ -55,3 +55,5 @@
 >>>>>>> master
 [1026/173217.999:ERROR:crash_report_database_win.cc(469)] failed to stat report
 [1026/173218.000:ERROR:crash_report_database_win.cc(469)] failed to stat report
+[1027/214631.686:ERROR:crash_report_database_win.cc(469)] failed to stat report
+[1027/214631.687:ERROR:crash_report_database_win.cc(469)] failed to stat report
