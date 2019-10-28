@@ -7,6 +7,7 @@ import TopBar from "../TopBar";
 import ProfilePicture from "../ProfilePicture"
 import firebase from "firebase";
 import { resolve } from 'q';
+import CheckboxContainer from './checkBox.jsx'
 
 class ProfilePage extends React.Component {
   
@@ -17,8 +18,10 @@ class ProfilePage extends React.Component {
       this.localProps = props;
     
       this.state = {
+        //checkedItems: new Map(),
         loaded: false
       }
+      //this.handleChange = this.handleChange.bind(this);
     }
     
     async componentDidMount() {
@@ -68,6 +71,12 @@ class ProfilePage extends React.Component {
       //this.userData = new UserData(username, false, false);
     //}
 
+    // handleChange(e) {
+    //   const item = e.target.name;
+    //   const isChecked = e.target.checked;
+    //   this.setState(prevState => ({ checkedItems: prevState.checkedItems.set(item, isChecked) }));
+    // }
+
     render(){
       if(this.state.loaded){
         return (
@@ -75,6 +84,7 @@ class ProfilePage extends React.Component {
             <TopBar/>
             <ProfilePicture/>
             <ProfilePageView userData={this.userData}/>
+            <CheckboxContainer username={this.username}/>
           </div>
         );
 
@@ -84,5 +94,3 @@ class ProfilePage extends React.Component {
   }
 }
 export default withRouter(ProfilePage);
-
-

@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { MicroblogView } from './MicroblogView.js';
+import Topics from '../Topics'
+import MicroblogBox from '../MicroblogBox/index.js';
 
 class Microblog extends React.Component{
 
@@ -15,14 +17,8 @@ class Microblog extends React.Component{
       this.microblogData.image = "props.image";
       
 
-      var topics = "";
-      for(var i = 0; i < props.data.topics.length-1; i++){
-            topics += props.data.topics[i];
-            topics += ", "
-      }
-      topics += props.data.topics[props.data.topics.length-1];
-
-      this.microblogData.topics = topics;
+     
+      this.microblogData.topics = props.data.topics;
       
     }
 
@@ -33,15 +29,20 @@ class Microblog extends React.Component{
         let tweet = this.microblogData.tweet
         let topics = this.microblogData.topics
         return(
-            
-            <MicroblogView 
-                key={this.microblogData.key}
-                name={name}
-                handle={handle}
-                image={image}
-                tweet={tweet}
-                topics={topics}
-            /> 
+            <div>
+                <MicroblogBox>
+                    <MicroblogView 
+                        key={this.microblogData.key}
+                        name={name}
+                        handle={handle}
+                        image={image}
+                        tweet={tweet}
+                        
+                    /> 
+
+                    <Topics topics={topics} />
+                </MicroblogBox>
+            </div>
         );
     }
 }

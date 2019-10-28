@@ -1,0 +1,47 @@
+#container {
+    display:table;
+    background: #DEDEDE;
+}
+
+
+.row {
+    display:table-row;
+}
+
+.cell {
+    display:table-cell;
+    float: left;
+    border-bottom:1px solid #DEDEDE;
+
+    margin-left: 15px;
+    margin-top: 7px;
+    width: 445px;
+    height: 10px;
+    font-family: HelveticaNeue;
+    font-size: 14px;
+    font-weight: 300;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: -0.6px;
+    color: #ffffff;
+}
+
+.cell-highlight{
+    display:table-cell;
+    float: left;
+    border-bottom:1px solid #DEDEDE;
+
+    margin-left: 15px;
+    margin-top: 7px;
+    width: 445px;
+    height: 10px;
+    font-family: HelveticaNeue;
+    font-size: 14px;
+    font-weight: 300;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: -0.6px;
+    color: #e41111;
+}
