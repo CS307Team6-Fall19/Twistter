@@ -6,13 +6,12 @@ import Login from "./LogIn";
 import SignUp from "./SignUp";
 import LandingPage from "./LandingPage/index";
 import ProfilePage from "./ProfilePage";
-
-import { toast } from 'react-toastify';
+import Chat from "./Chat";
+import { toast } from "react-toastify";
 
 toast.configure();
 
 const App = () => {
-
   const notify = () => toast("Wow so easy !");
   return (
     <Router>
@@ -22,10 +21,10 @@ const App = () => {
         <Route exact path="/signup" component={SignUp} />
         <Route exact path="/landing" component={LandingPage} />
         <Route path="/profile" component={ProfilePage} />
+        <Route path="/chat" component={Chat} />
       </div>
     </Router>
   );
-
 };
 
 export default App;
