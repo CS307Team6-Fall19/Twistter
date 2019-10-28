@@ -2,33 +2,35 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { checkboxes } from './checkBox.js';
 import { Checkbox } from './checkBox.js';
+import helperfunctions from '../helperfunctions.js';
 
 class CheckboxContainer extends React.Component {
   constructor(props) {
     super(props);
 
+    this.username = props.username;
     this.state = {
       checkedItems: new Map(),
     }
 
     this.handleChange = this.handleChange.bind(this);
 
-    const isChecked = true;
-    let name = "Hello";
-    let key = "checkbox4";
-    let label = "Check Box n";
+    // const isChecked = true;
+    // let name = "Hello";
+    // let key = "checkbox4";
+    // let label = "Check Box n";
     
-    let newCheckbox = {
-      name: name,
-      key: key,
-      label: label
-    }
+    // let newCheckbox = {
+    //   name: name,
+    //   key: key,
+    //   label: label
+    // }
 
-    checkboxes.map(item => (      
-      this.state.checkedItems.set(item.name, isChecked)
-    ));
+    // checkboxes.map(item => (      
+    //   this.state.checkedItems.set(item.name, isChecked)
+    // ));
     
-    checkboxes.push(newCheckbox);
+    // checkboxes.push(newCheckbox);
   }
 
   handleChange(e) {
@@ -37,6 +39,53 @@ class CheckboxContainer extends React.Component {
     this.setState(prevState => ({ checkedItems: prevState.checkedItems.set(item, isChecked) }));
   }
 
+  async componentDidMount()
+  {
+    this.topics = await helperfunctions.getFollowedAndUnfollowedTopics(this.username);
+    console.log("UI TOPICS", this.topics);
+    console.log("UI FOLLOW TOPICS", this.topics.followedTopics);
+    console.log("UI UNFOLLOW TOPICS", this.topics.unfollowedTopics);
+    for(var index = 0; index < this.topics.followedTopics; index++)
+    {
+      const isChecked = true;
+      let name = this.topics.followedTopics[index];
+      let key = this.topics.followedTopics[index] + "" + index;
+      let label = "Check Box " + index;
+      
+      let checkbox_new = {
+        name : name,
+        key: key,
+        label: label
+      };
+
+      checkboxes.map(item => (
+        this.state.checkedItems.set(item.name, isChecked)
+      ));
+
+      checkboxes.push(checkbox_new);
+    }
+
+    for(var index = 0; index < this.topics.unfollowedTopics; index++)
+    {
+      const isChecked = false;
+      let name = this.topics.unfollowedTopics[index];
+      let key = this.topics.unfollowedTopics[index] + "" + index;
+      let label = "Check Box " + index;
+      
+      let checkbox_new = {
+        name : name,
+        key: key,
+        label: label
+      };
+
+      checkboxes.map(item => (
+        this.state.checkedItems.set(item.name, isChecked)
+      ));
+
+      checkboxes.push(checkbox_new);
+    }
+    this.render();
+  }
   // componentWillMount() {
   //   const isChecked = true;
   //   checkboxes.map(item => (      

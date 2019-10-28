@@ -426,20 +426,39 @@ const helperfunctions =
         var followedUserUID = mapUsernameToUID[followedUserName];
 
         var writtenTopics = snapshot.child("users").child(followedUserUID).child("writtenTopics").val();
-
+        var tList = [];
+        if(writtenTopics != null && writtenTopics !== undefined)
+        {
+          for(var v = 0; v < writtenTopics.length; v++)
+          {
+            tList.push(writtenTopics[v].topics);
+          }
+        }
+        console.log("WRITTEN TOPICS", tList);
         var followedTopics = snapshot.child("users").child(currUserUID).child("following").child(followedUserName).val();
 
         var unfollowedTopics = [];
-        for(var i = 0; i < writtenTopics.length; i++)
+        if(tList != null && tList.length !== 0 && followedTopics != null && followedTopics.length !== 0)
         {
-          if(followedTopics.includes(writtenTopics[i]) === false)
+          for(var i = 0; i < tList.length; i++)
           {
-            unfollowedTopics.push(writtenTopics[i]);
+            if(followedTopics.includes(tList[i]) === false)
+            {
+              unfollowedTopics.push(tList[i]);
+            }
           }
         }
+        else
+        {
+          for(var i = 0; i < tList.length; i++)
+          {
+            unfollowedTopics.push(tList[i]);
+          }
+          followedTopics = [];
+        }
 
-        alert("FOLLOWED TOPICS" + followedTopics);
-        alert("UNFOLLOWED TOPICS" + unfollowedTopics);
+        console.log("FOLLOWED TOPICS", followedTopics);
+        console.log("UNFOLLOWED TOPICS", unfollowedTopics);
 
         result = {followedTopics, unfollowedTopics};
       });
@@ -571,6 +590,10 @@ const helperfunctions =
             
           }
         });
+        Microblogs.sort(function(m1, m2)
+        {
+          return m1.timestamp > m2.timestamp ? -1 : 1;
+        });
         return Microblogs;
       },
 
@@ -588,7 +611,10 @@ const helperfunctions =
           }
         });
         resolve("done");
-
+        Microblogs.sort(function(m1, m2)
+        {
+          return m1.timestamp > m2.timestamp ? -1 : 1;
+        });
         return Microblogs;
       },
 
