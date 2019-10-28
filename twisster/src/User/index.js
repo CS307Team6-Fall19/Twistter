@@ -14,6 +14,8 @@ import 'react-toastify/dist/ReactToastify.css';
 
 import { resolve } from 'q';
 
+import firebase from "firebase";
+
 class User extends React.Component{
 
 
@@ -29,7 +31,7 @@ class User extends React.Component{
         this.editProfile = this.editProfile.bind(this);
         this.deleteAccount = this.deleteAccount.bind(this);
         this.saveChanges = this.saveChanges.bind(this);
-        this.followUser = this.followUser.bind(this);
+        this.followOrUnfollowUser = this.followOrUnfollowUser.bind(this);
         
         this.renderLoggedInUser = this.renderLoggedInUser.bind(this);
         this.renderVisitedUser = this.renderVisitedUser.bind(this);
@@ -67,10 +69,22 @@ class User extends React.Component{
         })
     }
 
-    followUser(){
-        console.log("following");
-        helperfunctions.followUserIAmViewing(this.username);
-        this.setState({ follow : 0});
+    async followOrUnfollowUser(){
+    
+        if (document.getElementById('followbutton').textContent ==  "Follow") {
+            await helperfunctions.followUserIAmViewing(this.username);
+            document.getElementById('followbutton').textContent = "Unfollow";
+            this.setState({ follow : 0});
+        } else {
+            await helperfunctions.unfollowUserIAmViewing(this.username);
+            document.getElementById('followbutton').textContent = "Unfollow";
+            this.setState({ follow : 1});
+            document.getElementById('followbutton').textContent = "Follow";
+        }
+
+        this.followersAndFollowing = await helperfunctions.getFollowersAndFollowing(this.username);
+        this.userProfile.followersAndFollowing = this.followersAndFollowing;
+        this.setState({ mustUpdate : 1})
     }
 
     async componentDidMount() {
@@ -78,7 +92,7 @@ class User extends React.Component{
         this.userProfile = new Object();
         this.userProfile.saveChanges = this.saveChanges;
         this.userProfile.editProfile = this.editProfile;
-        this.userProfile.followUser = this.followUser;
+        this.userProfile.followUser = this.followOrUnfollowUser;
         await this.downloadUserProfile(this.userProfile);
         this.setState({loaded : true});
 
@@ -87,6 +101,16 @@ class User extends React.Component{
             document.getElementById('logout').disabled = true;
             document.getElementById('profile').disabled = true;
         }
+
+        //check if I am currently following the user I am viewing and if so, change button text to "unfollow"
+        await firebase.database().ref().once('value', (snapshot) => {
+            var mapUIDToUsername = snapshot.child("mapUIDtoUsername").val();
+            var currUserName = mapUIDToUsername[firebase.auth().currentUser.uid];
+
+            if ((this.userProfile.followersAndFollowing.followers).includes(currUserName)) {
+                document.getElementById('followbutton').textContent = "Unfollow";
+            }
+        });
     }
 
     async componentDidUpdate(){

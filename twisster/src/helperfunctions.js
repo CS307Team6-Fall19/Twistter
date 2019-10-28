@@ -331,20 +331,19 @@ const helperfunctions =
     unfollowUserIAmViewing: async function(username)
     {
       await firebase.database().ref().once('value', (snapshot) => {
-        var currUserUID = firebase.auth().currentUser.uid;
         var mapUIDToUsername = snapshot.child("mapUIDtoUsername").val();
         var currUserName = mapUIDToUsername[firebase.auth().currentUser.uid];
         var followedUserName = username;
         var mapUsernameToUID = snapshot.child("mapUsernameToUID").val();
         var followedUserUID = mapUsernameToUID[followedUserName];
 
-        var usersIAmFollowing = snapshot.child("users").child(currUserUID).child("following").val();
         var followersOfUserIamFollowing = snapshot.child("users").child(followedUserUID).child("followers").val();
 
-        if(usersIAmFollowing.includes(username))
+        if(firebase.database().ref().child("users").child(firebase.auth().currentUser.uid).child("following").child(followedUserName) != null)
         {
           firebase.database().ref().child("users").child(firebase.auth().currentUser.uid).child("following").child(followedUserName).remove();
         }
+
         if(followersOfUserIamFollowing.includes(currUserName))
         {
           var usersList = [];
@@ -358,6 +357,7 @@ const helperfunctions =
           firebase.database().ref().child("users").child(followedUserUID).child("followers").set(usersList);
         }
       });
+
       resolve("done");
     },
     
