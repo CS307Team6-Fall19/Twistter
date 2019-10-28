@@ -509,7 +509,10 @@ const helperfunctions =
 
       resolve("done");
       //Sort Microblogs based on timestamp
-
+      Microblogs.sort(function(m1, m2)
+      {
+        return m1.timestamp > m2.timestamp ? -1 : 1;
+      });
       return Microblogs;
     },
 
