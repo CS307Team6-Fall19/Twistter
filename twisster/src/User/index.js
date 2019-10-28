@@ -3,7 +3,7 @@ import { withRouter } from "react-router";
 
 import helperfunctions from '../helperfunctions.js'
 import Microblogs from '../Microblogs'
-
+import ProfilePicture from '../ProfilePicture'
 import LoggedInUserView from "./UserProfileViews/LoggedInUserView";
 import LoggedInUserEditView from "./UserProfileViews/LoggedInUserEditView"
 import VisitedUserView from "./UserProfileViews/VisitedUserView"
@@ -13,6 +13,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 import { resolve } from 'q';
+import ProfilePageView from '../ProfilePage/ProfilePageView.js';
 
 class User extends React.Component{
 
@@ -151,6 +152,7 @@ class User extends React.Component{
         else{
             return (
                 <div>
+                    <ProfilePicture/>
                     <LoggedInUserView userProfile={userProfile} deleteAccount={deleteAccount}/>
                     <Microblogs microblogs={userProfile.microblogs} username={userProfile.username} />
                 </div>

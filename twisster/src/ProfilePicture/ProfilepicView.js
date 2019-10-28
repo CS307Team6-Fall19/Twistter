@@ -1,10 +1,16 @@
 import React from "react"
 
-const ProfilepicView = ({image, changeProfPic}) =>   {
+const ProfilepicView = ({image, changeProfPic, deletePic}) =>   {
+
     return (
         <div>
-        <img src={image}></img>
-            <button onClick={changeProfPic}>Change profile picture</button>
+        <img height="125" width="125"/>
+            <div>
+            <button onClick={changeProfPic}>Change profile picture </button>
+            </div>
+            <div>
+            <button onClick={deletePic}>Delete Picture / Change to default</button>
+            </div>
 
         </div>
         
