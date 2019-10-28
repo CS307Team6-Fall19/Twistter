@@ -486,17 +486,20 @@ const helperfunctions =
           var followedTopics = childSnapshot.val();
           var uidOfFollowedUser = mapUsernameToUID[followedUsername];
           var microblogs = snapshot.child("users").child(uidOfFollowedUser).child("Microblogs").val();
-          for(var i = 0; i < microblogs.length; i++)
+          if(microblogs != undefined || microblogs != null)
           {
-            var currMicroblog = microblogs[i];
-            var topicsList = currMicroblog.topics;
-            if (topicsList != undefined || topicsList != null) {
-              for(var j = 0; j < topicsList.length; j++)
-              {
-                if(followedTopics.includes(topicsList[j]))
+            for(var i = 0; i < microblogs.length; i++)
+            {
+              var currMicroblog = microblogs[i];
+              var topicsList = currMicroblog.topics;
+              if (topicsList != undefined || topicsList != null) {
+                for(var j = 0; j < topicsList.length; j++)
                 {
-                  Microblogs.push(currMicroblog);
-                  break;
+                  if(followedTopics.includes(topicsList[j]))
+                  {
+                    Microblogs.push(currMicroblog);
+                    break;
+                  }
                 }
               }
             }
