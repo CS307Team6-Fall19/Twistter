@@ -8,7 +8,7 @@ class TopicsBox extends React.Component{
 
     render(){        
         return(
-            <div className="tweet-body">
+            <div>
                 {this.props.children}
             </div>
         );
