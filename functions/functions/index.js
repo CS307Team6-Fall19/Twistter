@@ -7,7 +7,7 @@ const auth = admin.auth();
 // // https://firebase.google.com/docs/functions/write-firebase-functions
 
 exports.runeveryminute =
-functions.pubsub.schedule('every 1 minutes').onRun((context) => {
+functions.pubsub.schedule('every 2 minutes').onRun((context) => {
     auth.listUsers().then((userRecords) => {
         userRecords.users.forEach((user) => {
             if (!user.emailVerified) {
