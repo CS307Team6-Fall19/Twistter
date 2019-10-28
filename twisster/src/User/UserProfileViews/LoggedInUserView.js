@@ -1,11 +1,12 @@
 import React from "react";
 
-const LoggedInUserView = ({ userProfile})=> {  
+const LoggedInUserView = ({ userProfile, deleteAccount})=> {  
   
     return(
         <div>
           <form>
           <label>Username:</label><label id='username'>{userProfile.username}</label>
+          <button type='button' style={{marginLeft: "365px"}} onClick={deleteAccount}>Delete account</button>
           <br></br>
           <label>Followers:</label><label id='followers'>{userProfile.followersAndFollowing.followers}</label>
           <br></br>

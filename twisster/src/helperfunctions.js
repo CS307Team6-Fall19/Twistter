@@ -124,20 +124,36 @@ const helperfunctions =
         }
         //add uid, microblog content, and list of topics to Microblogs
         var wTopics = [];
+
         for(var index = 0; index < topics.length; index++)
         {
-            wTopics.push(topics[index]);
+            var sub_arr = topics[index].split(',');
+            for(var index2 = 0; index2 < sub_arr.length; index2++)
+            {
+              alert(topics[index2]);
+              wTopics.push(topics[index2]);
+            }
         }
         firebase.database().ref().once('value', (snapshot) => {
             var writtenTopics = snapshot.child("users").child(firebase.auth().currentUser.uid).child("writtenTopics").val();
-            if(writtenTopics == null || writtenTopics.length == 0)
+            if(writtenTopics == null || writtenTopics.length === 0)
             {
-                firebase.database().ref().child("users").child(firebase.auth().currentUser.uid).child("writtenTopics").set({'0': wTopics});
+                firebase.database().ref().child("users").child(firebase.auth().currentUser.uid).child("writtenTopics").set({'0':wTopics[0]});
+                for(var index = 1; index < wTopics.length; index++)
+                {
+                  firebase.database().ref().child("users").child(firebase.auth().currentUser.uid).child("writtenTopics").push(wTopics[index]);
+                }
             }
             else
             {
-                writtenTopics.push(wTopics);
-                firebase.database().ref().child("users").child(firebase.auth().currentUser.uid).child("writtenTopics").set(wTopics);
+                for(var index = 0; index < wTopics.length; index++)
+                {
+                  if(!writtenTopics.includes(wTopics[index]))
+                  {
+                    writtenTopics.push(wTopics[index]);
+                  }
+                }
+                firebase.database().ref().child("users").child(firebase.auth().currentUser.uid).child("writtenTopics").set(writtenTopics);
             }
         });
         var topicsList = [];
@@ -208,12 +224,38 @@ const helperfunctions =
     
           var mapUsernameToUID = snapshot.child("mapUsernameToUID").val();
           var UIDofUserIAmViewing = mapUsernameToUID[username];
-          var usersTheUserIsFollowing = snapshot.child("users").child(UIDofUserIAmViewing).child("following").val();
+          var usersTheUserIsFollowing = [];
+          snapshot.child("users").child(UIDofUserIAmViewing).child("following").forEach((function(child)
+          {
+            usersTheUserIsFollowing.push(child.key);
+          }));
           var followersTheUserHas = snapshot.child("users").child(UIDofUserIAmViewing).child("followers").val();
-
-          var followers = followersTheUserHas;
-          var following = usersTheUserIsFollowing;
-
+          var followers = "";
+          if(followersTheUserHas == null)
+          {
+            followers = "";
+          }
+          else
+          {
+            for(var i = 0; i < followersTheUserHas.length - 1; i++)
+            {
+              followers += followersTheUserHas[i] + ", ";
+            }
+            followers += followersTheUserHas[followersTheUserHas.length - 1];
+          }
+          var following = "";
+          if(usersTheUserIsFollowing == null || usersTheUserIsFollowing === undefined || usersTheUserIsFollowing.length === 0)
+          {
+            following = "";
+          }
+          else
+          {
+            for(var i = 0; i < usersTheUserIsFollowing.length - 1; i++)
+            {
+              following += usersTheUserIsFollowing[i] + ", ";
+            }
+            following += usersTheUserIsFollowing[usersTheUserIsFollowing.length - 1];
+          }
           result = {followers, following};
           
         });
@@ -224,6 +266,7 @@ const helperfunctions =
 
     //Method to follow user I am viewing
     followUserIAmViewing: async function(username){
+        
         await firebase.database().ref().once('value', (snapshot) => {
           var currUserUID = firebase.auth().currentUser.uid;
           var mapUIDToUsername = snapshot.child("mapUIDtoUsername").val();
@@ -233,7 +276,14 @@ const helperfunctions =
           var followedUserUID = mapUsernameToUID[followedUserName];
 
           var usersIAmFollowing = snapshot.child("users").child(currUserUID).child("following").val();
-          
+          // var usersIAmFollowing = snapshot.child("users").child(currUserUID).child("following").forEach(function(childSnapshot) 
+          // {
+          //   var childKey = childSnapshot.key;
+          //   alert("CHILD KEY: " + childKey);
+          //   var childData = childSnapshot.val();
+          //   alert("CHILD VALUE: " + childData);
+          // });
+
           var followersOfUserIamFollowing = snapshot.child("users").child(followedUserUID).child("followers").val();
 
           if(followedUserUID !== currUserUID)
@@ -398,6 +448,17 @@ const helperfunctions =
         resolve("done");
     },
 
+    //Delete users data and authentication
+    //@Params
+    //content: string which contains username
+    deleteUserData: async function(username) {
+      firebase.database().ref().child("mapUIDtoUsername").child(firebase.auth().currentUser.uid).remove();
+      firebase.database().ref().child("mapUsernameToEmail").child(username).remove();
+      firebase.database().ref().child("mapUsernameToUID").child(username).remove();
+      firebase.database().ref().child("users").child(firebase.auth().currentUser.uid).remove();
+      firebase.auth().currentUser.delete();
+    },
+
     /*
     //gets a list of all the microblogs that the current user has posted and the posts he/she follows
     getMicroblogsForCurrentUserAsync: async function() {
@@ -412,6 +473,38 @@ const helperfunctions =
 
     return result;
     }*/
+
+    //use this function to get all related microblogs for a user's timeline (including following)
+    getMicroblogsForUserTimeline: async function(username)
+    {
+      var Microblogs = [];
+      firebase.database().ref().once('value', (snapshot) => {
+        var mapUsernameToUID = snapshot.child("mapUsernameToUID").val();
+        var uidOfUser = mapUsernameToUID[username];
+        var followingList = snapshot.child("users").child(uidOfUser).child("following").forEach(function(childSnapshot)
+        {
+          var followedUsername = childSnapshot.key;
+          var followedTopics = childSnapshot.val();
+          var uidOfFollowedUser = mapUsernameToUID[followedUsername];
+          var microblogs = snapshot.child("users").child(uidOfFollowedUser).child("Microblogs").val();
+          for(var i = 0; i < microblogs.length; i++)
+          {
+            var currMicroblog = microblogs[i];
+            var topicsList = currMicroblog.child("topics").val();
+            for(var j = 0; j < topicsList.length; j++)
+            {
+              if(followedTopics.includes(topicsList[i]))
+              {
+                Microblogs.push(currMicroblog);
+              }
+            }
+          }
+        });
+      });
+      resolve("done");
+      //Sort Microblogs based on timestamp
+      return Microblogs;
+    },
 
     getMicroblogsForCurrentUser: async function(username) {
         var Microblogs;
@@ -480,7 +573,7 @@ const helperfunctions =
         await firebase.database().ref().once('value', (snapshot) => {
           var UIDtoUsername = snapshot.child('mapUIDtoUsername').val();
           var username = UIDtoUsername[uid];
-          userData = new UserData(username, loggedIn);
+          userData = new UserData(username, loggedIn, true);
           //this.email = user.email;
         });
 

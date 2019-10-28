@@ -55,7 +55,7 @@ class Landing extends Component {
                 this.userData = await helperfunctions.getUserdataOfUser(user.uid, loggedIn);
                 
             
-                this.microblogs = await helperfunctions.getMicroblogsForUser(this.userData.username);
+                this.microblogs = await helperfunctions.getMicroblogsForUserTimeline(this.userData.username);
                 this.setState({loaded : true});
             }
         });
