@@ -133,7 +133,7 @@ const helperfunctions =
 
         for(var index = 0; index < topics.length; index++)
         {
-            wTopics.push(topics[index]);
+            wTopics.push({"topics":topics[index], "timestamp":timestamp});
         }
         await firebase.database().ref().once('value', (snapshot) => {
             var writtenTopics = snapshot.child("users").child(firebase.auth().currentUser.uid).child("writtenTopics").val();
@@ -147,8 +147,13 @@ const helperfunctions =
             {
                 for(var index = 0; index < wTopics.length; index++)
                 {
-                  if(!writtenTopics.includes(wTopics[index]))
-                  {
+                  var w = 0;
+                  for (; w < writtenTopics.length; w++) {
+                    if (writtenTopics[w].topics == wTopics[index].topics) {
+                      break;
+                    }
+                  }
+                  if (w == writtenTopics.length) {
                     writtenTopics.push(wTopics[index]);
                   }
                 }
