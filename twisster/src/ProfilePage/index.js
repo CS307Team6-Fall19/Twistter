@@ -4,6 +4,7 @@ import { withRouter } from "react-router";
 import ProfilePageView from "./ProfilePageView";
 import UserData from "../DataObjects/UserData";
 import TopBar from "../TopBar";
+import ProfilePicture from "../ProfilePicture"
 import firebase from "firebase";
 import { resolve } from 'q';
 import CheckboxContainer from './checkBox.jsx'
@@ -15,7 +16,7 @@ class ProfilePage extends React.Component {
 
       //this.getUser = this.getUser.bind(this);
       this.localProps = props;
-
+    
       this.state = {
         //checkedItems: new Map(),
         loaded: false
@@ -81,8 +82,9 @@ class ProfilePage extends React.Component {
         return (
           <div>
             <TopBar/>
+            <ProfilePicture/>
             <ProfilePageView userData={this.userData}/>
-            <CheckboxContainer/>
+            <CheckboxContainer username={this.username}/>
           </div>
         );
 
