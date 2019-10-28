@@ -43,7 +43,6 @@ class Landing extends Component {
 
         //verify user is logged in before displaying page
         firebase.auth().onAuthStateChanged(async (user) => {
-            console.log(user);
             if (!user) {
             this.props.history.push({
                 pathname: "/login"

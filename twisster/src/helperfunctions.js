@@ -478,7 +478,7 @@ const helperfunctions =
     getMicroblogsForUserTimeline: async function(username)
     {
       var Microblogs = [];
-      firebase.database().ref().once('value', (snapshot) => {
+      await firebase.database().ref().once('value', (snapshot) => {
         var mapUsernameToUID = snapshot.child("mapUsernameToUID").val();
         var uidOfUser = mapUsernameToUID[username];
         var followingList = snapshot.child("users").child(uidOfUser).child("following").forEach(function(childSnapshot)
@@ -490,19 +490,22 @@ const helperfunctions =
           for(var i = 0; i < microblogs.length; i++)
           {
             var currMicroblog = microblogs[i];
-            var topicsList = currMicroblog.child("topics").val();
+            var topicsList = currMicroblog.topics;
             for(var j = 0; j < topicsList.length; j++)
             {
               if(followedTopics.includes(topicsList[i]))
               {
                 Microblogs.push(currMicroblog);
+                break;
               }
             }
           }
         });
       });
+
       resolve("done");
       //Sort Microblogs based on timestamp
+
       return Microblogs;
     },
 
