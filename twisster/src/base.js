@@ -5,7 +5,7 @@ const app = firebase.initializeApp({
     authDomain: process.env.REACT_APP_FIREBASE_DOMAIN,
     databaseURL: process.env.REACT_APP_FIREBASE_DATABASE,
     projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
-    storageBucket: twistter.appspot.com,
+    storageBucket: 'gs://twistter.appspot.com/',
     messagingSenderId: process.env.REACT_APP_FIREBASE_SENDER_ID,
     
 });

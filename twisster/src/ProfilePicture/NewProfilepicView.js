@@ -14,3 +14,5 @@ const NewProfilepicView = ({image, changeProfPic}) =>   {
         
     );
 };
+
+export default NewProfilepicView;

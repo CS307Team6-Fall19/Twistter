@@ -4,6 +4,7 @@ import { withRouter } from "react-router";
 import ProfilePageView from "./ProfilePageView";
 import UserData from "../DataObjects/UserData";
 import TopBar from "../TopBar";
+import ProfilePicture from "../ProfilePicture"
 import firebase from "firebase";
 import { resolve } from 'q';
 
@@ -72,6 +73,7 @@ class ProfilePage extends React.Component {
         return (
           <div>
             <TopBar/>
+            <ProfilePicture/>
             <ProfilePageView userData={this.userData}/>
           </div>
         );

@@ -1,22 +1,17 @@
 import React, { Component } from 'react'
 import ProfilepicView from './ProfilepicView'
+import NewProfilepicView from './NewProfilepicView'
 import {withRouter } from "react-router"
 
 import firebase from 'firebase'
-import { stringLiteral } from '@babel/types';
+import { stringLiteral, isArrowFunctionExpression } from '@babel/types';
 
 class ProfilePicture extends Component {
 
     constructor(props) {
         super(props);
-        firebase.database.ref().once('value', (snapshot)  => {
-            var userid = snapshot.child("mapUIDtousername").val();
-            this.username = userid[firebase.auth().currentUser.id];
-
-        });        
-
+        
         this.toUpload = false;
-        this.storageRef = firebase.storage.ref();
         this.upLoadImage = this.uploadImage.bind(this);
         this.fetchImage = this.fetchImage.bind(this);
         this.changePic = this.changePic.bind(this);
@@ -24,16 +19,16 @@ class ProfilePicture extends Component {
     }
 
 
-    uploadImage() {
+    uploadImage = async event => {
         
         var inpFile = document.getElementById('input');
 
         const file = inpFile.files[0];
 
         if (file != null) {
-            firebase.database.ref().once('value', (snapshot)  => {
+            await firebase.database.ref().once('value', (snapshot)  => {
                 var userList = snapshot.child("users").val();
-                this.user = userList[firebase.auth().currentUser.id];
+                let user = userList[firebase.auth().currentUser.id];
                 user.ref('picture').set(file.name);
             });
 
@@ -51,10 +46,12 @@ class ProfilePicture extends Component {
 
     fetchImage() {
 
+        var picname;
+
         firebase.database.ref().once('value', (snapshot)  => {
             var userList = snapshot.child("users").val();
-            this.user = userList[firebase.auth().currentUser.id];
-            var picname = user['picure'].value;
+            let user = userList[firebase.auth().currentUser.id];
+            picname = user['picure'].value;
         });
 
         console.log(picname);
@@ -71,21 +68,28 @@ class ProfilePicture extends Component {
 
     changePic () {
         this.toUpload = true;
+        this.forceUpdate();
     }
 
     render() {
         
         if (this.toUpload == false) {
+            return(
              <div>
-                <ProfilepicView image = {fetchImage} changeProPic = {changePic}></ProfilepicView>
+                <ProfilepicView image = {this.fetchImage} changeProPic = {this.changePic}></ProfilepicView>
             </div>
+            );
         }
         else {
+            return (
             <div>
-                <NewProfilepicView image = {this.fetchImage} changePic = {changePic}></NewProfilepicView>
+                <NewProfilepicView image = {this.fetchImage} changePic = {this.changePic}></NewProfilepicView>
             </div>
+            );
         }
 
     }
 
 }
+
+export default withRouter(ProfilePicture);
