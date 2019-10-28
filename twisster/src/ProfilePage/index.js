@@ -82,7 +82,7 @@ class ProfilePage extends React.Component {
           <div>
             <TopBar/>
             <ProfilePageView userData={this.userData}/>
-            <CheckboxContainer/>
+            <CheckboxContainer username={this.username}/>
           </div>
         );
 

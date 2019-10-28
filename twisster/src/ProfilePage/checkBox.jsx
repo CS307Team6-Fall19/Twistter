@@ -2,11 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { checkboxes } from './checkBox.js';
 import { Checkbox } from './checkBox.js';
+import helperfunctions from '../helperfunctions.js';
 
 class CheckboxContainer extends React.Component {
   constructor(props) {
     super(props);
 
+    this.username = props.username;
     this.state = {
       checkedItems: new Map(),
     }
@@ -37,6 +39,11 @@ class CheckboxContainer extends React.Component {
     this.setState(prevState => ({ checkedItems: prevState.checkedItems.set(item, isChecked) }));
   }
 
+  async componentDidMount()
+  {
+    this.topics = await helperfunctions.getFollowedAndUnfollowedTopics(this.username);
+    console.log(this.topics);
+  }
   // componentWillMount() {
   //   const isChecked = true;
   //   checkboxes.map(item => (      
