@@ -15,12 +15,18 @@ class Topics extends React.Component{
 
     createTopics = (topicsArray) => {
         var topics = [];
-        var highlight;
         for (var i = 0; i < topicsArray.length; i++) {
             // note: we add a key prop here to allow react to uniquely identify each
             // element in this array. see: https://reactjs.org/docs/lists-and-keys.html
             this.num++;
-            topics.push(<Topic key={i} data={topicsArray[i]} highlight={this.num % 2} />);
+            var highlightbool = false;
+            if (topicsArray[i].length > 2) {
+              if (topicsArray[i].substr(0, 2) == "/h") {
+                topicsArray[i] = topicsArray[i].substr(2, topicsArray[i].length - 2);
+                highlightbool = true;
+              }
+            }
+            topics.push(<Topic key={i} data={topicsArray[i]} highlight={highlightbool} />);
         }
         return <div>{topics}</div>;
     }

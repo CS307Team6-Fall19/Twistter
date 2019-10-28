@@ -279,6 +279,10 @@ const helperfunctions =
           var mapUsernameToUID = snapshot.child("mapUsernameToUID").val();
           var followedUserUID = mapUsernameToUID[followedUserName];
 
+          var date = new Date();
+          var timestamp = date.getTime();
+          firebase.database().ref().child("users").child(firebase.auth().currentUser.uid).child("followingTimestamp").child(followedUserName).set(timestamp);
+
           var usersIAmFollowing = snapshot.child("users").child(currUserUID).child("following").val();
           // var usersIAmFollowing = snapshot.child("users").child(currUserUID).child("following").forEach(function(childSnapshot) 
           // {
@@ -491,13 +495,46 @@ const helperfunctions =
           var followedTopics = childSnapshot.val();
           var uidOfFollowedUser = mapUsernameToUID[followedUsername];
           var microblogs = snapshot.child("users").child(uidOfFollowedUser).child("Microblogs").val();
+
+          var followingTimestamp = snapshot.child("users").child(uidOfUser).child("followingTimestamp").val();
+          var followingTimestampOfFollowedUser = followingTimestamp[followedUsername];
+          var writtenTopics = snapshot.child("users").child(uidOfFollowedUser).child("writtenTopics").val();
+          
           if(microblogs != undefined || microblogs != null)
           {
             for(var i = 0; i < microblogs.length; i++)
             {
+
+              //first check if any new topics were added and include the first microblog with that new topic highlighted
               var currMicroblog = microblogs[i];
               var topicsList = currMicroblog.topics;
+
               if (topicsList != undefined || topicsList != null) {
+
+                var foundNewTopic = false;
+                for (var t = 0; t < topicsList.length; t++) {
+                  
+                  for (var w = 0; w < writtenTopics.length; w++) {
+                    if (writtenTopics[w].topics == topicsList[t]) {
+                      if (writtenTopics[w].timestamp == microblogs[i].timestamp) {
+                        if (followingTimestampOfFollowedUser < writtenTopics[w].timestamp) {
+                          //console.log("true", microblogs[i].timestamp);
+                          microblogs[i].topics[t] = "/h" + microblogs[i].topics[t];
+                          foundNewTopic = true;
+                        }
+                      }
+                    }
+                  }
+
+
+                }
+
+                if (foundNewTopic) {
+                  Microblogs.push(currMicroblog);
+                  continue;
+                }
+
+
                 for(var j = 0; j < topicsList.length; j++)
                 {
                   if(followedTopics.includes(topicsList[j]))
