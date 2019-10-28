@@ -1,62 +1,9 @@
-import React, { Component } from "react";
-import "../Landing/Landing.css"
-import "./Login.css"
-import LoginFields from "./loginFields"
-import logo from '../DataObjects/logo.png'
-export default class LoginView extends Component {
+import React from "react";
 
-  render() {
-    return (
-      <div className="login-prompt">
-          <img src={logo} className="logo-size"/>
-          <label className="twisster">twisster</label>
-              <LoginFields name="email" label="Username or Email" type="text"/>
-              <LoginFields name="password" label="Password" type="password"/>
-              <button className="login-button" onClick={this.props.Click}>Login</button>
-              <label className="or">or</label>
-              <button className="signup-button">Sign Up</button>           
-      </div>
-      // 
-      
-    );
-  }
-}
-
-
-
-//export default LogInView;
-
-
-// const LogInView = ({changeValue, handleKeyPress}) => {  
+const LogInView = ({ onSubmit }) => {  
   
-//   const { active, value, error, label } = this.state;
-//   const { predicted, locked } = this.props;
-//   const fieldClassName = `field ${(locked ? active : active || value) &&
-//     "active"} ${locked && !active && "locked"}`;
-
-//   return( 
-//       <div className={fieldClassName}>
-//       <input
-//         id={1}
-//         type="text"
-//         value={value}
-//         placeholder={label}
-//         onChange={changeValue}
-//         onKeyPress={handleKeyPress}
-//         onFocus={() => !locked && this.setState({ active: true })}
-//         onBlur={() => !locked && this.setState({ active: false })}
-//       />
-//       <label htmlFor={1} className={error && "error"}>
-//         {error || label}
-//       </label>
-//     </div>
-//   );
-// };
-
-
-
-/*
-<div>
+  return (
+    <div>
         <h1>Login</h1>
         <form onSubmit={onSubmit}>      
         
@@ -79,4 +26,7 @@ export default class LoginView extends Component {
         <button type="submit">Login</button>
       </form>
     </div>
-    */
+  );
+};
+
+export default LogInView;

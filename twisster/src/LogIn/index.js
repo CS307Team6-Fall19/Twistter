@@ -7,9 +7,8 @@ import LogInView from "./LogInView";
 import firebase from "firebase";
 
 import { ToastContainer, toast } from 'react-toastify';
+
 import 'react-toastify/dist/ReactToastify.css';
-import "../Landing/Landing.css"
-import "./Login.css"
 
 class LogInContainer extends Component {
 
@@ -19,6 +18,8 @@ class LogInContainer extends Component {
 
     this.handleLogIn = this.handleLogIn.bind(this);
     
+
+    
   }
 
   handleLogIn = async event => {
@@ -26,7 +27,7 @@ class LogInContainer extends Component {
     event.preventDefault();
     const { email, password } = event.target.elements;
     try {
-      console.log(document.getElementById('email').value);
+
       var user_exists = true;
       var username_or_email;
       await app.database().ref().once('value', (snapshot) => {
@@ -85,20 +86,14 @@ class LogInContainer extends Component {
     }
     
   };
-
   render() {
-    // const { active, value, error, label } = this.state;
-    // const { predicted, locked } = this.props;
-    // const fieldClassName = `field ${(locked ? active : active || value) &&
-    //   "active"} ${locked && !active && "locked"}`;
-
     return( 
+      <div>
+        <ToastContainer enableMultiContainer containerId={'B'} position={toast.POSITION.TOP_RIGHT} />
 
-      // </div>
-      // </div>
-      // </div>
-      <div className="main-body">
-          { <LogInView Click={this.handleLogIn} /> }
+        <TopBarLoginSignup />
+        <LogInView onSubmit={this.handleLogIn} />
+
       </div>
     );
   }
