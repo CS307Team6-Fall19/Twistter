@@ -12,6 +12,23 @@ class CheckboxContainer extends React.Component {
     }
 
     this.handleChange = this.handleChange.bind(this);
+
+    const isChecked = true;
+    let name = "Hello";
+    let key = "checkbox4";
+    let label = "Check Box n";
+    
+    let newCheckbox = {
+      name: name,
+      key: key,
+      label: label
+    }
+
+    checkboxes.map(item => (      
+      this.state.checkedItems.set(item.name, isChecked)
+    ));
+    
+    checkboxes.push(newCheckbox);
   }
 
   handleChange(e) {
@@ -19,6 +36,13 @@ class CheckboxContainer extends React.Component {
     const isChecked = e.target.checked;
     this.setState(prevState => ({ checkedItems: prevState.checkedItems.set(item, isChecked) }));
   }
+
+  // componentWillMount() {
+  //   const isChecked = true;
+  //   checkboxes.map(item => (      
+  //     this.state.checkedItems.set(item, isChecked)
+  //    ));
+  // }
 
   render() {
     return (
