@@ -3,7 +3,7 @@ import { withRouter } from "react-router";
 import ReactDOM from 'react-dom';
 import firebase from "firebase";
 import { resolve } from "dns";
-
+import UserData from "./DataObjects/UserData";
 /*
 TODO
 How to use this class:
@@ -109,7 +109,7 @@ const helperfunctions =
     //@Params
     //content: a string that represents the blog itself (must be a string of less than 250 characters), type: string
     //topic(s): a list of topics associated to the blog, type: array
-    addMicroBlogToCurrentUser: function(content, topics)
+    addMicroBlogToCurrentUser: async function(content, topics)
     {
         console.log("Entered addMicroBlogToCurrentUser");
         //get the current user's uid
@@ -124,20 +124,36 @@ const helperfunctions =
         }
         //add uid, microblog content, and list of topics to Microblogs
         var wTopics = [];
+
         for(var index = 0; index < topics.length; index++)
         {
-            wTopics.push(topics[index]);
+            var sub_arr = topics[index].split(',');
+            for(var index2 = 0; index2 < sub_arr.length; index2++)
+            {
+              alert(topics[index2]);
+              wTopics.push(topics[index2]);
+            }
         }
         firebase.database().ref().once('value', (snapshot) => {
             var writtenTopics = snapshot.child("users").child(firebase.auth().currentUser.uid).child("writtenTopics").val();
-            if(writtenTopics == null || writtenTopics.length == 0)
+            if(writtenTopics == null || writtenTopics.length === 0)
             {
-                firebase.database().ref().child("users").child(firebase.auth().currentUser.uid).child("writtenTopics").set({'0': wTopics});
+                firebase.database().ref().child("users").child(firebase.auth().currentUser.uid).child("writtenTopics").set({'0':wTopics[0]});
+                for(var index = 1; index < wTopics.length; index++)
+                {
+                  firebase.database().ref().child("users").child(firebase.auth().currentUser.uid).child("writtenTopics").push(wTopics[index]);
+                }
             }
             else
             {
-                writtenTopics.push(wTopics);
-                firebase.database().ref().child("users").child(firebase.auth().currentUser.uid).child("writtenTopics").set(wTopics);
+                for(var index = 0; index < wTopics.length; index++)
+                {
+                  if(!writtenTopics.includes(wTopics[index]))
+                  {
+                    writtenTopics.push(wTopics[index]);
+                  }
+                }
+                firebase.database().ref().child("users").child(firebase.auth().currentUser.uid).child("writtenTopics").set(writtenTopics);
             }
         });
         var topicsList = [];
@@ -146,7 +162,7 @@ const helperfunctions =
             topicsList.push(topics[index]);
         }
         var microblog = {'content': content, 'topics': topicsList, 'timestamp': timestamp};
-        firebase.database().ref().once('value', (snapshot) => {
+        await firebase.database().ref().once('value', (snapshot) => {
             var microblog_list = snapshot.child("users").child(firebase.auth().currentUser.uid).child("Microblogs").val();
             console.log(microblog_list);
             if(microblog_list == null || microblog_list.length == 0)
@@ -159,6 +175,9 @@ const helperfunctions =
                 firebase.database().ref().child("users").child(firebase.auth().currentUser.uid).child("Microblogs").set(microblog_list);
             }
         });
+
+        resolve("done");
+        return;
         console.log("Exited addMicroBlogToCurrentUser");
     },
     
@@ -205,12 +224,38 @@ const helperfunctions =
     
           var mapUsernameToUID = snapshot.child("mapUsernameToUID").val();
           var UIDofUserIAmViewing = mapUsernameToUID[username];
-          var usersTheUserIsFollowing = snapshot.child("users").child(UIDofUserIAmViewing).child("following").val();
+          var usersTheUserIsFollowing = [];
+          snapshot.child("users").child(UIDofUserIAmViewing).child("following").forEach((function(child)
+          {
+            usersTheUserIsFollowing.push(child.key);
+          }));
           var followersTheUserHas = snapshot.child("users").child(UIDofUserIAmViewing).child("followers").val();
-
-          var followers = followersTheUserHas;
-          var following = usersTheUserIsFollowing;
-
+          var followers = "";
+          if(followersTheUserHas == null)
+          {
+            followers = "";
+          }
+          else
+          {
+            for(var i = 0; i < followersTheUserHas.length - 1; i++)
+            {
+              followers += followersTheUserHas[i] + ", ";
+            }
+            followers += followersTheUserHas[followersTheUserHas.length - 1];
+          }
+          var following = "";
+          if(usersTheUserIsFollowing == null || usersTheUserIsFollowing === undefined || usersTheUserIsFollowing.length === 0)
+          {
+            following = "";
+          }
+          else
+          {
+            for(var i = 0; i < usersTheUserIsFollowing.length - 1; i++)
+            {
+              following += usersTheUserIsFollowing[i] + ", ";
+            }
+            following += usersTheUserIsFollowing[usersTheUserIsFollowing.length - 1];
+          }
           result = {followers, following};
           
         });
@@ -403,6 +448,17 @@ const helperfunctions =
         resolve("done");
     },
 
+    //Delete users data and authentication
+    //@Params
+    //content: string which contains username
+    deleteUserData: async function(username) {
+      firebase.database().ref().child("mapUIDtoUsername").child(firebase.auth().currentUser.uid).remove();
+      firebase.database().ref().child("mapUsernameToEmail").child(username).remove();
+      firebase.database().ref().child("mapUsernameToUID").child(username).remove();
+      firebase.database().ref().child("users").child(firebase.auth().currentUser.uid).remove();
+      firebase.auth().currentUser.delete();
+    },
+
     /*
     //gets a list of all the microblogs that the current user has posted and the posts he/she follows
     getMicroblogsForCurrentUserAsync: async function() {
@@ -482,7 +538,52 @@ const helperfunctions =
         resolve("done");
 
         return Microblogs;
+      },
+
+      getUserdataOfLoggedInUser: async function() {
+        var userData;
+
+        var loggedIn = true;
+
+        
+
+        firebase.auth().onAuthStateChanged(async function(user) {          
+          if (user) {
+
+            userData = await helperfunctions.getUserdataOfUser(user.uid, loggedIn);
+            resolve("done");
+            return userData;
+          } else {
+            console.log("null");
+            // No user is signed in.
+          }
+        });
+
+        
+        /* while(userData == undefined){
+          console.log("undefined")
+        } */
+        
+      },
+
+      getUserdataOfUser : async function(uid, loggedIn) {
+        var userData;
+
+        
+        await firebase.database().ref().once('value', (snapshot) => {
+          var UIDtoUsername = snapshot.child('mapUIDtoUsername').val();
+          var username = UIDtoUsername[uid];
+          userData = new UserData(username, loggedIn, true);
+          //this.email = user.email;
+        });
+
+        resolve("done");
+        return userData;
       }
+
+
+
+
 }
 
 export default helperfunctions;
