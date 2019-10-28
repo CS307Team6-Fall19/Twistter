@@ -47,13 +47,14 @@ class MicroblogWriter extends React.Component{
         if(content.length > 250 || content.length <= 0)
         {
           //alert("Cannot post microblog");
-          toast("Cannot post microblog");
+          toast("Cannot post microblog. Make sure the content is 250 characters or less");
         }
         else
         {
           await helperfunctions.addMicroBlogToCurrentUser(content, this.topics);
           //await helperfunctions.addMicroBlogToCurrentUser(content, this.topics);
           this.microblogPosted();
+          this.topics = [];
         }
     
         document.getElementById("content").value = "";

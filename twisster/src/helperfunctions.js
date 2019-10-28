@@ -111,9 +111,15 @@ const helperfunctions =
     //topic(s): a list of topics associated to the blog, type: array
     addMicroBlogToCurrentUser: async function(content, topics)
     {
+        var username = "";
         console.log("Entered addMicroBlogToCurrentUser");
         //get the current user's uid
         var uid_current = firebase.auth().currentUser.uid;
+        await firebase.database().ref().once('value', (snapshot) => {
+          var mapUIDtoUsername = snapshot.child("mapUIDtoUsername").val();
+          username = mapUIDtoUsername[uid_current];
+          console.log("USERNAME:", username);
+        });
         //fetch the current timestamp
         var date = new Date();
         var timestamp = date.getTime();
@@ -127,22 +133,15 @@ const helperfunctions =
 
         for(var index = 0; index < topics.length; index++)
         {
-            var sub_arr = topics[index].split(',');
-            for(var index2 = 0; index2 < sub_arr.length; index2++)
-            {
-              //alert(topics[index2]);
-              wTopics.push(topics[index2]);
-            }
+            wTopics.push(topics[index]);
         }
-        firebase.database().ref().once('value', (snapshot) => {
+        await firebase.database().ref().once('value', (snapshot) => {
             var writtenTopics = snapshot.child("users").child(firebase.auth().currentUser.uid).child("writtenTopics").val();
+            console.log("TYPE:", typeof(writtenTopics));
+            //console.log("VALUES:", Object.values(writtenTopics));
             if(writtenTopics == null || writtenTopics.length === 0)
             {
-                firebase.database().ref().child("users").child(firebase.auth().currentUser.uid).child("writtenTopics").set({'0':wTopics[0]});
-                for(var index = 1; index < wTopics.length; index++)
-                {
-                  firebase.database().ref().child("users").child(firebase.auth().currentUser.uid).child("writtenTopics").push(wTopics[index]);
-                }
+                firebase.database().ref().child("users").child(firebase.auth().currentUser.uid).child("writtenTopics").set(wTopics);
             }
             else
             {
@@ -161,11 +160,11 @@ const helperfunctions =
         {
             topicsList.push(topics[index]);
         }
-        var microblog = {'content': content, 'topics': topicsList, 'timestamp': timestamp};
+        var microblog = {'user': username, 'content': content, 'topics': topicsList, 'timestamp': timestamp};
         await firebase.database().ref().once('value', (snapshot) => {
             var microblog_list = snapshot.child("users").child(firebase.auth().currentUser.uid).child("Microblogs").val();
-            console.log(microblog_list);
-            if(microblog_list == null || microblog_list.length == 0)
+            //console.log(microblog_list);
+            if(microblog_list == null || microblog_list.length === 0)
             {
                 firebase.database().ref().child("users").child(firebase.auth().currentUser.uid).child("Microblogs").set({'0': microblog});
             }
