@@ -1,23 +1,56 @@
 import React, { Component } from "react";
 import "../Landing/Landing.css"
 import "./Login.css"
-import LoginFields from "./loginFields"
-import logo from '../DataObjects/logo.png'
-export default class LoginView extends Component {
+
+export default class LoginFields extends Component {
+
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      active: (props.locked && props.active) || false,
+      value: props.value || "",
+      error: props.error || "",
+      label: props.label || this.props.label
+    };
+  }
+
+  changeValue(event) {
+    const value = event.target.value;
+    this.setState({ value, error: "" });
+  }
+
+  handleKeyPress(event) {
+    if (event.which === 13) {
+      this.setState({ value: this.props.predicted });
+    }
+  }
 
   render() {
+    const { active, value, error, label } = this.state;
+    const { predicted, locked } = this.props;
+    const fieldClassName = `field ${(locked ? active : active || value) &&
+      "active"} ${locked && !active && "locked"}`;
+
     return (
-      <div className="login-prompt">
-          <img src={logo} className="logo-size"/>
-          <label className="twisster">twisster</label>
-              <LoginFields name="email" label="Username or Email" type="text"/>
-              <LoginFields name="password" label="Password" type="password"/>
-              <button className="login-button" onClick={this.props.Click}>Login</button>
-              <label className="or">or</label>
-              <button className="signup-button">Sign Up</button>           
+      <div className={fieldClassName}>
+        {active &&
+          value &&
+          predicted &&
+          predicted.includes(value) && <p className="predicted">{predicted}</p>}
+        <input
+          id={1}
+          type={this.props.type}
+          value={value}
+          placeholder={label}
+          onKeyPress={this.handleKeyPress.bind(this)}
+          onFocus={() => !locked && this.setState({ active: true })}
+          onBlur={() => !locked && this.setState({ active: false })}
+        />
+        <label htmlFor={1} className={error && "error"}>
+          {error || label}
+        </label>
       </div>
-      // 
-      
     );
   }
 }

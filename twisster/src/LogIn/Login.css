@@ -1,0 +1,223 @@
+.login-prompt {
+    width: 50%;
+    height: 100%;
+    border-radius: 25px;
+    box-shadow: 0 10px 40px 0 #00000080;
+    border: solid 0 #979797;
+    background-color: #213649;
+    align-self: center;
+    position: fixed;
+    top: -3%; 
+}
+
+.login-bar {
+    position: relative;
+    top: 30%;
+    left: 10%;
+    width: 80%;
+    height: 60px;
+    opacity: 0.15;
+    border-radius: 15px;
+    background-color: #979797;
+}
+
+.login-font {
+    width: 559px;
+    height: 44px;
+    opacity: 0.5;
+    font-family: AvenirNext;
+    font-size: 32px;
+    font-weight: 200;
+    font-stretch: condensed;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    color: #ffffff ;
+  }
+  * {
+    box-sizing: border-box;
+  }
+  
+  body {
+    background: #673ab7;
+    background: linear-gradient(to right, #512da8, #673ab7);
+  }
+  
+.field {
+    top: 40%;
+    left: 10%;
+    width: 80%;
+    height: 56px;
+    border-radius: 4px;
+    position: relative;
+    background-color: rgba(255, 255, 255, 0.3);
+    transition: 0.3s background-color ease-in-out, 0.3s box-shadow ease-in-out;
+    margin-top: 2%;
+  }
+  
+  .field:hover {
+    background-color: rgba(255, 255, 255, 0.45);
+    box-shadow: 0px 4px 20px 0px rgba(0, 0, 0, 0.05);
+  }
+  
+  .field.active {
+    background-color: #ffffff;
+    box-shadow: 0px 4px 20px 0px rgba(0, 0, 0, 0.2);
+  }
+  
+  .field.active input {
+    padding: 24px 16px 8px 16px;
+  }
+  
+  .field.active input + label {
+    top: 4px;
+    opacity: 1;
+    color: #512da8;
+  }
+  
+  .field.locked {
+    pointer-events: none;
+  }
+  
+  .field input {
+    width: 100%;
+    height: 56px;
+    position: relative;
+    padding: 0px 16px;
+    border: none;
+    border-radius: 4px;
+    font-family: "Gotham SSm A", "Gotham SSm B", sans-serif;
+    font-size: 18px;
+    font-weight: 400;
+    line-height: normal;
+    background-color: transparent;
+    color: #282828;
+    outline: none;
+    box-shadow: 0px 4px 20px 0px transparent;
+    transition: 0.3s background-color ease-in-out, 0.3s box-shadow ease-in-out,
+      0.1s padding ease-in-out;
+    -webkit-appearance: none;
+  }
+  
+  .field input::-webkit-input-placeholder {
+    color: rgba(255, 255, 255, 0.8);
+  }
+  .field input::-moz-placeholder {
+    color: rgba(255, 255, 255, 0.8);
+  }
+  .field input:-ms-input-placeholder {
+    color: rgba(255, 255, 255, 0.8);
+  }
+  .field input:-moz-placeholder {
+    color: rgba(255, 255, 255, 0.8);
+  }
+  
+  .field input + label {
+    position: absolute;
+    top: 24px;
+    left: 16px;
+    font-family: "Gotham SSm A", "Gotham SSm B", sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 24px;
+    color: #ffffff;
+    opacity: 0;
+    pointer-events: none;
+    transition: 0.1s all ease-in-out;
+  }
+  
+  .field input + label.error {
+    color: #ec392f;
+  }
+  
+  .field p.predicted {
+    position: absolute;
+    top: 8px;
+    left: 16px;
+    font-family: "Gotham SSm A", "Gotham SSm B", sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 24px;
+    color: #e0e0e0;
+    opacity: 1;
+    pointer-events: none;
+  }
+  
+  .login-button {
+    position: absolute;
+    align-self: center;
+    top: 67%;
+    left: 28%;
+    width: 300px;
+    height: 60px;
+    border-radius: 37.5px;
+    border: solid 0 #979797;
+    background-color: #11171d;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 32px;
+    font-weight: bold;
+    font-stretch: condensed;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    color: #ffffff;
+}
+.login-button:hover {
+    background-color: rgba(255, 255, 255, 0.45);
+    box-shadow: 0px 4px 20px 0px rgba(0, 0, 0, 0.05);
+}
+
+.signup-button {
+    position: absolute;
+    top: 86%;
+    left: 28%;
+    width: 300px;
+    height: 60px;
+    border-radius: 37.5px;
+    border: solid 0 #979797;
+    background-color: #d8d8d8;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 32px;
+    font-weight: bold;
+    font-stretch: condensed;
+    line-height: normal;
+    letter-spacing: -1pt;
+    color: #11171d;
+}
+
+.signup-button:hover {
+    background-color: rgba(255, 255, 255, 0.45);
+    box-shadow: 0px 4px 20px 0px rgba(0, 0, 0, 0.05);
+}
+
+.logo-size {
+    position: absolute;
+    left: 35%;
+    top: 5%;
+    width: 200px;
+    height: 200px;
+}
+
+.or {
+    position: absolute;
+    left: 47%;
+    top: 78%;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 32px;
+    font-weight: bold;
+    font-stretch: condensed;
+    line-height: normal;
+    letter-spacing: -1pt;
+    color: #d8d8d8;
+}
+
+.twisster {
+    position: absolute;
+    left: 38%;
+    top: 32%;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 32px;
+    line-height: normal;
+    letter-spacing: 0pt;
+    color: #ffffff;
+}

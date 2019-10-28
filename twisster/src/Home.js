@@ -21,8 +21,7 @@ class Home extends Component {
  
   render() {
     return (
-      <div>
-        <TopBarLoginSignup />
+      <div className="main-body">
         <h1>Home</h1>
         <form>
         <button onClick={this.goLogIn}>Login</button>
