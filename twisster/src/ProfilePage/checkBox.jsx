@@ -47,11 +47,11 @@ class CheckboxContainer extends React.Component {
   {
     this.topics = await helperfunctions.getFollowedAndUnfollowedTopics(this.username);
     
-    for(var index = 0; index < this.topics.followedTopics.length; index++)
+    for(var index = 0; index < this.topics.followedTopicsList.length; index++)
     {
       const isChecked = true;
-      let name = this.topics.followedTopics[index];
-      let key = this.topics.followedTopics[index] + "" + index;
+      let name = this.topics.followedTopicsList[index];
+      let key = this.topics.followedTopicsList[index] + "" + index;
       let label = "Check Box " + index;
       
       let checkbox_new = {

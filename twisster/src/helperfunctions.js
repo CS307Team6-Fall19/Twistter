@@ -4,6 +4,7 @@ import ReactDOM from 'react-dom';
 import firebase from "firebase";
 import { resolve } from "dns";
 import UserData from "./DataObjects/UserData";
+import { isFlowDeclaration } from "@babel/types";
 /*
 TODO
 How to use this class:
@@ -435,13 +436,23 @@ const helperfunctions =
         }
         console.log("WRITTEN TOPICS", tList);
         var followedTopics = snapshot.child("users").child(currUserUID).child("following").child(followedUserName).val();
-
+        var followedTopicsList = [];
+        if(followedTopics != null && followedTopics.length !== 0)
+        {
+          for(var index = 0; index < followedTopics.length; index++)
+          {
+            if(followedTopics[index] !== "None")
+            {
+              followedTopicsList.push(followedTopics[index]);
+            }
+          }
+        }
         var unfollowedTopics = [];
-        if(tList != null && tList.length !== 0 && followedTopics != null && followedTopics.length !== 0)
+        if(tList != null && tList.length !== 0 && followedTopicsList != null && followedTopicsList.length !== 0)
         {
           for(var i = 0; i < tList.length; i++)
           {
-            if(followedTopics.includes(tList[i]) === false)
+            if(followedTopicsList.includes(tList[i]) === false)
             {
               if(tList[i] !== undefined)
               {
@@ -456,13 +467,13 @@ const helperfunctions =
           {
             unfollowedTopics.push(tList[i]);
           }
-          followedTopics = [];
+          followedTopicsList = [];
         }
 
-        console.log("FOLLOWED TOPICS", followedTopics);
+        console.log("FOLLOWED TOPICS", followedTopicsList);
         console.log("UNFOLLOWED TOPICS", unfollowedTopics);
 
-        result = {followedTopics, unfollowedTopics};
+        result = {followedTopicsList, unfollowedTopics};
       });
 
       resolve("done");
