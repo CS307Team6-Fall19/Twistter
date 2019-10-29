@@ -88,6 +88,11 @@ class CheckboxContainer extends React.Component {
     //this.handleChange = this.handleChange.bind(this);
     this.setState({loaded: true});
   }
+
+  async save()
+  {
+    console.log("REACHED HERE");
+  }
   // componentWillMount() {
   //   const isChecked = true;
   //   checkboxes.map(item => (      
@@ -96,7 +101,6 @@ class CheckboxContainer extends React.Component {
   // }
 
   render() {
-    console.log(this.state.loaded);
     if(this.state.loaded)
     {
       return (
@@ -109,6 +113,7 @@ class CheckboxContainer extends React.Component {
               </label>
             ))
           }
+          <button type="button" onClick={this.save}>Save</button>
         </React.Fragment>
       );
     }
