@@ -151,6 +151,7 @@ class User extends React.Component{
                 if (this.loggedInViewingOwnProfile) {
                     return this.renderLoggedInUser(this.userProfile, this.deleteAccount);
                 } else {
+
                     return this.renderVisitedUser(this.userProfile);
                 }
             }
@@ -179,7 +180,7 @@ class User extends React.Component{
         else{
             return (
                 <div>
-
+                    <ProfilePicture visiting={false}/>
                     <LoggedInUserView userProfile={userProfile} deleteAccount={deleteAccount}/>
                     <Microblogs microblogs={userProfile.microblogs} username={userProfile.username} />
                     
@@ -189,9 +190,10 @@ class User extends React.Component{
     }
 
     renderVisitedUser(userProfile){
-        
+
         return(
             <div>
+                <ProfilePicture strangername={this.username} visiting={true}/>
                 <VisitedUserView userProfile={userProfile}/>
                 <Microblogs microblogs={userProfile.microblogs} username={userProfile.username} />
                
