@@ -32,27 +32,41 @@
 
 .top-bar-logout {
   position: absolute;
-  right: 60px;
+  right: 2%;
   float: right;
-  width: 80px;
+  width: 5%;
   height: 48px;
   background-color: #ffffff;
+  top: 0.5%;
+  color: #11171d;
 }
 
 .top-bar-profile {
   position: absolute;
-  right: 0px;
+  right: 8%;
   float: right;
-  width: 48px;
+  width: 5%;
   height: 48px;
   background-color: #ffffff;
+  top: 0.5%;
+  color: #11171d;
 }
 
 .top-bar-chat {
   position: absolute;
-  right: 190px;
+  right: 14%;
   float: right;
-  width: 48px;
+  width: 5%;
   height: 48px;
   background-color: #ffffff;
+  top: 0.5%;
+  color: #11171d;
+}
+
+.picture {
+  margin-left: 24px;
+  margin-top: 0.5%;
+  border-radius: 50%;
+  width: 48px;
+  height: 48px;
 }

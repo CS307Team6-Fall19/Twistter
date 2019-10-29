@@ -1,5 +1,6 @@
 import React from "react";
 import "./TopBar.css";
+import logo from "../logo192.png";
 
 const TopBarTwisster = ({ goLogout, goToProfile, goToChat }) => {
   return (
@@ -12,6 +13,7 @@ const TopBarTwisster = ({ goLogout, goToProfile, goToChat }) => {
         Profile
       </button>
       <button className="top-bar-chat" id="chat" onClick={goToChat}>
+        {/* <img className="picture" src={logo} alt="my image" onClick={goToChat} /> */}
         Chat
       </button>
       {/* <input className="top-bar-search" placeholder="Search"/>
