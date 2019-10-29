@@ -29,7 +29,7 @@ class SignUpContainer extends Component {
         var user_email_list = snapshot.child('mapUsernameToEmail').val();
         if (user_email_list != undefined) {
           if (user_email_list[username.value] != undefined) {
-            alert('Username already exists');
+            toast('Username already exists');
             username_exists = true;
           }
         }
@@ -69,7 +69,7 @@ class SignUpContainer extends Component {
         console.log("sent verification email");
       })
       .catch(function(error) {
-        alert(error);
+        toast(error.message);
       });
 
       //create a new user from the data and set default fields and arrays
@@ -81,7 +81,7 @@ class SignUpContainer extends Component {
 
       this.props.history.push("/login");
     } catch (error) {
-      alert(error);
+      toast(error.message);
     }
   };
 

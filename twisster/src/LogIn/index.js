@@ -48,7 +48,7 @@ class LogInContainer extends Component {
         });
 
       if (!user_exists) {
-        alert("User Account does not exist");
+        toast("User Account does not exist");
         toast("User Account does not exist", { containerId: "B" });
         return;
       }
@@ -58,7 +58,7 @@ class LogInContainer extends Component {
         .signInWithEmailAndPassword(username_or_email, password.value);
 
       if (!this.user.user.emailVerified) {
-        alert("email is not verified! resending verification link...");
+        toast("email is not verified! resending verification link...");
         firebase
           .auth()
           .currentUser.sendEmailVerification({
@@ -69,7 +69,7 @@ class LogInContainer extends Component {
             console.log("sent verification email");
           })
           .catch(function(error) {
-            alert(error);
+            toast(error);
           });
         return;
       }
@@ -78,7 +78,7 @@ class LogInContainer extends Component {
         pathname: "/landing"
       });
     } catch (error) {
-      alert(error);
+      toast(error);
     }
   };
   render() {
