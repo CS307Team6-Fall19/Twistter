@@ -16,7 +16,7 @@ class UserVM extends React.Component
 {
     constructor()
     {
-        alert("Within the user class");
+        toast("Within the user class");
     }
     //Create a new user
     // //@Params

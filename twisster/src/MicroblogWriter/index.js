@@ -46,7 +46,7 @@ class MicroblogWriter extends React.Component{
         console.log(content);
         if(content.length > 250 || content.length <= 0)
         {
-          //alert("Cannot post microblog");
+          //toast("Cannot post microblog");
           toast("Cannot post microblog. Make sure the content is 250 characters or less");
         }
         else

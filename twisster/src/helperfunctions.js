@@ -287,9 +287,9 @@ const helperfunctions =
           // var usersIAmFollowing = snapshot.child("users").child(currUserUID).child("following").forEach(function(childSnapshot) 
           // {
           //   var childKey = childSnapshot.key;
-          //   alert("CHILD KEY: " + childKey);
+          //   toast("CHILD KEY: " + childKey);
           //   var childData = childSnapshot.val();
-          //   alert("CHILD VALUE: " + childData);
+          //   toast("CHILD VALUE: " + childData);
           // });
 
           var followersOfUserIamFollowing = snapshot.child("users").child(followedUserUID).child("followers").val();
