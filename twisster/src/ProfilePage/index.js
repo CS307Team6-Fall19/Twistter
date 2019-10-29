@@ -82,7 +82,7 @@ class ProfilePage extends React.Component {
         return (
           <div>
             <TopBar/>
-            <ProfilePicture/>
+
             <ProfilePageView userData={this.userData}/>
             <CheckboxContainer username={this.username}/>
           </div>

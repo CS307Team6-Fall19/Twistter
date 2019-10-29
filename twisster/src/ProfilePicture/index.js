@@ -1,9 +1,11 @@
 import React, { Component } from 'react'
 import ProfilepicView from './ProfilepicView'
 import NewProfilepicView from './NewProfilepicView'
+import VisitedProfilepic from './VisitedProfilepic'
 import {withRouter } from "react-router"
 
 import firebase from 'firebase'
+import VisitedUserView from '../User/UserProfileViews/VisitedUserView'
 
 
 class ProfilePicture extends Component {
@@ -11,6 +13,8 @@ class ProfilePicture extends Component {
     constructor(props) {
         super(props);
         var username;
+        this.visiting = this.props.visiting;
+        this.strangername = this.props.strangername;
         this.toUpload = false;
         this.upLoadImage = this.uploadImage.bind(this);
         this.fetchImage = this.fetchImage.bind(this);
@@ -108,6 +112,42 @@ class ProfilePicture extends Component {
 
     }
 
+    async visiterImage() {
+        var toRet;
+        var strangeruid;
+        var picname;
+
+        await firebase.database().ref().once('value', (snapshot) => {
+            strangeruid = snapshot.child("mapUsernameToUID").child(this.strangername).val();
+            console.log("helloworld");
+            console.log(this.strangername);
+            picname = snapshot.child("users").child(strangeruid).child("picture").val();
+        })
+        console.log("Yupdupbug");
+        console.log(picname);
+
+        await firebase.storage().ref().child(picname).getDownloadURL().then(function(url) {
+            toRet = url;
+            document.querySelector('img').src = toRet;
+        }).catch(function(error) {
+            switch(error.code) {
+                case 'storage/object-not-found':
+                    console.log("object not found");
+                    break;
+                case 'storage/unauthorized' :
+                    console.log("unauthorized");
+                    break;
+                case 'storage/unknown':
+                    console.log("unknown");
+                    break;
+
+
+            }
+        });
+
+    
+    }
+
 
     deletePicture = async event => {
 
@@ -135,23 +175,32 @@ class ProfilePicture extends Component {
     }*/
 
     render() {
-        
-        if (this.toUpload == false) {
-            console.log("here first");
-            return(
-            <div>
-                <ProfilepicView image = {this.fetchImage()} changeProfPic = {this.changePic} deletePic = {this.deletePicture}/>
-            </div>
-            );
+        if (this.visiting == false) {
+            if (this.toUpload == false) {
+                console.log("here first");
+                return(
+                <div>
+                    <ProfilepicView image = {this.fetchImage()} changeProfPic = {this.changePic} deletePic = {this.deletePicture}/>
+                </div>
+                );
+            }
+            else {
+                console.log("wrong place");
+                return (
+                <div>
+                    <NewProfilepicView image = {this.fetchImage()} changeProfPic = {this.upLoadImage}></NewProfilepicView>
+                </div>
+                );
+            }
         }
         else {
-            console.log("wrong place");
             return (
-            <div>
-                <NewProfilepicView image = {this.fetchImage()} changeProfPic = {this.upLoadImage}></NewProfilepicView>
-            </div>
-            );
+                <div>
+                    <VisitedProfilepic image={this.visiterImage()}/>
+                </div>
+            )
         }
+    
 
     }
 

@@ -11,9 +11,7 @@ const TopBarTwisster = ({ goLogout, goToProfile, goToChat }) => {
       <button className="top-bar-profile" id="profile" onClick={goToProfile}>
         Profile
       </button>
-      <button className="top-bar-chat" id="chat" onClick={goToChat}>
-        Chat
-      </button>
+      <button className="top-bar-chat" id="chat" onClick={goToChat}>Chat</button>
       {/* <input className="top-bar-search" placeholder="Search"/>
         <button className="top-bar-button" type="button" onClick={onClickProfile}>Go to your profile</button>  */}
     </div>
