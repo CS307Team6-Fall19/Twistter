@@ -454,10 +454,38 @@ const helperfunctions =
       firebase.database().ref().child("mapUIDtoUsername").child(firebase.auth().currentUser.uid).remove();
       firebase.database().ref().child("mapUsernameToEmail").child(username).remove();
       firebase.database().ref().child("mapUsernameToUID").child(username).remove();
-      firebase.database().ref().child("users").child(firebase.auth().currentUser.uid).remove();
-      firebase.auth().currentUser.delete();
-    },
 
+      await firebase.database().ref().once('value', (snapshot) => {
+        var followingUsers = snapshot.child("users").child(firebase.auth().currentUser.uid).child('followers').val();
+        var followedUsers =  snapshot.child("users").child(firebase.auth().currentUser.uid).child('following').val();
+        //remove users name from the following list of the users who follow them
+        for (var key in followingUsers) {
+          console.log(followingUsers[key])
+          var followerUid = snapshot.child("mapUsernameToUID").child(followingUsers[key]).val();
+          console.log(followerUid);
+          firebase.database().ref().child('users').child(followerUid).child('following').child(username).remove();
+        }
+
+        //remove users name from the followers list of the users who they follow
+        for (var key in followedUsers) {
+          var followingUserUid = snapshot.child("mapUsernameToUID").child(key).val();
+          console.log(followingUserUid);
+          var followerlist = snapshot.child('users').child(followingUserUid).child('followers').val();
+          console.log(followerlist);
+          for (var index in followerlist) {
+            if(followerlist[index] == username) {
+              console.log(index);
+              firebase.database().ref().child('users').child(followingUserUid).child('followers').child(index).remove();
+              break;
+            }
+          }
+        }
+      });
+
+      firebase.auth().currentUser.delete();
+      firebase.database().ref().child("users").child(firebase.auth().currentUser.uid).remove();
+    },
+    
     /*
     //gets a list of all the microblogs that the current user has posted and the posts he/she follows
     getMicroblogsForCurrentUserAsync: async function() {
