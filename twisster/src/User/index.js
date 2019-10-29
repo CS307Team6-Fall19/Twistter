@@ -172,7 +172,7 @@ class User extends React.Component{
                 <div>
                     <LoggedInUserEditView userProfile={userProfile} deleteAccount={deleteAccount}/>
                     <Microblogs microblogs={userProfile.microblogs} username={userProfile.username} />
-                    <CheckboxContainer username={this.username}/>
+                    
                 </div>
             );
         }
@@ -183,7 +183,7 @@ class User extends React.Component{
                     <ProfilePicture visiting={false}/>
                     <LoggedInUserView userProfile={userProfile} deleteAccount={deleteAccount}/>
                     <Microblogs microblogs={userProfile.microblogs} username={userProfile.username} />
-                    <CheckboxContainer username={this.username}/>
+                    
                 </div>
             );
         }
@@ -196,7 +196,7 @@ class User extends React.Component{
                 <ProfilePicture strangername={this.username} visiting={true}/>
                 <VisitedUserView userProfile={userProfile}/>
                 <Microblogs microblogs={userProfile.microblogs} username={userProfile.username} />
-                <CheckboxContainer username={this.username}/>
+               
             </div>
         );
     }

@@ -45,10 +45,8 @@ class CheckboxContainer extends React.Component {
   async componentDidMount()
   {
     this.topics = await helperfunctions.getFollowedAndUnfollowedTopics(this.username);
-    console.log("UI TOPICS", this.topics);
-    console.log("UI FOLLOW TOPICS", this.topics.followedTopics);
-    console.log("UI UNFOLLOW TOPICS", this.topics.unfollowedTopics);
-    for(var index = 0; index < this.topics.followedTopics; index++)
+    
+    for(var index = 0; index < this.topics.followedTopics.length; index++)
     {
       const isChecked = true;
       let name = this.topics.followedTopics[index];
@@ -68,7 +66,7 @@ class CheckboxContainer extends React.Component {
       checkboxes.push(checkbox_new);
     }
 
-    for(var index = 0; index < this.topics.unfollowedTopics; index++)
+    for(var index = 0; index < this.topics.unfollowedTopics.length; index++)
     {
       const isChecked = false;
       let name = this.topics.unfollowedTopics[index];
@@ -90,6 +88,11 @@ class CheckboxContainer extends React.Component {
     //this.handleChange = this.handleChange.bind(this);
     this.setState({loaded: true});
   }
+
+  async save()
+  {
+    console.log("REACHED HERE");
+  }
   // componentWillMount() {
   //   const isChecked = true;
   //   checkboxes.map(item => (      
@@ -110,6 +113,7 @@ class CheckboxContainer extends React.Component {
               </label>
             ))
           }
+          <button type="button" onClick={this.save}>Save</button>
         </React.Fragment>
       );
     }
