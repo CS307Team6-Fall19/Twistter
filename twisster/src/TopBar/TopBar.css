@@ -36,13 +36,9 @@
   float: right;
   width: 5%;
   height: 48px;
-<<<<<<< HEAD
-
-=======
   background-color: #ffffff;
   top: 0.5%;
   color: #11171d;
->>>>>>> master
 }
 
 .top-bar-profile {
@@ -51,12 +47,9 @@
   float: right;
   width: 5%;
   height: 48px;
-<<<<<<< HEAD
-=======
   background-color: #ffffff;
   top: 0.5%;
   color: #11171d;
->>>>>>> master
 }
 
 .top-bar-chat {
@@ -65,8 +58,6 @@
   float: right;
   width: 5%;
   height: 48px;
-<<<<<<< HEAD
-=======
   background-color: #ffffff;
   top: 0.5%;
   color: #11171d;
@@ -78,5 +69,4 @@
   border-radius: 50%;
   width: 48px;
   height: 48px;
->>>>>>> master
 }
