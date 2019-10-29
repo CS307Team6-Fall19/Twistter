@@ -59,9 +59,11 @@ class CheckboxContainer extends React.Component {
         label: label
       };
 
-      checkboxes.map(item => (
+      /* checkboxes.map(item => (
         this.state.checkedItems.set(item.name, isChecked)
-      ));
+      )); */
+
+      this.state.checkedItems.set(name, isChecked)
 
       checkboxes.push(checkbox_new);
     }
@@ -79,9 +81,11 @@ class CheckboxContainer extends React.Component {
         label: label
       };
 
-      checkboxes.map(item => (
+     /*  checkboxes.map(item => (
         this.state.checkedItems.set(item.name, isChecked)
-      ));
+      )); */
+
+      this.state.checkedItems.set(name, isChecked)
 
       checkboxes.push(checkbox_new);
     }
