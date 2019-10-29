@@ -17,6 +17,7 @@ class CheckboxContainer extends React.Component {
     this.username = props.username;
 
     this.handleChange = this.handleChange.bind(this);
+    this.save = this.save.bind(this);
 
     // const isChecked = true;
     // let name = "Hello";
@@ -59,11 +60,11 @@ class CheckboxContainer extends React.Component {
         label: label
       };
 
-      /* checkboxes.map(item => (
-        this.state.checkedItems.set(item.name, isChecked)
-      )); */
-
-      this.state.checkedItems.set(name, isChecked)
+      // checkboxes.map(item => (
+      //   this.state.checkedItems.set(item.name, isChecked)
+      // ));
+      
+      this.state.checkedItems.set(name, isChecked);
 
       checkboxes.push(checkbox_new);
     }
@@ -81,12 +82,11 @@ class CheckboxContainer extends React.Component {
         label: label
       };
 
-     /*  checkboxes.map(item => (
-        this.state.checkedItems.set(item.name, isChecked)
-      )); */
+      // checkboxes.map(item => (
+      //   this.state.checkedItems.set(item.name, isChecked)
+      // ));
 
-      this.state.checkedItems.set(name, isChecked)
-
+      this.state.checkedItems.set(name, isChecked);
       checkboxes.push(checkbox_new);
     }
     //this.handleChange = this.handleChange.bind(this);
@@ -96,6 +96,21 @@ class CheckboxContainer extends React.Component {
   async save()
   {
     console.log("REACHED HERE");
+    var followedTopics = [];
+    var unFollowedTopics = [];
+    for(const [k,v] of this.state.checkedItems.entries())
+    {
+      console.log(k,v);
+      if(v === true)
+      {
+        followedTopics.push(k);
+      }
+      else if(v === false)
+      {
+        unFollowedTopics.push(k);
+      }
+    }
+    await helperfunctions.addAndRemoveTopicsFromFollowedUser(this.username, followedTopics, unFollowedTopics);
   }
   // componentWillMount() {
   //   const isChecked = true;

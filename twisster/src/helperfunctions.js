@@ -380,11 +380,7 @@ const helperfunctions =
         var mapUsernameToUID = snapshot.child("mapUsernameToUID").val();
         var followedUserUID = mapUsernameToUID[followedUserName];
 
-        var usersIAmFollowing = snapshot.child("users").child(currUserUID).child("following").val();
-        
-        var followersOfUserIamFollowing = snapshot.child("users").child(followedUserUID).child("followers").val();
-
-        if(usersIAmFollowing.includes(username) === false)
+        if(snapshot.child("users").child(currUserUID).child("following").hasChild(username) === false)
         {
           //ERROR: cannot find username - user should be followed before adding/removing topics from that user
         }
@@ -431,7 +427,10 @@ const helperfunctions =
         {
           for(var v = 0; v < writtenTopics.length; v++)
           {
-            tList.push(writtenTopics[v].topics);
+            if(writtenTopics[v] !== undefined)
+            {
+              tList.push(writtenTopics[v].topics);
+            }
           }
         }
         console.log("WRITTEN TOPICS", tList);
@@ -444,7 +443,10 @@ const helperfunctions =
           {
             if(followedTopics.includes(tList[i]) === false)
             {
-              unfollowedTopics.push(tList[i]);
+              if(tList[i] !== undefined)
+              {
+                unfollowedTopics.push(tList[i]);
+              }
             }
           }
         }
