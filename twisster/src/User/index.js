@@ -3,6 +3,8 @@ import { withRouter } from "react-router";
 
 import helperfunctions from '../helperfunctions.js'
 import Microblogs from '../Microblogs'
+import CheckboxContainer from '../ProfilePage/checkBox.jsx'
+
 import ProfilePicture from '../ProfilePicture'
 import LoggedInUserView from "./UserProfileViews/LoggedInUserView";
 import LoggedInUserEditView from "./UserProfileViews/LoggedInUserEditView"
@@ -169,6 +171,7 @@ class User extends React.Component{
                 <div>
                     <LoggedInUserEditView userProfile={userProfile} deleteAccount={deleteAccount}/>
                     <Microblogs microblogs={userProfile.microblogs} username={userProfile.username} />
+                    
                 </div>
             );
         }
@@ -179,6 +182,7 @@ class User extends React.Component{
 
                     <LoggedInUserView userProfile={userProfile} deleteAccount={deleteAccount}/>
                     <Microblogs microblogs={userProfile.microblogs} username={userProfile.username} />
+                    
                 </div>
             );
         }
@@ -190,6 +194,7 @@ class User extends React.Component{
             <div>
                 <VisitedUserView userProfile={userProfile}/>
                 <Microblogs microblogs={userProfile.microblogs} username={userProfile.username} />
+               
             </div>
         );
     }

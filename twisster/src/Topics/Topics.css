@@ -45,3 +45,13 @@
     letter-spacing: -0.6px;
     color: #e41111;
 }
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+th, td {
+    text-align: left;
+    padding: 8px;
+}

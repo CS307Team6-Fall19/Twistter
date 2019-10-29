@@ -8,10 +8,13 @@ class CheckboxContainer extends React.Component {
   constructor(props) {
     super(props);
 
-    this.username = props.username;
-    this.state = {
+    this.state = 
+    {
       checkedItems: new Map(),
+      loaded: false
     }
+
+    this.username = props.username;
 
     this.handleChange = this.handleChange.bind(this);
 
@@ -42,10 +45,8 @@ class CheckboxContainer extends React.Component {
   async componentDidMount()
   {
     this.topics = await helperfunctions.getFollowedAndUnfollowedTopics(this.username);
-    console.log("UI TOPICS", this.topics);
-    console.log("UI FOLLOW TOPICS", this.topics.followedTopics);
-    console.log("UI UNFOLLOW TOPICS", this.topics.unfollowedTopics);
-    for(var index = 0; index < this.topics.followedTopics; index++)
+    
+    for(var index = 0; index < this.topics.followedTopics.length; index++)
     {
       const isChecked = true;
       let name = this.topics.followedTopics[index];
@@ -65,7 +66,7 @@ class CheckboxContainer extends React.Component {
       checkboxes.push(checkbox_new);
     }
 
-    for(var index = 0; index < this.topics.unfollowedTopics; index++)
+    for(var index = 0; index < this.topics.unfollowedTopics.length; index++)
     {
       const isChecked = false;
       let name = this.topics.unfollowedTopics[index];
@@ -84,7 +85,13 @@ class CheckboxContainer extends React.Component {
 
       checkboxes.push(checkbox_new);
     }
-    this.render();
+    //this.handleChange = this.handleChange.bind(this);
+    this.setState({loaded: true});
+  }
+
+  async save()
+  {
+    console.log("REACHED HERE");
   }
   // componentWillMount() {
   //   const isChecked = true;
@@ -94,18 +101,26 @@ class CheckboxContainer extends React.Component {
   // }
 
   render() {
-    return (
-      <React.Fragment>
-        {
-          checkboxes.map(item => (
-            <label key={item.key}>
-              {item.name}
-              <Checkbox name={item.name} checked={this.state.checkedItems.get(item.name)} onChange={this.handleChange} />
-            </label>
-          ))
-        }
-      </React.Fragment>
-    );
+    if(this.state.loaded)
+    {
+      return (
+        <React.Fragment>
+          {
+            checkboxes.map(item => (
+              <label key={item.key}>
+                {item.name}
+                <Checkbox name={item.name} checked={this.state.checkedItems.get(item.name)} onChange={this.handleChange} />
+              </label>
+            ))
+          }
+          <button type="button" onClick={this.save}>Save</button>
+        </React.Fragment>
+      );
+    }
+    else
+    {
+      return null;
+    }
   }
 }
 
