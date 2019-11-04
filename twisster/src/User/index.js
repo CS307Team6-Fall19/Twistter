@@ -106,14 +106,17 @@ class User extends React.Component{
         }
 
         //check if I am currently following the user I am viewing and if so, change button text to "unfollow"
-        await firebase.database().ref().once('value', (snapshot) => {
-            var mapUIDToUsername = snapshot.child("mapUIDtoUsername").val();
-            var currUserName = mapUIDToUsername[firebase.auth().currentUser.uid];
-
-            if ((this.userProfile.followersAndFollowing.followers).includes(currUserName)) {
-                document.getElementById('followbutton').textContent = "Unfollow";
-            }
-        });
+        if(this.viewingOwnProfile === false)
+        {
+            await firebase.database().ref().once('value', (snapshot) => {
+                var mapUIDToUsername = snapshot.child("mapUIDtoUsername").val();
+                var currUserName = mapUIDToUsername[firebase.auth().currentUser.uid];
+    
+                if ((this.userProfile.followersAndFollowing.followers).includes(currUserName)) {
+                    document.getElementById('followbutton').textContent = "Unfollow";
+                }
+            });
+        }
     }
 
     async componentDidUpdate(){

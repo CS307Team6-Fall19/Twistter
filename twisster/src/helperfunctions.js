@@ -514,7 +514,7 @@ const helperfunctions =
           var followerlist = snapshot.child('users').child(followingUserUid).child('followers').val();
           console.log(followerlist);
           for (var index in followerlist) {
-            if(followerlist[index] == username) {
+            if(followerlist[index] === username) {
               console.log(index);
               firebase.database().ref().child('users').child(followingUserUid).child('followers').child(index).remove();
               break;
@@ -523,6 +523,7 @@ const helperfunctions =
         }
       });
 
+      
       firebase.auth().currentUser.delete();
       firebase.database().ref().child("users").child(firebase.auth().currentUser.uid).remove();
     },
