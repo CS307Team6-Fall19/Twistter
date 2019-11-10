@@ -10,11 +10,19 @@ import { ToastContainer, toast } from "react-toastify";
 
 import "react-toastify/dist/ReactToastify.css";
 
+// goLogIn = async event => {
+
+//   this.props.history.push({
+//     pathname: "/login"
+//   });
+// };
+
 class LogInContainer extends Component {
   constructor(props) {
     super(props);
 
     this.handleLogIn = this.handleLogIn.bind(this);
+    this.goSignUp = this.goSignUp.bind(this);
   }
 
   handleLogIn = async event => {
@@ -81,17 +89,25 @@ class LogInContainer extends Component {
       toast(error);
     }
   };
+
+  goSignUp = async event => {
+    this.props.history.push({
+      pathname: "/signup"
+    });
+  };
+
   render() {
     return (
       <div>
         <ToastContainer
+          color="danger"
           enableMultiContainer
           containerId={"B"}
           position={toast.POSITION.TOP_RIGHT}
         />
 
-        <TopBarLoginSignup />
-        <LogInView onSubmit={this.handleLogIn} />
+        {/* <TopBarLoginSignup /> */}
+        <LogInView onSubmit={this.handleLogIn} onClick={this.goSignUp} />
       </div>
     );
   }
