@@ -3,9 +3,11 @@ import './Landing.css'
 
 const TopicView = (props) => {
     return(
-      <div className="topic">
-        {props.text}
-      </div>
+      
+          <div className="topic">
+            {props.text}
+          </div>
+        
     )
 }
 export default TopicView 

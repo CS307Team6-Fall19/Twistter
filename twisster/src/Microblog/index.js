@@ -17,17 +17,43 @@ class Microblog extends React.Component{
       this.microblogData.image = "props.image";
       
 
-     
+      this.likeButtonClicked = this.likeButtonClicked.bind(this);
       this.microblogData.topics = props.data.topics;
       
+      this.state = {
+
+        like: false
+      }
+    }
+
+    likeButtonClicked(){
+
+        if(this.state.like){
+            this.setState({like : false});  
+        }
+        else{
+            this.setState({like : true});  
+        }
     }
 
     render(){
+        var likeText = "Placeholder"
+
+        if(this.state.like){
+            likeText = "Unlike"
+        }
+        else{
+            likeText = "Like"
+        }
+
+        let likeButtonText = likeText;
         let name = `${this.microblogData.name}`
         let handle = `@${this.microblogData.name}`
         let image = this.microblogData.image
         let tweet = this.microblogData.tweet
         let topics = this.microblogData.topics
+        
+        let likeButtonClicked = this.likeButtonClicked;
         return(
             <div>
                 <MicroblogBox>
@@ -37,7 +63,8 @@ class Microblog extends React.Component{
                         handle={handle}
                         image={image}
                         tweet={tweet}
-                        
+                        likeButtonClicked={likeButtonClicked}
+                        likeButtonText={likeButtonText}
                     /> 
 
                     <Topics topics={topics} />

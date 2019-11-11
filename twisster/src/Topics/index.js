@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react'
 import Topic from "../Topic"
 import TopicsBox from "./TopicsBox.js"
 
+import './Topics.css';
 class Topics extends React.Component{
 
     constructor(props){
@@ -36,7 +37,12 @@ class Topics extends React.Component{
         return(
           <div>
               <TopicsBox>
-                {this.createTopics(this.props.topics)}
+                {/* <table id="topics"> */}
+                  {/* <tr>
+                    <th>Topics</th>
+                  </tr> */}
+                  {this.createTopics(this.props.topics)}
+                {/* </table> */}
               </TopicsBox>    
           </div>
         )

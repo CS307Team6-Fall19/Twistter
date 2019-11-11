@@ -177,3 +177,14 @@
   height: 48px;
   background-color: #ffffff;
 }
+
+.like-button {
+  margin-top: 1%;
+  margin-left: 65%;
+  width: 150px;
+  height: 30px;
+  border-radius: 25px;
+  border-color: #cc0011;
+  box-shadow: 0 0 10px 0 #00000080;
+  background-color: #cc0011;
+}
