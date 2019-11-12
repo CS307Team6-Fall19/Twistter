@@ -55,19 +55,21 @@ const helperfunctions =
     retrieveUserEmail: async function(username) 
     {
         console.log("Entered retrieveUserEmail");
-        var username_email_map = firebase.database.ref().child("mapUsernameToEmail");
+        var username_email_map = firebase.database().ref().child("mapUsernameToEmail");
         var email = username_email_map[username];
         console.log("Exited retrieveUserEmail");
         return email;
     },
 
-    retrieveUsername: async function(uid)
+    retrieveUsername: function(uid)
     {
       console.log("Entered retrieveUsername");
-      var uid_username_map = firebase.database.ref().child("mapUIDtoUsername");
+      var uid_username_map = firebase.database().ref().child("mapUIDtoUsername");
       var username = uid_username_map[uid];
       console.log("Exited retrieveUsername");
-      return username;
+
+/*       resolve("done");
+ */      return username;
     },
 
     //Description: Add a user to follow to the current user's list of followers
@@ -203,10 +205,10 @@ const helperfunctions =
       console.log("Entered likeMicroblog");
       await firebase.database().ref().once('value', (snapshot) => {
         var mapUsernameToUID = snapshot.child("mapUsernameToUID").val();
-        var UIDofUserIAmViewing = mapUsernameToUID[microblog.user];
+        var UIDofUserIAmViewing = mapUsernameToUID[microblog.name];
         snapshot.child("users").child(UIDofUserIAmViewing).child("Microblogs").forEach((function(child)
         {
-          if(child.uid === microblog.uid)
+          if(child.id === microblog.id)
           {
             if(child.numLikes === 0)
             {
@@ -230,10 +232,10 @@ const helperfunctions =
       console.log("Entered unlikeMicroblog");
       await firebase.database().ref().once('value', (snapshot) => {
         var mapUsernameToUID = snapshot.child("mapUsernameToUID").val();
-        var UIDofUserIAmViewing = mapUsernameToUID[microblog.user];
+        var UIDofUserIAmViewing = mapUsernameToUID[microblog.name];
         snapshot.child("users").child(UIDofUserIAmViewing).child("Microblogs").forEach((function(child)
         {
-          if(child.uid === microblog.uid)
+          if(child.id === microblog.id)
           {
             if(child.userLikes.includes(username))
             {

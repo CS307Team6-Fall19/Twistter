@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { MicroblogView } from './MicroblogView.js';
 import Topics from '../Topics'
 import MicroblogBox from '../MicroblogBox/index.js';
+import helperfunctions from "../helperfunctions";
+import firebase from "firebase";
 
 class Microblog extends React.Component{
 
@@ -15,7 +17,7 @@ class Microblog extends React.Component{
       this.microblogData.handle = props.username;
       this.microblogData.tweet = props.data.content;
       this.microblogData.image = "props.image";
-      
+      this.microblogData.id = props.id;
 
       this.likeButtonClicked = this.likeButtonClicked.bind(this);
       this.microblogData.topics = props.data.topics;
@@ -26,13 +28,18 @@ class Microblog extends React.Component{
       }
     }
 
-    likeButtonClicked(){
+    async likeButtonClicked(){
+
+        var username = await helperfunctions.retrieveUsername(firebase.auth().currentUser.uid);
 
         if(this.state.like){
             this.setState({like : false});  
+            await helperfunctions.unlikeMicroblog(this.microblogData, username)
         }
         else{
             this.setState({like : true});  
+            await helperfunctions.likeMicroblog(this.microblogData, username)
+
         }
     }
 
