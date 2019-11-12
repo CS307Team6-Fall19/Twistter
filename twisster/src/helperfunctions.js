@@ -52,7 +52,7 @@ const helperfunctions =
     //username: username of the specific user
     //@Return
     //email: email of the specific user
-    retrieveUserEmail: async function(username) 
+    retrieveUserEmail: function(username) 
     {
         console.log("Entered retrieveUserEmail");
         var username_email_map = firebase.database().ref().child("mapUsernameToEmail");
@@ -61,15 +61,16 @@ const helperfunctions =
         return email;
     },
 
-    retrieveUsername: function(uid)
+    retrieveUsername: async function(uid)
     {
       console.log("Entered retrieveUsername");
-      var uid_username_map = firebase.database().ref().child("mapUIDtoUsername");
-      var username = uid_username_map[uid];
+      var username;
+      await firebase.database().ref().once('value', (snapshot) => {
+        var mapUIDtoUsername = snapshot.child("mapUIDtoUsername").val();
+        username = mapUIDtoUsername[uid];
+      });
       console.log("Exited retrieveUsername");
-
-/*       resolve("done");
- */      return username;
+      return username;
     },
 
     //Description: Add a user to follow to the current user's list of followers
@@ -208,18 +209,40 @@ const helperfunctions =
         var UIDofUserIAmViewing = mapUsernameToUID[microblog.name];
         snapshot.child("users").child(UIDofUserIAmViewing).child("Microblogs").forEach((function(child)
         {
-          if(child.id === microblog.id)
+          //console.log(username);
+          // console.log(child);
+          // console.log(child.key);
+          // console.log(child.val().id);
+          var countLikes = 0;
+          var userLikes = [];
+          if(child.val().id === microblog.id)
           {
-            if(child.numLikes === 0)
+            if(child.val().userLikes === undefined)
             {
-              child.userLikes.set(0, username);
+              userLikes.push(username);
             }
-            else
+            else if(child.val().userLikes.includes(username) === false)
             {
-              child.userLikes.push(username);
+              if(child.val().numLikes === 0 || child.val().userLikes.includes("hello"))
+              {
+                userLikes = child.val().userLikes;
+                userLikes[0] = username;
+              }
+              else
+              {
+                userLikes = child.val().userLikes;
+                userLikes.push(username);
+              }
             }
-            child.numLikes += 1;
+            else if(child.val().userLikes.includes(username) === true)
+            {
+              userLikes = child.val().userLikes;
+            }
+            countLikes = userLikes.length;
           }
+
+          firebase.database().ref().child("users").child(UIDofUserIAmViewing).child("Microblogs").child(child.key).update({'userLikes': userLikes});
+          firebase.database().ref().child("users").child(UIDofUserIAmViewing).child("Microblogs").child(child.key).update({'numLikes': countLikes});
         }));
       });
 
@@ -235,14 +258,24 @@ const helperfunctions =
         var UIDofUserIAmViewing = mapUsernameToUID[microblog.name];
         snapshot.child("users").child(UIDofUserIAmViewing).child("Microblogs").forEach((function(child)
         {
-          if(child.id === microblog.id)
+          var countLikes = 0;
+          var userLikes = [];
+          if(child.val().id === microblog.id)
           {
-            if(child.userLikes.includes(username))
+            if(child.val().userLikes === undefined)
             {
-              child.userLikes.remove(username);
-              child.numLikes -= 1;
+              countLikes = 0;
+            }
+            else if(child.val().userLikes.includes(username) === true)
+            {
+              userLikes = child.val().userLikes;
+              var index = userLikes.indexOf(username);
+              userLikes.splice(index, 1);
+              countLikes = userLikes.length;
             }
           }
+          firebase.database().ref().child("users").child(UIDofUserIAmViewing).child("Microblogs").child(child.key).update({'userLikes': userLikes});
+          firebase.database().ref().child("users").child(UIDofUserIAmViewing).child("Microblogs").child(child.key).update({'numLikes': countLikes});
         }));
       });
       resolve("done");

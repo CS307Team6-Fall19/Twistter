@@ -23,15 +23,13 @@ class Microblog extends React.Component{
       this.microblogData.topics = props.data.topics;
       
       this.state = {
-
-        like: false
+        like: props.liked
       }
     }
 
-    async likeButtonClicked(){
-
+    async likeButtonClicked()
+    {
         var username = await helperfunctions.retrieveUsername(firebase.auth().currentUser.uid);
-
         if(this.state.like){
             this.setState({like : false});  
             await helperfunctions.unlikeMicroblog(this.microblogData, username)
