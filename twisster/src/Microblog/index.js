@@ -21,6 +21,8 @@ class Microblog extends React.Component{
 
       this.likeButtonClicked = this.likeButtonClicked.bind(this);
       this.microblogData.topics = props.data.topics;
+
+      this.microblogData.numLikes = props.numLikes;
       
       this.state = {
         like: props.liked
@@ -31,12 +33,16 @@ class Microblog extends React.Component{
     {
         var username = await helperfunctions.retrieveUsername(firebase.auth().currentUser.uid);
         if(this.state.like){
-            this.setState({like : false});  
+            this.microblogData.numLikes--;
             await helperfunctions.unlikeMicroblog(this.microblogData, username)
+            this.setState({like : false});  
+
         }
         else{
-            this.setState({like : true});  
+            this.microblogData.numLikes++;
             await helperfunctions.likeMicroblog(this.microblogData, username)
+            this.setState({like : true});  
+
 
         }
     }
@@ -57,6 +63,7 @@ class Microblog extends React.Component{
         let image = this.microblogData.image
         let tweet = this.microblogData.tweet
         let topics = this.microblogData.topics
+        let numLikes = this.microblogData.numLikes;
         
         let likeButtonClicked = this.likeButtonClicked;
         return(
@@ -70,6 +77,7 @@ class Microblog extends React.Component{
                         tweet={tweet}
                         likeButtonClicked={likeButtonClicked}
                         likeButtonText={likeButtonText}
+                        numLikes={numLikes}
                     /> 
 
                     <Topics topics={topics} />

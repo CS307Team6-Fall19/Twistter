@@ -20,7 +20,7 @@ class Microblogs extends React.Component{
             {
               liked = true;
             }
-            microblogs.push(<Microblog key={i} data={microblogsArray[i]} username={microblogsArray[i].user} id={microblogsArray[i].id} liked={liked}/>);
+            microblogs.push(<Microblog key={i} data={microblogsArray[i]} username={microblogsArray[i].user} id={microblogsArray[i].id} liked={liked} numLikes={microblogsArray[i].numLikes}/>);
         }
         return <div>{microblogs}</div>;
     }

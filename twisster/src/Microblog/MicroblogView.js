@@ -42,6 +42,8 @@ const Topics = (props) => {
   )
 }
 
+
+
 const MicroblogView = (props) => {
   return(
     <MicroblogBox>
@@ -53,7 +55,10 @@ const MicroblogView = (props) => {
             <Handle handle={props.handle}/>
           </div>
           <Tweet tweet={props.tweet}/>
-          <button class="like-button" onClick={props.likeButtonClicked}>{props.likeButtonText}</button>
+          <div class="likes">
+            <button class="like-button" onClick={props.likeButtonClicked}>{props.likeButtonText}</button>
+            <label class="num-likes">{props.numLikes}</label>
+          </div>
           <Topics topics={props.topics}/>
         </div>
       </div>
