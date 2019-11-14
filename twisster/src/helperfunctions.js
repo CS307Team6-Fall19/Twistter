@@ -270,8 +270,8 @@ const helperfunctions =
               userLikes = child.val().userLikes;
               var index = userLikes.indexOf(username);
               userLikes.splice(index, 1);
-              countLikes = userLikes.length;
             }
+            countLikes = userLikes.length;
             firebase.database().ref().child("users").child(UIDofUserIAmViewing).child("Microblogs").child(child.key).update({'userLikes': userLikes});
             firebase.database().ref().child("users").child(UIDofUserIAmViewing).child("Microblogs").child(child.key).update({'numLikes': countLikes});
           }
