@@ -9,6 +9,7 @@ import LandingPage from "./LandingPage/index";
 import ProfilePage from "./ProfilePage";
 import Chat from "./Chat";
 import TestComponent from "./TestComponent"
+import PageNotFound from "./PageNotFound"
 import { toast } from "react-toastify";
 
 toast.configure();
@@ -16,21 +17,25 @@ toast.configure();
 const App = () => {
   const notify = () => toast("Wow so easy !");
   return (
-    <Switch>
-      <div>
-        <Route path="/home" component={Home} />
-        <Route path="/login" component={Login} />
-        <Route path="/signup" component={SignUp} />
-        <Route path="/landing" component={LandingPage} />
-        <Route path='/profile' component={ProfilePage} />
-        <Route path="/chat" component={Chat} />
-        
-        {/* FOR TESTING ONLY */}
-        <Route path="/test" component={TestComponent} />
+    <Router>
+      <Switch>
+       
+          <Route exact path="/" component={Home} />
+          <Route exact path="/login" component={Login} />
+          <Route exact path="/signup" component={SignUp} />
+          <Route path="/landing" component={LandingPage} />
+          <Route path='/profile' component={ProfilePage} />
+          <Route path="/chat" component={Chat} />
+          
+          {/* FOR TESTING ONLY */}
+          <Route path="/test" component={TestComponent} />
 
-        {/* <Route path="*" render={() => <Redirect to="/home" />} /> */}
-      </div>
-    </Switch>
+          <Route component={PageNotFound} />
+          {/* <Route render={() => <Redirect to="/home" />} /> */}
+
+       
+      </Switch>
+    </Router>
   );
 };
 
