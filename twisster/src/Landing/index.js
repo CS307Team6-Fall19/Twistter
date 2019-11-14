@@ -6,6 +6,7 @@ import helperfunctions from "../helperfunctions";
 import firebase from "firebase";
 import TopBar from "../TopBar";
 import Microblogs from "../Microblogs";
+import QuotedMicroblog from "../QuotedMicroblog"
 
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -75,7 +76,10 @@ class Landing extends Component {
                 <div>
                     <TopBar userData={this.userData}/>
                     <MicroblogWriter username={this.userData.username} microblogPosted={this.microblogPosted}/>
-                    <Microblogs microblogs={this.microblogs} username={this.userData.username} />                               
+                    <Microblogs microblogs={this.microblogs} username={this.userData.username} />   
+
+
+                    
                 </div>
                 
             );

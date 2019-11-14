@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import './Landing.css'
+import './MicroblogBox.css'
 class MicroblogBox extends React.Component{
 
     constructor(props) {
