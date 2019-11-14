@@ -239,10 +239,9 @@ const helperfunctions =
               userLikes = child.val().userLikes;
             }
             countLikes = userLikes.length;
+            firebase.database().ref().child("users").child(UIDofUserIAmViewing).child("Microblogs").child(child.key).update({'userLikes': userLikes});
+            firebase.database().ref().child("users").child(UIDofUserIAmViewing).child("Microblogs").child(child.key).update({'numLikes': countLikes});
           }
-
-          firebase.database().ref().child("users").child(UIDofUserIAmViewing).child("Microblogs").child(child.key).update({'userLikes': userLikes});
-          firebase.database().ref().child("users").child(UIDofUserIAmViewing).child("Microblogs").child(child.key).update({'numLikes': countLikes});
         }));
       });
 
@@ -273,9 +272,9 @@ const helperfunctions =
               userLikes.splice(index, 1);
               countLikes = userLikes.length;
             }
+            firebase.database().ref().child("users").child(UIDofUserIAmViewing).child("Microblogs").child(child.key).update({'userLikes': userLikes});
+            firebase.database().ref().child("users").child(UIDofUserIAmViewing).child("Microblogs").child(child.key).update({'numLikes': countLikes});
           }
-          firebase.database().ref().child("users").child(UIDofUserIAmViewing).child("Microblogs").child(child.key).update({'userLikes': userLikes});
-          firebase.database().ref().child("users").child(UIDofUserIAmViewing).child("Microblogs").child(child.key).update({'numLikes': countLikes});
         }));
       });
       resolve("done");
