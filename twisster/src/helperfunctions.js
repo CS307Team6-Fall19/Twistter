@@ -55,10 +55,22 @@ const helperfunctions =
     retrieveUserEmail: function(username) 
     {
         console.log("Entered retrieveUserEmail");
-        var username_email_map = firebase.database.ref().child("mapUsernameToEmail");
+        var username_email_map = firebase.database().ref().child("mapUsernameToEmail");
         var email = username_email_map[username];
         console.log("Exited retrieveUserEmail");
         return email;
+    },
+
+    retrieveUsername: async function(uid)
+    {
+      console.log("Entered retrieveUsername");
+      var username;
+      await firebase.database().ref().once('value', (snapshot) => {
+        var mapUIDtoUsername = snapshot.child("mapUIDtoUsername").val();
+        username = mapUIDtoUsername[uid];
+      });
+      console.log("Exited retrieveUsername");
+      return username;
     },
 
     //Description: Add a user to follow to the current user's list of followers
@@ -166,7 +178,10 @@ const helperfunctions =
         {
             topicsList.push(topics[index]);
         }
-        var microblog = {'user': username, 'content': content, 'topics': topicsList, 'timestamp': timestamp};
+        var numLikes = 0;
+        var userLikes = [];
+        userLikes.push("hello");
+        var microblog = {'userLikes': userLikes, 'id': username + timestamp, 'user': username, 'content': content, 'topics': topicsList, 'timestamp': timestamp, 'numLikes': numLikes};
         await firebase.database().ref().once('value', (snapshot) => {
             var microblog_list = snapshot.child("users").child(firebase.auth().currentUser.uid).child("Microblogs").val();
             //console.log(microblog_list);
@@ -184,6 +199,86 @@ const helperfunctions =
         resolve("done");
         return;
         console.log("Exited addMicroBlogToCurrentUser");
+    },
+
+    likeMicroblog: async function(microblog, username)
+    {
+      console.log("Entered likeMicroblog");
+      await firebase.database().ref().once('value', (snapshot) => {
+        var mapUsernameToUID = snapshot.child("mapUsernameToUID").val();
+        var UIDofUserIAmViewing = mapUsernameToUID[microblog.name];
+        snapshot.child("users").child(UIDofUserIAmViewing).child("Microblogs").forEach((function(child)
+        {
+          //console.log(username);
+          // console.log(child);
+          // console.log(child.key);
+          // console.log(child.val().id);
+          var countLikes = 0;
+          var userLikes = [];
+          if(child.val().id === microblog.id)
+          {
+            if(child.val().userLikes === undefined)
+            {
+              userLikes.push(username);
+            }
+            else if(child.val().userLikes.includes(username) === false)
+            {
+              if(child.val().numLikes === 0 || child.val().userLikes.includes("hello"))
+              {
+                userLikes = child.val().userLikes;
+                userLikes[0] = username;
+              }
+              else
+              {
+                userLikes = child.val().userLikes;
+                userLikes.push(username);
+              }
+            }
+            else if(child.val().userLikes.includes(username) === true)
+            {
+              userLikes = child.val().userLikes;
+            }
+            countLikes = userLikes.length;
+            firebase.database().ref().child("users").child(UIDofUserIAmViewing).child("Microblogs").child(child.key).update({'userLikes': userLikes});
+            firebase.database().ref().child("users").child(UIDofUserIAmViewing).child("Microblogs").child(child.key).update({'numLikes': countLikes});
+          }
+        }));
+      });
+
+      resolve("done");
+      console.log("Exited likeMicroblog");
+    },
+
+    unlikeMicroblog: async function(microblog, username)
+    {
+      console.log("Entered unlikeMicroblog");
+      await firebase.database().ref().once('value', (snapshot) => {
+        var mapUsernameToUID = snapshot.child("mapUsernameToUID").val();
+        var UIDofUserIAmViewing = mapUsernameToUID[microblog.name];
+        snapshot.child("users").child(UIDofUserIAmViewing).child("Microblogs").forEach((function(child)
+        {
+          var countLikes = 0;
+          var userLikes = [];
+          if(child.val().id === microblog.id)
+          {
+            if(child.val().userLikes === undefined)
+            {
+              countLikes = 0;
+            }
+            else if(child.val().userLikes.includes(username) === true)
+            {
+              userLikes = child.val().userLikes;
+              var index = userLikes.indexOf(username);
+              userLikes.splice(index, 1);
+            }
+            countLikes = userLikes.length;
+            firebase.database().ref().child("users").child(UIDofUserIAmViewing).child("Microblogs").child(child.key).update({'userLikes': userLikes});
+            firebase.database().ref().child("users").child(UIDofUserIAmViewing).child("Microblogs").child(child.key).update({'numLikes': countLikes});
+          }
+        }));
+      });
+      resolve("done");
+      console.log("Exited unlikeMicroblog");
     },
     
     //Description: fetch another Users bio (when current user visits another profile)

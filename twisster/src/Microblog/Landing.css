@@ -177,3 +177,36 @@
   height: 48px;
   background-color: #ffffff;
 }
+
+.like-button {
+  margin-top: 1%;
+  margin-left: 65%;
+  width: 150px;
+  height: 30px;
+  border-radius: 25px;
+  border-color: #cc0011;
+  box-shadow: 0 0 10px 0 #00000080;
+  background-color: #cc0011;
+}
+
+.num-likes {
+  display: flex;
+  flex-direction: row;
+  margin-left: 15px;
+  margin-top: 19px;
+  min-width: 85px;
+  height: 17px;
+  font-family: HelveticaNeue;
+  font-size: 14px;
+  font-weight: 500;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: normal;
+  letter-spacing: -0.6px;
+  color: #ffffff;
+}
+
+.likes {
+  display: flex;
+  flex-direction: row;
+}

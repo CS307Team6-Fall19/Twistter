@@ -55,3 +55,22 @@ th, td {
     text-align: left;
     padding: 8px;
 }
+
+#Topics {
+    font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
+  
+#topics td, #topics th {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+#topics th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
+    background-color: #4CAF50;
+    color: white;
+}
