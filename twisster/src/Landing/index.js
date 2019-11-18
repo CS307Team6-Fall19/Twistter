@@ -6,6 +6,7 @@ import helperfunctions from "../helperfunctions";
 import firebase from "firebase";
 import TopBar from "../TopBar";
 import Microblogs from "../Microblogs";
+import AutoCompleteSearchBar from "../AutoCompleteSearchBar/AutoCompleteSearchBar"
 
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -26,6 +27,7 @@ class Landing extends Component {
         this.editMode = false;
 
         this.microblogPosted = this.microblogPosted.bind(this);
+        this.getAllUsernames = this.getAllUsernames.bind(this);
     }
 
     async microblogPosted(){
@@ -67,6 +69,20 @@ class Landing extends Component {
         })
     }
 
+    getAllUsernames(){
+        var user_list = [];
+        const promise = firebase.database().ref().once('value', (snapshot)=> {
+            var all_users = snapshot.child("mapUsernameToEmail").val();
+            var key;
+            for (key in all_users) {
+                if (all_users[key] != firebase.auth().currentUser.email) {
+                    user_list.push(key);
+                }
+            }
+        });
+        return user_list;
+    }
+
     render() {
 
         if(this.state.loaded){
@@ -74,6 +90,7 @@ class Landing extends Component {
             return(
                 <div>
                     <TopBar userData={this.userData}/>
+                    <AutoCompleteSearchBar items={this.getAllUsernames()}/>
                     <MicroblogWriter username={this.userData.username} microblogPosted={this.microblogPosted}/>
                     <Microblogs microblogs={this.microblogs} username={this.userData.username} />                               
                 </div>
