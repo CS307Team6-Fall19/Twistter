@@ -54,10 +54,9 @@ class User extends React.Component{
     }
 
   deleteAccount() {
-    helperfunctions.deleteUserData(this.username);
     this.loggedIn = false;
     this.props.history.push({
-        pathname: "/login"
+        pathname: "/DeleteAccount"
     });
   }
   
