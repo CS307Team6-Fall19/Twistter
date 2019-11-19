@@ -769,7 +769,7 @@ const helperfunctions =
 
         
 
-        firebase.auth().onAuthStateChanged(async function(user) {          
+        await firebase.auth().onAuthStateChanged(async function(user) {          
           if (user) {
 
             userData = await helperfunctions.getUserdataOfUser(user.uid, loggedIn);
@@ -777,10 +777,12 @@ const helperfunctions =
             return userData;
           } else {
             console.log("null");
+            resolve("done");
+            return null;
             // No user is signed in.
           }
         });
-
+        
         
         /* while(userData == undefined){
           console.log("undefined")
