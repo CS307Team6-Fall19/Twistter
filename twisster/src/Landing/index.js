@@ -86,11 +86,10 @@ class Landing extends Component {
     render() {
 
         if(this.state.loaded){
-            
             return(
                 <div>
                     <TopBar userData={this.userData}/>
-                    <AutoCompleteSearchBar items={this.getAllUsernames()}/>
+                    <AutoCompleteSearchBar items={this.getAllUsernames()} username={this.userData.username} />
                     <MicroblogWriter username={this.userData.username} microblogPosted={this.microblogPosted}/>
                     <Microblogs microblogs={this.microblogs} username={this.userData.username} />                               
                 </div>
