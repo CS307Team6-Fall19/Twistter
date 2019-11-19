@@ -15,12 +15,21 @@ class Microblogs extends React.Component{
         for (var i = 0; i < microblogsArray.length; i++) {
             // note: we add a key prop here to allow react to uniquely identify each
             // element in this array. see: https://reactjs.org/docs/lists-and-keys.html
-            var liked = false;
+           /*  var liked = false;
             if(microblogsArray[i].userLikes !== undefined && microblogsArray[i].userLikes.includes(username))
             {
               liked = true;
-            }
-            microblogs.push(<Microblog key={i} data={microblogsArray[i]} username={microblogsArray[i].user} id={microblogsArray[i].id} liked={liked} numLikes={microblogsArray[i].numLikes}/>);
+            } */
+            microblogs.push(
+              <Microblog 
+                key={i} 
+                data={microblogsArray[i]} 
+                username={microblogsArray[i].user} 
+                id={microblogsArray[i].id} 
+                numLikes={microblogsArray[i].numLikes}
+                userLikes={microblogsArray[i].userLikes}
+              />
+            );
         }
         return <div>{microblogs}</div>;
     }
