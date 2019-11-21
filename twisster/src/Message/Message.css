@@ -1,18 +1,21 @@
-.message-box {
+.message-box-sent {
     display: flex;
     flex-direction: column;
-    width: 600px;
-    height: 170px;
-    background-color: #3f60bd4a;
-    /*margin-left: 50%;*/
+    width: 400px;
+    height: 120px;
+    background-color: #5d0e0e55;
+    margin-left: 5%;
     align-self: center;
     margin-bottom: 0.1rem;
+
+    word-wrap: break-word;
+    hyphens: auto;
 }
 
 .content {
     margin-left: 15px;
     margin-top: 7px;
-    width: 445px;
+    width: 350px;
     height: 88px;
     font-family: HelveticaNeue;
     font-size: 14px;
@@ -21,13 +24,13 @@
     font-stretch: normal;
     line-height: normal;
     letter-spacing: -0.6px;
-    color: #ffffff;
+    color: #000000;
 }
 
 .sender {
     margin-left: 15px;
     margin-top: 7px;
-    width: 445px;
+    width: 350px;
     height: 88px;
     font-family: HelveticaNeue;
     font-size: 14px;
@@ -36,5 +39,21 @@
     font-stretch: normal;
     line-height: normal;
     letter-spacing: -0.6px;
-    color: #ffffff;
+    color: #000000;
+}
+
+.message-box-received {
+    display: flex;
+    /* position: absolute;
+    right: 20px; */
+    flex-direction: column;
+    width: 400px;
+    height: 120px;
+    background-color: #5d0e0e55;
+    margin-left: 70%;
+    align-self: center;
+    margin-bottom: 0.1rem;
+
+    word-wrap: break-word;
+    hyphens: auto;
 }

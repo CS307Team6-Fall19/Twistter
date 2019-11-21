@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Message from "../Message"
 import Topics from '../Topics'
 import MicroblogBox from '../MicroblogBox/index.js';
 import helperfunctions from "../helperfunctions";
@@ -18,13 +19,26 @@ class TestComponent extends React.Component{
         return(
             <div >
                 <label>Test Component</label>
-                <QuotedMicroblog 
+                {/* <QuotedMicroblog 
                 key={0} 
                 data={"Data"} 
                 username={"username"} 
                 id={"ID"} 
                 liked={false} 
                 numLikes={0}
+                /> */}
+                <Message 
+                    sender={"sender"} 
+                    content={"message1"} 
+                    receiver={"receiver"} 
+                    sentByUser={false}
+                />
+
+                <Message 
+                    sender={"sender"} 
+                    content={"message2"} 
+                    receiver={"receiver"} 
+                    sentByUser={true}
                 />
             </div>
         )

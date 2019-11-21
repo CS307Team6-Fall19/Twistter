@@ -6,23 +6,41 @@ class Message extends React.Component{
     constructor(props){
         super(props)
 
-        this.sender = "props.sender";
-        this.receiver = "props.receiver";
+        this.sender = props.sender;
+        this.receiver = props.receiver;
 
-        this.content = "props.content";
+        this.sentByUser = props.sentByUser;
+
+        this.content = props.content;
     }
 
     render(){        
-        return(
-            <div className="message-box">
-                <div className="sender">
-                    {this.sender}
-                    <div className="content">
-                        {this.content}
+        if(this.sentByUser){
+            return(
+                <div className="message-box-sent">
+                    <div className="sender">
+                        {this.sender}
+                        <div className="content">
+                            {this.content}
+                        </div>
                     </div>
                 </div>
-            </div>
-        );
+            );
+        }
+        
+        else{
+            return(
+                <div className="message-box-received">
+                    <div className="sender">
+                        {this.sender}
+                        <div className="content">
+                            {this.content}
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+        
     }
 }
 export default Message;
