@@ -23,17 +23,7 @@
   flex-direction: row;
 }
 
-.tweet-body {
-  display: flex;
-  flex-direction: column;
-  width: 600px;
-  height: 170px;
-  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.5);
-  background-color: #213649;
-  /*margin-left: 50%;*/
-  align-self: center;
-  margin-bottom: 0.1rem;
-}
+
 
 .new-tweet-body {
   display: flex;
@@ -209,4 +199,20 @@
 .likes {
   display: flex;
   flex-direction: row;
+}
+
+.quote {
+  display: flex;
+  flex-direction: row;
+}
+
+.quote-button {
+  margin-top: 1%;
+  margin-left: 65%;
+  width: 150px;
+  height: 30px;
+  border-radius: 25px;
+  border-color: #00cc4e;
+  box-shadow: 0 0 10px 0 #00000080;
+  background-color: #00cc4e;
 }

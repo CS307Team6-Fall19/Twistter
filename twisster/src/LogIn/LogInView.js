@@ -1,6 +1,6 @@
 import React from "react";
 import "./LoginView.css";
-import Button from "react-bootstrap/Button";
+import Button from 'react-bootstrap/Button';
 import logo from "../assets/twisster_logo.png";
 
 const MainLogo = props => {

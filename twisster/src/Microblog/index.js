@@ -4,6 +4,7 @@ import Topics from '../Topics'
 import MicroblogBox from '../MicroblogBox/index.js';
 import helperfunctions from "../helperfunctions";
 import firebase from "firebase";
+import { toast } from 'react-toastify';
 
 class Microblog extends React.Component{
 
@@ -18,11 +19,13 @@ class Microblog extends React.Component{
       this.microblogData.tweet = props.data.content;
       this.microblogData.image = "props.image";
       this.microblogData.id = props.id;
+      this.microblogData.topics = props.data.topics;
+      this.microblogData.numLikes = props.numLikes;
 
       this.likeButtonClicked = this.likeButtonClicked.bind(this);
-      this.microblogData.topics = props.data.topics;
+      this.quoteButtonClicked = this.quoteButtonClicked.bind(this);
 
-      this.microblogData.numLikes = props.numLikes;
+     
       
       this.state = {
         like: props.liked
@@ -47,6 +50,10 @@ class Microblog extends React.Component{
         }
     }
 
+    async quoteButtonClicked(){
+        toast("Quote!")
+    }
+
     render(){
         var likeText = "Placeholder"
 
@@ -57,6 +64,7 @@ class Microblog extends React.Component{
             likeText = "Like"
         }
 
+        let quoteButtonText = "Quote"
         let likeButtonText = likeText;
         let name = `${this.microblogData.name}`
         let handle = `@${this.microblogData.name}`
@@ -66,6 +74,7 @@ class Microblog extends React.Component{
         let numLikes = this.microblogData.numLikes;
         
         let likeButtonClicked = this.likeButtonClicked;
+        let quoteButtonClicked = this.quoteButtonClicked;
         return(
             <div>
                 <MicroblogBox>
@@ -75,9 +84,14 @@ class Microblog extends React.Component{
                         handle={handle}
                         image={image}
                         tweet={tweet}
+
                         likeButtonClicked={likeButtonClicked}
                         likeButtonText={likeButtonText}
                         numLikes={numLikes}
+
+                        quoteButtonText={quoteButtonText}
+                        quoteButtonClicked={quoteButtonClicked}
+
                     /> 
 
                     <Topics topics={topics} />

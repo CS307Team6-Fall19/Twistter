@@ -7,6 +7,7 @@ import firebase from "firebase";
 import TopBar from "../TopBar";
 import Microblogs from "../Microblogs";
 import AutoCompleteSearchBar from "../AutoCompleteSearchBar/AutoCompleteSearchBar"
+import QuotedMicroblog from "../QuotedMicroblog"
 
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -91,7 +92,10 @@ class Landing extends Component {
                     <TopBar userData={this.userData}/>
                     <AutoCompleteSearchBar items={this.getAllUsernames()} username={this.userData.username} />
                     <MicroblogWriter username={this.userData.username} microblogPosted={this.microblogPosted}/>
-                    <Microblogs microblogs={this.microblogs} username={this.userData.username} />                               
+                    <Microblogs microblogs={this.microblogs} username={this.userData.username} />   
+
+
+                    
                 </div>
                 
             );

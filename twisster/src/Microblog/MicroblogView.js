@@ -55,10 +55,16 @@ const MicroblogView = (props) => {
             <Handle handle={props.handle}/>
           </div>
           <Tweet tweet={props.tweet}/>
+
           <div class="likes">
             <button class="like-button" onClick={props.likeButtonClicked}>{props.likeButtonText}</button>
             <label class="num-likes">{props.numLikes}</label>
           </div>
+
+          <div class="quote">
+            <button class="quote-button" onClick={props.quoteButtonClicked}>{props.quoteButtonText}</button>
+          </div>
+
           <Topics topics={props.topics}/>
         </div>
       </div>
