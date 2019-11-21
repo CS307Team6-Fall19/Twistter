@@ -181,7 +181,7 @@ const helperfunctions =
         var numLikes = 0;
         var userLikes = [];
         userLikes.push("hello");
-        var microblog = {'userLikes': userLikes, 'id': username + timestamp, 'user': username, 'content': content, 'topics': topicsList, 'timestamp': timestamp, 'numLikes': numLikes};
+        var microblog = {'userLikes': userLikes, 'id': username + timestamp, 'user': username, 'content': content, 'topics': topicsList, 'timestamp': timestamp, 'numLikes': numLikes, 'quote': false};
         await firebase.database().ref().once('value', (snapshot) => {
             var microblog_list = snapshot.child("users").child(firebase.auth().currentUser.uid).child("Microblogs").val();
             //console.log(microblog_list);
@@ -199,6 +199,87 @@ const helperfunctions =
         resolve("done");
         return;
         console.log("Exited addMicroBlogToCurrentUser");
+    },
+
+    addQuotedMicroblogToCurrentUser: async function(microblog, content, topics)
+    {
+      console.log("Entered addQuotedMicroblogToCurrentUser");
+      var username = "";
+      var uid_current = firebase.auth().currentUser.uid;
+      await firebase.database().ref().once('value', (snapshot) => {
+        var mapUIDtoUsername = snapshot.child("mapUIDtoUsername").val();
+        username = mapUIDtoUsername[uid_current];
+        console.log("USERNAME:", username);
+      });
+
+      var date = new Date();
+      var timestamp = date.getTime();
+      if(content.length > 250)
+      {
+        console.log("ERROR: content of microblog cannot exceed 250 characters --> will note store in firebase");
+      }
+
+      var wTopics = [];
+
+      for(var index = 0; index < topics.length; index++)
+      {
+        wTopics.push({"topics": topics[index], "timestamp": timestamp});
+      }
+
+      await firebase.database().ref().once('value', (snapshot) => {
+        var writtenTopics = snapshot.child("users").child(firebase.auth().currentUser.uid).child("writtenTopics").val();
+        console.log("TYPE:", typeof(writtenTopics));
+        //console.log("VALUES:", Object.values(writtenTopics));
+        if(writtenTopics == null || writtenTopics.length === 0)
+        {
+            firebase.database().ref().child("users").child(firebase.auth().currentUser.uid).child("writtenTopics").set(wTopics);
+        }
+        else
+        {
+            for(var index = 0; index < wTopics.length; index++)
+            {
+              var w = 0;
+              for (; w < writtenTopics.length; w++) {
+                if (writtenTopics[w].topics == wTopics[index].topics) {
+                  break;
+                }
+              }
+              if (w == writtenTopics.length) {
+                writtenTopics.push(wTopics[index]);
+              }
+            }
+            firebase.database().ref().child("users").child(firebase.auth().currentUser.uid).child("writtenTopics").set(writtenTopics);
+        }
+      });
+
+      var topicsList = [];
+      for(var index = 0; index < topics.length; index++)
+      {
+          topicsList.push(topics[index]);
+      }
+      var numLikes = 0;
+      var userLikes = [];
+      userLikes.push("hello");
+
+      var microblog = {'quotedUserLikes': userLikes, 'quotedId': username + timestamp, 'quotedUser': username, 'quotedContent': content, 'quotedTopics': topicsList, 'quotedTimestamp': timestamp, 'quotedNumLikes': numLikes, 'quote': true, 'userLikes': microblog.userLikes, 'id': microblog.id, 'user': microblog.user, 'content': microblog.content, 'topics': microblog.topics, 'timestamp': microblog.timestamp, 'numLikes': microblog.numLikes}; 
+
+      await firebase.database().ref().once('value', (snapshot) => {
+        var microblog_list = snapshot.child("users").child(firebase.auth().currentUser.uid).child("Microblogs").val();
+        //console.log(microblog_list);
+        if(microblog_list == null || microblog_list.length === 0)
+        {
+            firebase.database().ref().child("users").child(firebase.auth().currentUser.uid).child("Microblogs").set({'0': microblog});
+        }
+        else
+        {
+            microblog_list.push(microblog);
+            firebase.database().ref().child("users").child(firebase.auth().currentUser.uid).child("Microblogs").set(microblog_list);
+        }
+      });
+
+      resolve("done");
+
+      console.log("Exited addQuotedMicroblogToCurrentUser");
     },
 
     likeMicroblog: async function(microblog, username)
