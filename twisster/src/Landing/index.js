@@ -75,7 +75,11 @@ class Landing extends Component {
             return(
                 <div>
                     <TopBar userData={this.userData}/>
-                    <MicroblogWriter username={this.userData.username} microblogPosted={this.microblogPosted}/>
+                    <MicroblogWriter 
+                        username={this.userData.username} 
+                        microblogPosted={this.microblogPosted}
+                        quotedMicroblog={false}
+                    />
                     <Microblogs microblogs={this.microblogs} username={this.userData.username} />   
 
 
