@@ -51,7 +51,8 @@ class Microblog extends React.Component{
     }
 
     async quoteButtonClicked(){
-        //we need to pass in content and topics
+        //Second parameter is comment
+        //Third parameter is topics list
         await helperfunctions.addQuotedMicroblogToCurrentUser(this.microblogData, "", []);
     }
 
