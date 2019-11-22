@@ -8,7 +8,7 @@ class TopicsBox extends React.Component{
 
     render(){        
         return(
-            <div>
+            <div className="topics">
                 {this.props.children}
             </div>
         );
