@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { QuotedMicroblogView } from './QuotedMicroblogView';
 import Topics from '../Topics'
-import MicroblogBox from '../MicroblogBox/index.js';
+import MicroblogBox from '../MicroblogBox';
 import helperfunctions from "../helperfunctions";
 import firebase from "firebase";
 
