@@ -44,7 +44,7 @@ const Topics = (props) => {
 
 
 
-const MicroblogView = (props) => {
+const QuotedMicroblogView = (props) => {
   return(
     <MicroblogBox>
       <div className="inner-body">
@@ -56,14 +56,14 @@ const MicroblogView = (props) => {
           </div>
           <Tweet tweet={props.tweet}/>
 
-          <div class="likes">
-            <button class="like-button" onClick={props.likeButtonClicked}>{props.likeButtonText}</button>
-            <label class="num-likes">{props.numLikes}</label>
-          </div>
 
-          <div class="quote">
-            <button class="quote-button" onClick={props.quoteButtonClicked}>{props.quoteButtonText}</button>
-          </div>
+          {/* <div class="send-quote">
+            <button class="send-quote-button" onClick={props.sendQuoteButtonClicked}>{props.sendQuoteButtonText}</button>
+            <button class="cancel-quote-button" onClick={props.cancelQuoteButtonClicked}>{props.cancelQuoteButtonText}</button>
+
+            <input type="quote" id="sendquote" name="sendquote"></input>
+          </div> */}
+
 
 
           <Topics topics={props.topics}/>
@@ -74,4 +74,4 @@ const MicroblogView = (props) => {
 }
 
 
-export {MicroblogView};
+export {QuotedMicroblogView};
