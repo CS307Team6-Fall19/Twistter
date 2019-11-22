@@ -5,7 +5,7 @@ import './Landing.css'
 
 const Image = (image) => {
   return(
-    <img src={image} alt="Logo" className="picture">
+    <img id = "img2" alt="Logo" className="picture">
     </img>
   )
 }
