@@ -4,13 +4,23 @@ import Topics from '../Topics'
 import MicroblogBox from '../MicroblogBox/index.js';
 import helperfunctions from "../helperfunctions";
 import firebase from "firebase";
+import { nullLiteral } from '@babel/types';
 
 class Microblog extends React.Component{
 
+   // static counter;
+    
+    
     constructor(props) {
       super(props);
 
       this.microblogData = new Object();
+      if (Microblog.counter == undefined) {
+          Microblog.counter = 0;
+      }
+      this.counter = Microblog.counter;
+      this.blogid = "blogid" + this.counter;
+      Microblog.counter++;
 
 
       this.microblogData.name = props.username;
@@ -69,14 +79,19 @@ class Microblog extends React.Component{
 
         console.log(picname);
         console.log(picname2);
+        //console.log(this.blogid);
+        var toMatch = this.blogid;
 
         if (true) {
  
 
             await firebase.storage().ref().child(picname).getDownloadURL().then(function(url) {
                 var toReturn = url;
+                console.log(toMatch);
+
                 document.querySelectorAll('img').forEach(function(item){
-                    if (item.id == "img2") {
+                   // console.log(this.blogid);
+                    if (item.id == toMatch) {
                         item.src = toReturn;
                     }
 
@@ -137,6 +152,9 @@ class Microblog extends React.Component{
 
     }
 
+    componentDidMount() {
+        this.fetchImage();
+    }
 
 
     render(){
@@ -165,7 +183,8 @@ class Microblog extends React.Component{
                         key={this.microblogData.key}
                         name={name}
                         handle={handle}
-                        image={this.fetchImage()}
+                        image={nullLiteral}
+                        unitid = {this.blogid}
                         tweet={tweet}
                         likeButtonClicked={likeButtonClicked}
                         likeButtonText={likeButtonText}
