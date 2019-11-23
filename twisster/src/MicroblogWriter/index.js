@@ -12,6 +12,11 @@ class MicroblogWriter extends React.Component{
         //TODO: THIS
       super(props);
 
+      this.isQuoted = props.isQuoted;
+      if(this.isQuoted){
+        this.quotedMicroblog = props.quotedMicroblog;
+      }
+
       this.microblogData = new Object();
 
       this.microblogPosted = props.microblogPosted;
@@ -51,7 +56,12 @@ class MicroblogWriter extends React.Component{
         }
         else
         {
-          await helperfunctions.addMicroBlogToCurrentUser(content, this.topics);
+          if(this.isQuoted){
+            await helperfunctions.addQuotedMicroblogToCurrentUser(this.quotedMicroblog, content, this.topics)
+          }
+          else {
+            await helperfunctions.addMicroBlogToCurrentUser(content, this.topics);
+          }
           //await helperfunctions.addMicroBlogToCurrentUser(content, this.topics);
           this.microblogPosted();
           this.topics = [];

@@ -281,7 +281,7 @@ const helperfunctions =
 
       console.log("Exited addQuotedMicroblogToCurrentUser");
     },
-
+    
     likeMicroblog: async function(microblog, username)
     {
       console.log("Entered likeMicroblog");

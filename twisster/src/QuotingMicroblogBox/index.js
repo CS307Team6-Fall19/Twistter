@@ -1,17 +1,19 @@
 import React, { Component } from 'react';
-import '../css/Landing.css'
-class TopicsBox extends React.Component{
+import '../MicroblogBox/MicroblogBox.css'
+class QuotingMicroblogBox extends React.Component{
 
     constructor(props) {
       super(props);
+
+      
     }
 
     render(){        
         return(
-            <div className="topics">
+            <div className="quoting-tweet-body">
                 {this.props.children}
             </div>
         );
     }
 }
-export default TopicsBox;
+export default QuotingMicroblogBox;
