@@ -57,7 +57,7 @@ class MicroblogWriter extends React.Component{
         else
         {
           if(this.isQuoted){
-            await helperfunctions.addQuotedMicroblogToCurrentUser(this.quotedMicroblog, content, this.topics)
+            await helperfunctions.addQuotedMicroblogToCurrentUser(this.quotedMicroblog, content, this.topics);
           }
           else {
             await helperfunctions.addMicroBlogToCurrentUser(content, this.topics);
