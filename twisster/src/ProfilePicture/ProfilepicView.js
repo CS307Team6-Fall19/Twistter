@@ -4,7 +4,7 @@ const ProfilepicView = ({image, changeProfPic, deletePic}) =>   {
 
     return (
         <div>
-        <img height="125" width="125"/>
+        <img id = "img1" height="125" width="125"/>
             <div>
             <button onClick={changeProfPic}>Change profile picture </button>
             </div>

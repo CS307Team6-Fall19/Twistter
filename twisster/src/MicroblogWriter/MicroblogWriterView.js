@@ -40,7 +40,7 @@ const MicroblogWriterView = (props) => {
 
   const Image = (image) => {
     return(
-      <img src={image} alt="Logo" className="picture">
+      <img id = "img3" alt="Logo" height="50" width="100">
       </img>
     )
   }

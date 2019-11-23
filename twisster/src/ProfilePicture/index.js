@@ -81,7 +81,11 @@ class ProfilePicture extends Component {
 
             await firebase.storage().ref().child(picname).getDownloadURL().then(function(url) {
                 var toReturn = url;
-                document.querySelector('img').src = toReturn;
+                document.querySelectorAll('img').forEach(function(item){
+                    if (item.id == "img1") {
+                        item.src = toReturn;
+                    }
+                })
                 //return toReturn;
 
             }).catch(function(error) {
