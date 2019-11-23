@@ -18,16 +18,7 @@ toast.configure();
 const App = () => {
   const notify = () => toast("Wow so easy !");
   return (
-    <Router>
-      <div>
-        <Route exact path="/" component={Home} />
-        <Route exact path="/login" component={Login} />
-        <Route exact path="/signup" component={SignUp} />
-        <Route exact path="/landing" component={LandingPage} />
-        <Route path="/profile" component={ProfilePage} />
-        <Route path="/DeleteAccount" component={DeleteAccountAuthentication} />
-        <Route path="/chat" component={Chat} />
-      </div>
+    
       <Switch>
        
           <Route exact path="/" component={Home} />
@@ -45,7 +36,7 @@ const App = () => {
 
        
       </Switch>
-    </Router>
+   
   );
 };
 
