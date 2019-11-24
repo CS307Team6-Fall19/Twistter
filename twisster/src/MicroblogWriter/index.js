@@ -61,9 +61,9 @@ class MicroblogWriter extends React.Component{
           }
           else {
             await helperfunctions.addMicroBlogToCurrentUser(content, this.topics);
+            this.microblogPosted();
           }
           //await helperfunctions.addMicroBlogToCurrentUser(content, this.topics);
-          this.microblogPosted();
           this.topics = [];
         }
     
