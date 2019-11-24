@@ -46,13 +46,16 @@ class Chat extends Component {
           loggedIn
         );
         this.state.member.username = this.userData.username;
+        this.state.member.id = this.userData.username;
+        this.fillWithPreviousMessages();
       }
     });
   }
 
   constructor(props) {
     super(props);
-    this.updateUserName();
+    //this.updateUserName();
+    /*
     this.drone = new window.Scaledrone("QeA5YRICL8SUcMYT", {
       data: this.state.member
     });
@@ -69,7 +72,7 @@ class Chat extends Component {
       const messages = this.state.messages;
       messages.push({ member, text: data });
       this.setState({ messages });
-    });
+    });*/
   }
 
   render() {
@@ -87,14 +90,35 @@ class Chat extends Component {
     );
   }
 
+  fillWithPreviousMessages() {
+    this.appendMessageFromMe("test text from me previous");
+    this.appendMessageFromOtherUser("test text from other user previous");
+  }
+
+  appendMessageFromMe(inputText) {
+    const messages = this.state.messages;
+    messages.push({ member: this.state.member, text: inputText });
+    this.setState({ messages });
+  }
+
+  appendMessageFromOtherUser(inputText) {
+    let member2 = {
+      username: "otheruser",
+      color: randomColor(),
+      id: "otheruser"
+    };
+    const messages = this.state.messages;
+    messages.push({ member: member2, text: inputText });
+    this.setState({ messages });
+  }
+
   onSendMessage = message => {
 
-    document.getElementById("messageslist").innerHTML = "";
+    console.log("onSendMessage(message: " + message + ")");
 
-    this.drone.publish({
-      room: "observable-room",
-      message
-    });
+    //document.getElementById("messageslist").innerHTML = "";
+
+    this.appendMessageFromMe(message);
 
     setTimeout(function() {
       if (document.getElementById("messageslist").innerHTML != "") {
