@@ -6,6 +6,7 @@ import { resolve } from "path";
 import firebase from "firebase";
 import { withRouter } from "react-router";
 import helperfunctions from "../helperfunctions";
+import { timeout } from "q";
 
 // Current Issues ----
 // Refresh does not work well
@@ -87,10 +88,20 @@ class Chat extends Component {
   }
 
   onSendMessage = message => {
+
+    document.getElementById("messageslist").innerHTML = "";
+
     this.drone.publish({
       room: "observable-room",
       message
     });
+
+    setTimeout(function() {
+      if (document.getElementById("messageslist").innerHTML != "") {
+        var element = document.getElementById("messageslist");
+        element.scrollTop = element.clientHeight;
+      }
+    }, 200);
   };
 }
 
