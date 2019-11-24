@@ -14,7 +14,9 @@ class QuotedMicroblog extends Microblog{
     constructor(props){
         super(props)
 
-        this.userWhoQuoted = "user"
+        this.content = props.content;
+
+        this.userWhoQuoted = props.user;
     }
 
     render(){

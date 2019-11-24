@@ -25,6 +25,7 @@ class TestComponent extends React.Component{
                 id={"ID"} 
                 liked={false} 
                 numLikes={0}
+                user={"user"}
                 />
             </div>
         )
