@@ -28,12 +28,11 @@ class Microblog extends React.Component{
       this.quoteButtonClicked = this.quoteButtonClicked.bind(this);
       
       this.state = {
-        like: props.liked
-      }
-
-      this.state = {
+        like: props.liked,
         quote: false
       }
+
+      this.numOfMicroblog = props.numOfMicroblog;
     }
 
     async likeButtonClicked()
@@ -56,6 +55,8 @@ class Microblog extends React.Component{
 
     async quoteButtonClicked(){
         toast("Quote!");
+
+        this.loggedInUser = await helperfunctions.retrieveUsername(firebase.auth().currentUser.uid);
 
         if(this.state.quote){
             this.setState({quote : false});
@@ -137,10 +138,11 @@ class Microblog extends React.Component{
                         <Topics topics={topics} />
 
                         <MicroblogWriter 
-                            username={name} 
+                            username={this.loggedInUser} 
                             microblogPosted={this.microblogPosted}
                             isQuoted={true}
                             quotedMicroblog={this.microblogData}
+                            numOfMicroblog={this.numOfMicroblog}
                         />
                         
                     </QuotingMicroblogBox>
