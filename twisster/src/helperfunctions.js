@@ -204,7 +204,6 @@ const helperfunctions =
     addQuotedMicroblogToCurrentUser: async function(microblog, content, topics)
     {
       console.log("Entered addQuotedMicroblogToCurrentUser");
-      alert(microblog.id);
       var username = "";
       var uid_current = firebase.auth().currentUser.uid;
       await firebase.database().ref().once('value', (snapshot) => {
