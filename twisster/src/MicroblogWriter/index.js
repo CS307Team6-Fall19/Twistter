@@ -15,6 +15,7 @@ class MicroblogWriter extends React.Component{
       this.isQuoted = props.isQuoted;
       if(this.isQuoted){
         this.quotedMicroblog = props.quotedMicroblog;
+        this.numOfMicroblog = props.numOfMicroblog;
       }
 
       this.microblogData = new Object();
@@ -30,24 +31,39 @@ class MicroblogWriter extends React.Component{
 
       this.topics = [];
       this.numTopics = 0;
+
+
+
+      if(this.isQuoted){
+        this.addTopicsId = "addTopicsQuoted" + this.numOfMicroblog
+        this.showTopicsId = "showTopicsQuoted" + this.numOfMicroblog
+        this.contentId = "contentQuoted" + this.numOfMicroblog
+      }
+      else{
+        this.addTopicsId = "addTopics"
+        this.showTopicsId = "showTopics"
+        this.contentId = "content"
+      }
     }
 
     addTopic(event) {
-        if (document.getElementById("addTopics").value != "" && document.getElementById("addTopics").value != ",") {
-          this.topics.push(document.getElementById("addTopics").value);
-          if (document.getElementById("showTopics").value == "") {
+      
+      console.log("topic: " + document.getElementById(this.addTopicsId).value);
+        if (document.getElementById(this.addTopicsId).value != "" && document.getElementById(this.addTopicsId).value != ",") {
+          this.topics.push(document.getElementById(this.addTopicsId).value);
+          if (document.getElementById(this.showTopicsId).value == "") {
 
-            document.getElementById("showTopics").value = document.getElementById("addTopics").value;
+            document.getElementById(this.showTopicsId).value = document.getElementById(this.addTopicsId).value;
           } else {
             
-            document.getElementById("showTopics").value = document.getElementById("showTopics").value + ", " + document.getElementById("addTopics").value;
+            document.getElementById(this.showTopicsId).value = document.getElementById(this.showTopicsId).value + ", " + document.getElementById(this.addTopicsId).value;
           }
-          document.getElementById("addTopics").value = "";
+          document.getElementById(this.addTopicsId).value = "";
         }
     }
 
     async submitMicroblog(event) {
-        var content = document.getElementById("content").value;
+        var content = document.getElementById(this.contentId).value;
         console.log(content);
         if(content.length > 250 || content.length <= 0)
         {
@@ -64,12 +80,13 @@ class MicroblogWriter extends React.Component{
             this.microblogPosted();
           }
           //await helperfunctions.addMicroBlogToCurrentUser(content, this.topics);
+          
           this.topics = [];
         }
     
-        document.getElementById("content").value = "";
-        document.getElementById("showTopics").value = "";
-        document.getElementById("addTopics").value = "";
+        document.getElementById(this.contentId).value = "";
+        document.getElementById(this.showTopicsId).value = "";
+        document.getElementById(this.addTopicsId).value = "";
     }
 
     render(){
@@ -85,6 +102,10 @@ class MicroblogWriter extends React.Component{
                 image={image}
                 submitMicroblog={this.submitMicroblog}
                 addTopic={this.addTopic}
+
+                addTopicsId={this.addTopicsId}
+                showTopicsId={this.showTopicsId}
+                contentId={this.contentId}
             /> 
         );
     }

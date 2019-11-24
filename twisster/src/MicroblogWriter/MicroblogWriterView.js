@@ -16,9 +16,9 @@ const MicroblogWriterView = (props) => {
               <Handle handle={props.handle}/>
             </div>
             <div >
-              <textarea id='content' className='new-tweet' placeholder="Hello"/>
-              <textarea disabled id='showTopics' className='new-topic' placeholder="Topics Listed Here"/>
-              <textarea id='addTopics' className='new-topic' placeholder="Add Topics Here"/>
+            <textarea id={props.contentId} className='new-tweet' placeholder="Hello"/>
+              <textarea disabled id={props.showTopicsId} className='new-topic' placeholder="Topics Listed Here"/>
+              <textarea id={props.addTopicsId} className='new-topic' placeholder="Add Topics Here"/>
               <button type="submit" onClick={props.submitMicroblog}>Post</button>
               <button type="submit" onClick={props.addTopic}>Add New Topics</button>
             </div> 

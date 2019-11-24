@@ -23,6 +23,7 @@ class Microblogs extends React.Component{
             microblogs.push(
               <Microblog 
                 key={i} 
+                numOfMicroblog={i}
                 data={microblogsArray[i]} 
                 username={microblogsArray[i].user} 
                 id={microblogsArray[i].id} 
