@@ -19,6 +19,7 @@ function randomColor() {
 
 class Chat extends Component {
   state = {
+    otherUser: "otheruser",
     messages: [],
     member: {
       username: "ABCD",
@@ -48,31 +49,14 @@ class Chat extends Component {
         this.state.member.username = this.userData.username;
         this.state.member.id = this.userData.username;
         this.fillWithPreviousMessages();
+        this.listenToPersistantMessages();
       }
     });
   }
 
   constructor(props) {
     super(props);
-    //this.updateUserName();
-    /*
-    this.drone = new window.Scaledrone("QeA5YRICL8SUcMYT", {
-      data: this.state.member
-    });
-    this.drone.on("open", error => {
-      if (error) {
-        return console.error(error);
-      }
-      const member = { ...this.state.member };
-      member.id = this.drone.clientId;
-      this.setState({ member });
-    });
-    const room = this.drone.subscribe("observable-room");
-    room.on("data", (data, member) => {
-      const messages = this.state.messages;
-      messages.push({ member, text: data });
-      this.setState({ messages });
-    });*/
+
   }
 
   render() {
@@ -103,13 +87,22 @@ class Chat extends Component {
 
   appendMessageFromOtherUser(inputText) {
     let member2 = {
-      username: "otheruser",
+      username: this.state.otherUser,
       color: randomColor(),
-      id: "otheruser"
+      id: this.state.otherUser
     };
     const messages = this.state.messages;
     messages.push({ member: member2, text: inputText });
     this.setState({ messages });
+  }
+
+  listenToPersistantMessages() {
+    firebase.database().ref().child("users").child(firebase.auth().currentUser.uid).child("persistantmessages").child("bloisch").on('value', (snapshot) => {
+      firebase.database().ref().once('value', (snapshot) => {
+        var test = snapshot.child("users").child(firebase.auth().currentUser.uid).child("persistantmessages").child("bloisch").val();
+        console.log(test);
+      });
+    });
   }
 
   onSendMessage = message => {
@@ -117,6 +110,8 @@ class Chat extends Component {
     console.log("onSendMessage(message: " + message + ")");
 
     //document.getElementById("messageslist").innerHTML = "";
+
+    firebase.database().ref().child("users").child(firebase.auth().currentUser.uid).child("persistantmessages").child("bloisch").set({"0": "bloisch" + "," + message});
 
     this.appendMessageFromMe(message);
 
