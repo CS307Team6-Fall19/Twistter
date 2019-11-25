@@ -19,7 +19,6 @@ function randomColor() {
 
 class Chat extends Component {
   state = {
-    otherUser: "otheruser",
     messages: [],
     member: {
       username: "ABCD",
@@ -56,11 +55,13 @@ class Chat extends Component {
 
   constructor(props) {
     super(props);
-
   }
 
   render() {
-    return (
+    if (this.props.location.state.dmUsername == undefined || this.props.location.state.dmUsername == null) {
+      return null;
+    } else {
+      return (
       <div className="App">
         <div className="App-header">
           <h1>Twisster Chat</h1>
@@ -72,6 +73,7 @@ class Chat extends Component {
         <Input onSendMessage={this.onSendMessage} />
       </div>
     );
+    }
   }
 
   fillWithPreviousMessages() {
@@ -87,9 +89,9 @@ class Chat extends Component {
 
   appendMessageFromOtherUser(inputText) {
     let member2 = {
-      username: this.state.otherUser,
+      username: this.props.location.state.dmUsername,
       color: randomColor(),
-      id: this.state.otherUser
+      id: this.props.location.state.dmUsername
     };
     const messages = this.state.messages;
     messages.push({ member: member2, text: inputText });
