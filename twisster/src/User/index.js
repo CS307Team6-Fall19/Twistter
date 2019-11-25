@@ -182,7 +182,7 @@ class User extends React.Component{
         else{
             return (
                 <div>
-                    <ProfilePicture visiting={false}/>
+                    <ProfilePicture strangername={this.username} visiting={false}/>
                     <LoggedInUserView userProfile={userProfile} deleteAccount={deleteAccount}/>
                     <Microblogs microblogs={userProfile.microblogs} username={userProfile.username} />
                     
