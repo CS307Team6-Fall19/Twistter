@@ -149,7 +149,7 @@ class Chat extends Component {
     setTimeout(function() {
       if (document.getElementById("messageslist").innerHTML != "") {
         var element = document.getElementById("messageslist");
-        element.scrollTop = element.clientHeight;
+        element.scrollTop = element.scrollHeight;
       }
     }, 200);
   }
@@ -185,7 +185,7 @@ class Chat extends Component {
     setTimeout(function() {
       if (document.getElementById("messageslist").innerHTML != "") {
         var element = document.getElementById("messageslist");
-        element.scrollTop = element.clientHeight;
+        element.scrollTop = element.scrollHeight;
       }
     }, 200);
   };
