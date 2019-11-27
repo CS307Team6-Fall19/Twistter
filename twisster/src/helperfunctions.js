@@ -475,7 +475,7 @@ const helperfunctions =
         var blockedList = [];
         for(var index = 0; index < blockedUsers.length; index++)
         {
-          blockedList.push(blockedUsers[i]);
+          blockedList.push(blockedUsers[index]);
         }
 
         var currBlockedList = firebase.database().ref().child("users").child(firebase.auth().currentUser.uid).child("blockedUsers").val();
