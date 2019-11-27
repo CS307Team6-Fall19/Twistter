@@ -12,6 +12,7 @@ class TopBar extends React.Component {
     this.goLogout = this.goLogout.bind(this);
     this.goToProfile = this.goToProfile.bind(this);
     this.goToChat = this.goToChat.bind(this);
+    this.goToLanding = this.goToLanding.bind(this);
   }
 
   goLogout = async event => {
@@ -44,6 +45,13 @@ class TopBar extends React.Component {
     });
   }
 
+  goToLanding() {
+    this.props.history.push({
+      pathname: "/landing",
+      state: { userData: this.userData}
+    });
+  }
+
   render() {
     return (
       <div className="top-bar">
@@ -51,6 +59,7 @@ class TopBar extends React.Component {
           goLogout={this.goLogout}
           goToProfile={this.goToProfile}
           goToChat={this.goToChat}
+          goToLanding={this.goToLanding}
         />
       </div>
     );

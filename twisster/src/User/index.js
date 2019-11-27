@@ -35,6 +35,7 @@ class User extends React.Component{
         this.deleteAccount = this.deleteAccount.bind(this);
         this.saveChanges = this.saveChanges.bind(this);
         this.followOrUnfollowUser = this.followOrUnfollowUser.bind(this);
+        this.directMessageUser = this.directMessageUser.bind(this);
         
         this.renderLoggedInUser = this.renderLoggedInUser.bind(this);
         this.renderVisitedUser = this.renderVisitedUser.bind(this);
@@ -89,12 +90,20 @@ class User extends React.Component{
         this.setState({ mustUpdate : 1})
     }
 
+    directMessageUser() {
+        this.props.history.push({
+            pathname: "/chat",
+            state: { dmUsername: this.username }
+        });
+    }
+
     async componentDidMount() {
 
         this.userProfile = new Object();
         this.userProfile.saveChanges = this.saveChanges;
         this.userProfile.editProfile = this.editProfile;
         this.userProfile.followUser = this.followOrUnfollowUser;
+        this.userProfile.dmUser = this.directMessageUser;
         await this.downloadUserProfile(this.userProfile);
         this.setState({loaded : true});
 
@@ -182,7 +191,7 @@ class User extends React.Component{
         else{
             return (
                 <div>
-                    <ProfilePicture visiting={false}/>
+                    <ProfilePicture strangername={this.username} visiting={false}/>
                     <LoggedInUserView userProfile={userProfile} deleteAccount={deleteAccount}/>
                     <Microblogs microblogs={userProfile.microblogs} username={userProfile.username} />
                     

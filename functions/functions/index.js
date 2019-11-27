@@ -7,23 +7,57 @@ const auth = admin.auth();
 // // https://firebase.google.com/docs/functions/write-firebase-functions
 
 exports.runeveryminute =
-functions.pubsub.schedule('every 2 minutes').onRun((context) => {
+functions.pubsub.schedule('every 1 minutes').onRun((context) => {
     auth.listUsers().then((userRecords) => {
         userRecords.users.forEach((user) => {
             if (!user.emailVerified) {
 
                 ref = admin.database().ref();
                 ref.once('value').then((snapshot) => {
-                    var mapUIDtoUsername = snapshot.child("mapUIDtoUsername").val();
-                    var username = mapUIDtoUsername[user.uid];
-                    admin.database().ref().child("mapUIDtoUsername").child(user.uid).remove();
-                    admin.database().ref().child("mapUsernameToEmail").child(username).remove();
-                    admin.database().ref().child("mapUsernameToUID").child(username).remove();
-                    admin.database().ref().child("users").child(user.uid).remove();
+                    try {
+                        var mapUIDtoUsername = snapshot.child("mapUIDtoUsername").val();
+                        var username = mapUIDtoUsername[user.uid];
+                    } catch (e) {
+                        console.log("could not fetch username from mapUIDtoUsername");
+                    }
 
-                    admin.auth().deleteUser(user.uid).then(function() {
-                        console.log("deleted user " + user.email + " because unverified");
-                    });
+                    var date = new Date();
+                    var currTimestamp = date.getTime();
+                    var diff = snapshot.child("users").child(user.uid).child("signupTimestamp").val() - currTimestamp;
+                    //delete account if not activated within one minute
+                    if (Math.abs(diff)/1000 > 60) {
+                        try {
+                            admin.database().ref().child("mapUIDtoUsername").child(user.uid).remove();
+                        } catch (e) {
+                            console.log("could not delete " + username + " from mapUIDtoUsername");
+                        }
+
+                        try {
+                            admin.database().ref().child("mapUsernameToEmail").child(username).remove();
+                        } catch (e) {
+                            console.log("could not delete " + username + " from mapUsernameToEmail");
+                        }
+
+                        try {
+                            admin.database().ref().child("mapUsernameToUID").child(username).remove();
+                        } catch (e) {
+                            console.log("could not delete " + username + " from mapUsernameToUID");
+                        }
+
+                        try {
+                            admin.database().ref().child("users").child(user.uid).remove();
+                        } catch (e) {
+                            console.log("could not delete " + username + " from users");
+                        }
+
+                        try {
+                            admin.auth().deleteUser(user.uid).then(function() {
+                                console.log("deleted user " + user.email + " because unverified");
+                            });
+                        } catch (e) {
+                            console.log("could not delete " + username + " from authentication");
+                        }
+                    }
                 });
             }
         });

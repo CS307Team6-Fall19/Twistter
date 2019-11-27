@@ -3,9 +3,12 @@ import MicroblogBox from '../MicroblogBox'
 import './Landing.css'
 
 
-const Image = (image) => {
+const Image = ({image, theid}) => {
+
+  console.log(theid);
+
   return(
-    <img src={image} alt="Logo" className="picture">
+    <img id = {theid} alt="Logo" className="picture">
     </img>
   )
 }
@@ -48,7 +51,7 @@ const MicroblogView = (props) => {
   return(
     <MicroblogBox>
       <div className="inner-body">
-        <Image image={props.image}/>
+        <Image image={props.image} theid={props.unitid}/>
         <div className="body">
           <div className="inner-body">
             <Name name={props.name}/>
