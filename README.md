@@ -7,7 +7,7 @@
 
 For help refer to -> [source](https://material-ui.com/getting-started/installation/)
 
-## Notices Bugs
+## Noticed Bugs
 
 1. The props for topics is not returned correctly. It is used as a string but it does not come properly formatted.
 2. MicroblogWritter Fails to load picture when home button is clicked.
