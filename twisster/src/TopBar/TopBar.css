@@ -27,7 +27,6 @@
   margin-top: 5px;
   width: 48px;
   height: 48px;
-
 }
 
 .top-bar-logout {
@@ -41,37 +40,19 @@
   color: #11171d;
 }
 
-.top-bar-profile {
-  position: absolute;
-  right: 8%;
-  float: right;
-  width: 5%;
-  height: 48px;
-  background-color: #ffffff;
-  top: 0.5%;
-  color: #11171d;
-}
-
 .top-bar-chat {
-  position: absolute;
-  right: 20%;
-  float: right;
-  width: 5%;
-  height: 48px;
-  background-color: #ffffff;
-  top: 0.5%;
-  color: #11171d;
+  margin-top: 0px;
+  margin-left: 83%;
 }
 
 .top_bar_home {
-  position: absolute;
-  right: 14%;
-  float: right;
-  width: 5%;
-  height: 48px;
-  background-color: #ffffff;
-  top: 0.5%;
-  color: #252627;
+  margin-top: 0px;
+  margin-left: 1%;
+}
+
+.top-bar-profile {
+  margin-top: 0px;
+  margin-left: 1%;
 }
 
 .picture {

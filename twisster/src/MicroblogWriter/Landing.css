@@ -15,7 +15,7 @@
 
 .body {
   display: flex;
-  flex-direction: column; 
+  flex-direction: column;
 }
 
 .inner-body {
@@ -47,12 +47,12 @@
   margin-bottom: 0.1rem;
 }
 
-.new-tweet-body:hover { 
+/* .new-tweet-body:hover {
   background-color: #11171d;
   border: #ffffff;
-}
+} */
 
-.tweet-body:hover { 
+.tweet-body:hover {
   background-color: #11171d;
   border: #ffffff;
 }
@@ -127,17 +127,17 @@
   color: #ffffff;
   border: none;
   resize: none;
-  background-color: #213649
+  background-color: #213649;
 }
 
-.new-tweet:hover { 
+.new-tweet:hover {
   background-color: #11171d;
   border: #ffffff;
 }
 
 .post-button {
   margin-top: 1%;
-  margin-left: 65%;
+  margin-left: 15%;
   width: 150px;
   height: 30px;
   border-radius: 25px;

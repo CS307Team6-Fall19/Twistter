@@ -47,10 +47,10 @@
   margin-bottom: 0.1rem;
 }
 
-.new-tweet-body:hover {
+/* .new-tweet-body:hover {
   background-color: #11171d;
   border: #ffffff;
-}
+} */
 
 .tweet-body:hover {
   background-color: #11171d;
