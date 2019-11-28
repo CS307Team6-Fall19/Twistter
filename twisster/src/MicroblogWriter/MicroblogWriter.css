@@ -29,7 +29,7 @@
   display: flex;
   flex-direction: column;
   width: 600px;
-  height: 500px;
+  /* height: 53px; */
   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.5);
   background-color: #213649;
   /*margin-left: 50%;*/
@@ -102,7 +102,7 @@
   color: #ffffff;
 }
 
-.new-tweet {
+.new-tweet-writer {
   margin-left: 15px;
   margin-top: 7px;
   width: 445px;
@@ -166,4 +166,26 @@
   width: 48px;
   height: 48px;
   background-color: #ffffff;
+}
+
+.like-button {
+  margin-top: 1%;
+  margin-left: 65%;
+  width: 150px;
+  height: 30px;
+  border-radius: 25px;
+  border-color: #cc0011;
+  box-shadow: 0 0 10px 0 #00000080;
+  background-color: #cc0011;
+}
+
+.quote-button {
+  margin-top: 1%;
+  margin-left: 65%;
+  width: 150px;
+  height: 30px;
+  border-radius: 25px;
+  border-color: #00cc4e;
+  box-shadow: 0 0 10px 0 #00000080;
+  background-color: #00cc4e;
 }
