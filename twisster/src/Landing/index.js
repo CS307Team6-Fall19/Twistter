@@ -6,7 +6,10 @@ import helperfunctions from "../helperfunctions";
 import firebase from "firebase";
 import TopBar from "../TopBar";
 import Microblogs from "../Microblogs";
+<<<<<<< HEAD
 import AutoCompleteSearchBar from "../AutoCompleteSearchBar/AutoCompleteSearchBar";
+=======
+>>>>>>> master
 
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";

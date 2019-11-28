@@ -478,11 +478,48 @@ const helperfunctions =
           blockedList.push(blockedUsers[index]);
         }
 
-        var currBlockedList = firebase.database().ref().child("users").child(firebase.auth().currentUser.uid).child("blockedUsers").val();
+        var currBlockedList = [];
+        if(snapshot.child("users").child(firebase.auth().currentUser.uid).hasChild("blockedUsers") === true)
+        {
+          currBlockedList = snapshot.child("users").child(firebase.auth().currentUser.uid).child("blockedUsers").val();
+        }
 
         for(var index = 0; index < currBlockedList.length; index++)
         {
-          blockedList.push(currBlockedList[index]);
+          if(!blockedList.includes(currBlockedList[index]))
+          {
+            blockedList.push(currBlockedList[index]);
+          }
+        }
+
+        firebase.database().ref().child("users").child(firebase.auth().currentUser.uid).child("blockedUsers").set(blockedList);
+
+      });
+
+      resolve("done");
+    },
+
+    removeBlockedUser: async function(blockedUsers)
+    {
+      await firebase.database().ref().once('value', (snapshot) => {
+        var currUserUID = firebase.auth().currentUser.uid;
+        var mapUIDToUsername = snapshot.child("mapUIDtoUsername").val();
+        var currUserName = mapUIDToUsername[firebase.auth().currentUser.uid];
+
+        var blockedList = [];
+
+        var currBlockedList = [];
+        if(snapshot.child("users").child(firebase.auth().currentUser.uid).hasChild("blockedUsers") === true)
+        {
+          currBlockedList = snapshot.child("users").child(firebase.auth().currentUser.uid).child("blockedUsers").val();
+        }
+
+        for(var index = 0; index < currBlockedList.length; index++)
+        {
+          if(!blockedUsers.includes(currBlockedList[index]))
+          {
+            blockedList.push(currBlockedList[index]);
+          }
         }
 
         firebase.database().ref().child("users").child(firebase.auth().currentUser.uid).child("blockedUsers").set(blockedList);
@@ -494,10 +531,13 @@ const helperfunctions =
 
     getBlockedUser: async function()
     {
-      var blockedList;
+      var blockedList = [];
       await firebase.database().ref().once('value', (snapshot) => {
         var currUserUID = firebase.auth().currentUser.uid;
-        blockedList = firebase.database().ref().child("users").child(firebase.auth().currentUser.uid).child("blockedUsers").val();
+        if(snapshot.child("users").child(firebase.auth().currentUser.uid).hasChild("blockedUsers") === true)
+        {
+          blockedList = snapshot.child("users").child(firebase.auth().currentUser.uid).child("blockedUsers").val();
+        }
       });
 
       resolve("done");

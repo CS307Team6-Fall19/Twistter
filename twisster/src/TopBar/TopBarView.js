@@ -32,7 +32,14 @@ const theme = createMuiTheme({
   }
 });
 
-const TopBarTwisster = ({ goLogout, goToProfile, goToChat, goToLanding }) => {
+const TopBarTwisster = ({
+  getAllUsernames,
+  getCurrentUsername,
+  goLogout,
+  goToProfile,
+  goToChat,
+  goToLanding
+}) => {
   return (
     <div className="inner-body">
       <label className="top-bar-twisster">Twistter</label>
