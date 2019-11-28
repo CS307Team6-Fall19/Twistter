@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react'
 import Microblog from "../Microblog"
+import QuotedMicroblog from "../QuotedMicroblog"
 
 class Microblogs extends React.Component{
 
@@ -20,17 +21,41 @@ class Microblogs extends React.Component{
             {
               liked = true;
             }
-            microblogs.push(
-              <Microblog 
-                key={i} 
-                numOfMicroblog={i}
-                data={microblogsArray[i]} 
-                username={microblogsArray[i].user} 
-                id={microblogsArray[i].id} 
-                liked={liked} 
-                numLikes={microblogsArray[i].numLikes}
-              />
-            );
+
+            if(microblogsArray[i].quote){
+              microblogs.push(
+                <QuotedMicroblog 
+                  key={i} 
+                  numOfMicroblog={i}
+                  data={microblogsArray[i]} 
+                  username={microblogsArray[i].user} 
+                  id={microblogsArray[i].id} 
+                  liked={liked} 
+                  numLikes={microblogsArray[i].numLikes}
+
+                  quotedContent={microblogsArray[i].quotedContent}
+                  quotedNumLikes={microblogsArray[i].numLikes}
+                  quotedTopics={microblogsArray[i].quotedTopics}
+                  quotedUserLikes={microblogsArray[i].quotedUserLikes}
+                  quotedUser={microblogsArray[i].quotedUser}
+                />
+              );
+            }
+
+            else{
+              microblogs.push(
+                <Microblog 
+                  key={i} 
+                  numOfMicroblog={i}
+                  data={microblogsArray[i]} 
+                  username={microblogsArray[i].user} 
+                  id={microblogsArray[i].id} 
+                  liked={liked} 
+                  numLikes={microblogsArray[i].numLikes}
+                />
+              );
+            }
+            
         }
         return <div>{microblogs}</div>;
     }
