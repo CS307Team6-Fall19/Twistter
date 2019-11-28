@@ -1,6 +1,6 @@
 import React from "react";
 import MicroblogBox from '../MicroblogBox'
-import './Landing.css'
+import './MicroblogWriter.css'
 
 const MicroblogWriterView = (props) => {
     return(
@@ -16,7 +16,7 @@ const MicroblogWriterView = (props) => {
               <Handle handle={props.handle}/>
             </div>
             <div >
-            <textarea id={props.contentId} className='new-tweet' placeholder="Hello"/>
+            <textarea id={props.contentId} className='new-tweet-writer' placeholder="Hello"/>
               <textarea disabled id={props.showTopicsId} className='new-topic' placeholder="Topics Listed Here"/>
               <textarea id={props.addTopicsId} className='new-topic' placeholder="Add Topics Here"/>
               <button type="submit" onClick={props.submitMicroblog}>Post</button>
