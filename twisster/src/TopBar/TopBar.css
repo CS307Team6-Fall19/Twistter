@@ -13,14 +13,6 @@
   color: #ffffff;
 }
 
-.top-bar-search {
-  margin-left: 27%;
-  margin-top: 15px;
-  width: 676px;
-  height: 25px;
-  border-radius: 7px;
-  background-color: #ffffff;
-}
 
 .top-bar-button {
   margin-left: 28%;
@@ -42,7 +34,7 @@
 
 .top-bar-chat {
   margin-top: 0px;
-  margin-left: 83%;
+  margin-left: 56%;
 }
 
 .top_bar_home {

@@ -12,6 +12,7 @@ import {
   makeStyles,
   ThemeProvider
 } from "@material-ui/core/styles";
+import AutoCompleteSearchBar from "../AutoCompleteSearchBar/AutoCompleteSearchBar"
 
 const ColorButton = withStyles(theme => ({
   root: {
@@ -46,7 +47,9 @@ const TopBarTwisster = ({
       {/* <button className="top-bar-logout" id="logout" onClick={goLogout}>
         Logout
       </button> */}
-
+      <div>
+        <AutoCompleteSearchBar items={getAllUsernames} username={getCurrentUsername}/>
+      </div>
       <div className="top-bar-chat">
         <ColorButton
           size="medium"
