@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { QuotedMicroblogView } from './QuotedMicroblogView';
 import Topics from '../Topics'
 import MicroblogBox from '../MicroblogBox';
 import helperfunctions from "../helperfunctions";
@@ -14,18 +13,48 @@ class QuotedMicroblog extends Microblog{
     constructor(props){
         super(props)
 
-        this.content = props.content;
+        this.quotedContent = props.quotedContent;
 
-        this.userWhoQuoted = props.user;
+        this.quotedTopics = props.quotedTopics;
+
+        this.quotedUserLikes = props.quotedUserLikes
+
+        this.quotedNumLikes = props.quotedNumLikes
+
+        this.quotedUser = props.quotedUser
+        
+        this.profilePicture = 'profilePicture'
     }
 
     render(){
         return(
             <div class="quoted-microblog">
-                <label>Quoted by {this.userWhoQuoted}</label>
+    
+                <div className="quoted-body">
+
+                    <div className="inner-body-quoted">
+
+                        <img src={this.profilePicture} alt="Logo" className="picture">
+
+                        </img>
+                        
+
+                        <div className="quoted-name">
+                            {this.quotedUser}
+                        </div>
+                    </div>
+
+                    <div className="quoted-content">
+                        {this.quotedContent}
+                    </div>
+    
+                </div>
                 {super.render()}
+                
+                <Topics topics={this.quotedTopics} />
+                
             </div>
-        )
+        );
     }
 
 }export default QuotedMicroblog;
