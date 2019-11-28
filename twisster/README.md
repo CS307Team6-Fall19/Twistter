@@ -1,12 +1,32 @@
+# Notes
+
+## Installation for erros
+
+`npm install @material-ui/core`
+
+`npm install @material-ui/icons`
+
+For help refer to -> [source](https://material-ui.com/getting-started/installation/)
+
+## Notices Bugs
+
+1. The props for topics is not returned correctly. It is used as a string but it does not come properly formatted.
+2. MicroblogWritter Fails to load picture when home button is clicked.
+
+---
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Working features
+
 On connecting to server, screen shows login and signup buttons.
 
 ### Signup
+
 Can signup with email and password, then redirects to login page.
 
 ### Login
+
 On successful login, page redirects to landing page which shows a welcome message and the user's email.
 
 ## Available Scripts
