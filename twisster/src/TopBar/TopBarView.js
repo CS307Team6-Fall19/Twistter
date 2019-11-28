@@ -1,11 +1,13 @@
 import React from "react";
 import "./TopBar.css";
 import logo from "../logo192.png";
+import AutoCompleteSearchBar from "../AutoCompleteSearchBar/AutoCompleteSearchBar";
 
-const TopBarTwisster = ({ goLogout, goToProfile, goToChat, goToLanding }) => {
+const TopBarTwisster = ({getAllUsernames, getCurrentUsername, goLogout, goToProfile, goToChat, goToLanding }) => {
   return (
     <div className="inner-body">
       <label className="top-bar-twisster">Twistter</label>
+      <AutoCompleteSearchBar items={getAllUsernames} username={getCurrentUsername} />
       <button className="top-bar-logout" id="logout" onClick={goLogout}>
         Logout
       </button>
