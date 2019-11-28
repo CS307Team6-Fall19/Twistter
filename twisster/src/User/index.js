@@ -36,6 +36,7 @@ class User extends React.Component{
         this.saveChanges = this.saveChanges.bind(this);
         this.followOrUnfollowUser = this.followOrUnfollowUser.bind(this);
         this.directMessageUser = this.directMessageUser.bind(this);
+        this.blockUser = this.blockUser.bind(this);
         
         this.renderLoggedInUser = this.renderLoggedInUser.bind(this);
         this.renderVisitedUser = this.renderVisitedUser.bind(this);
@@ -97,6 +98,33 @@ class User extends React.Component{
         });
     }
 
+    async blockUser() {
+        if(document.getElementById('blockbutton').textContent === "Block")
+        {
+            var currBlocked = await helperfunctions.getBlockedUser();
+            if(!currBlocked.includes(this.username))
+            {
+                var blockedUsers = [];
+                blockedUsers.push(this.username);
+                await helperfunctions.addBlockedUser(blockedUsers);
+            }
+            document.getElementById('blockbutton').textContent = "Unblock";
+            document.getElementById('directmessagebutton').disabled = true;
+        }
+        else if(document.getElementById('blockbutton').textContent === "Unblock")
+        {
+            var currBlocked = await helperfunctions.getBlockedUser();
+            if(currBlocked.includes(this.username))
+            {
+                var blockedUsers = [];
+                blockedUsers.push(this.username);
+                await helperfunctions.removeBlockedUser(blockedUsers);
+            }
+            document.getElementById('blockbutton').textContent = "Block";
+            document.getElementById('directmessagebutton').disabled = false;
+        }
+    }
+
     async componentDidMount() {
 
         this.userProfile = new Object();
@@ -104,6 +132,7 @@ class User extends React.Component{
         this.userProfile.editProfile = this.editProfile;
         this.userProfile.followUser = this.followOrUnfollowUser;
         this.userProfile.dmUser = this.directMessageUser;
+        this.userProfile.blockUser = this.blockUser;
         await this.downloadUserProfile(this.userProfile);
         this.setState({loaded : true});
 
@@ -111,6 +140,19 @@ class User extends React.Component{
             document.getElementById('followbutton').disabled = true;
             document.getElementById('logout').disabled = true;
             document.getElementById('profile').disabled = true;
+        }
+
+        var blockedUsers = await helperfunctions.getBlockedUser();
+
+        if(blockedUsers !== undefined && blockedUsers.length !== 0 && blockedUsers.includes(this.username))
+        {
+            document.getElementById("directmessagebutton").disabled = true;
+            document.getElementById("blockbutton").textContent = "Unblock";
+        }
+        else
+        {
+            document.getElementById("directmessagebutton").disabled = false;
+            document.getElementById("blockbutton").textContent = "Block";
         }
 
         //check if I am currently following the user I am viewing and if so, change button text to "unfollow"
