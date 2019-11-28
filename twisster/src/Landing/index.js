@@ -100,10 +100,10 @@ class Landing extends Component {
             username={this.userData.username}
             microblogPosted={this.microblogPosted}
           />
-          {/* <Microblogs
+          <Microblogs
             microblogs={this.microblogs}
             username={this.userData.username}
-          /> */}
+          />
         </div>
       );
     } else {

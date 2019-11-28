@@ -48,37 +48,35 @@ const MicroblogWriterView = props => {
             <Name name={props.name} id="name" />
             <Handle handle={props.handle} />
           </div>
-          <ThemeProvider theme={theme}>
-            <div className="body">
-              {/* <textarea id="content" className="new-tweet" placeholder="Hello" /> */}
+          <div className="body">
+            {/* <textarea id="content" className="new-tweet" placeholder="Hello" /> */}
 
-              <NewTweet
-                id="content"
-                placeholder="How are you feeling today?"
-                rows="5"
-                multiline
-                margin="dense"
-                variant="standard"
-                color="primary"
-              />
-              <ListedTopics
-                disableUnderline
-                disabled
-                id="showTopics"
-                label="Added Topics"
-                placeholder="Added Topics Show Up Here"
-                onSubmit={props.addTopic}
-                variant="standard"
-              />
+            <NewTweet
+              id="content"
+              placeholder="How are you feeling today?"
+              rows="5"
+              multiline
+              margin="dense"
+              variant="standard"
+              color="primary"
+            />
+            <ListedTopics
+              disableUnderline
+              disabled
+              id="showTopics"
+              label="Added Topics"
+              placeholder="Added Topics Show Up Here"
+              onSubmit={props.addTopic}
+              variant="standard"
+            />
 
-              {/* <textarea
+            {/* <textarea
               disabled
               id="showTopics"
               className="added-topic"
               placeholder="Topics Listed Here"
             /> */}
-            </div>
-          </ThemeProvider>
+          </div>
           <div className="body" style={{ minHeight: "48px" }}>
             <div className="inner-body">
               <AddTopics

@@ -52,10 +52,10 @@
   border: #ffffff;
 } */
 
-.tweet-body:hover {
+/*.tweet-body:hover {
   background-color: #11171d;
   border: #ffffff;
-}
+}*/
 
 .picture {
   margin-left: 24px;
@@ -74,7 +74,7 @@
   height: 17px;
   font-family: HelveticaNeue;
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 800;
   font-style: normal;
   font-stretch: normal;
   line-height: normal;
