@@ -15,6 +15,7 @@ class Microblog extends React.Component{
 
       this.microblogData = new Object();
 
+      this.userLikes = props.userLikes;
 
       this.microblogData.name = props.username;
       this.microblogData.handle = props.username;
@@ -64,10 +65,32 @@ class Microblog extends React.Component{
         else{
             this.setState({quote : true});
         }
-        
+    }
+    async componentDidMount(){
+/*         this.loggedInUser = await helperfunctions.getUserdataOfLoggedInUser();
+ */
+        var user = firebase.auth().currentUser;
+        this.loggedInUser = await helperfunctions.getUserdataOfUser(user.uid, true);
+
+        if(this.userLikes.includes(this.loggedInUser.username)){
+            this.liked = true;
+        }
+        else{
+            this.liked = false;
+        }
+
+        this.setState({
+            loaded: true,
+            like: this.liked
+        })
+
     }
 
     render(){
+        if(this.state.loaded == false){
+            return null;
+        }
+
         var likeText = "Placeholder"
 
         if(this.state.like){
