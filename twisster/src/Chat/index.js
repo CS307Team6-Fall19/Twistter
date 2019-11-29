@@ -31,8 +31,21 @@ class Chat extends Component {
     this.updateUserName();
     this.getUsernameOfOtherUser();
 
-    this.addButton("rgupta");
-    this.addButton("gosse");
+    await firebase.database().ref().once('value', (snapshot)  => {
+      var retrievedDMUsers = snapshot.child("users").child(firebase.auth().currentUser.uid).child("persistantmessages").val();     
+      if (retrievedDMUsers != undefined || retrievedDMUsers != null) {
+        for (let i = 0; i < Object.keys(retrievedDMUsers).length; i++) {
+          this.addButton(Object.keys(retrievedDMUsers)[i]);
+        }
+      }
+
+      var retrievedUnseenDMUsers = snapshot.child("users").child(firebase.auth().currentUser.uid).child("unseenUsersDM").val();     
+      if (retrievedUnseenDMUsers != undefined || retrievedUnseenDMUsers != null) {
+        for (let i = 0; i < retrievedUnseenDMUsers.length; i++) {
+          this.changeButtonColor(retrievedUnseenDMUsers[i], "#fff000");
+        }
+      }
+    });
 
     var buttons = document.getElementsByTagName('button');
     for (var i = 0, len = buttons.length; i < len; i++) {
@@ -50,15 +63,56 @@ class Chat extends Component {
     button.id = username;
     button.innerHTML = username;
     button.outerHTML = button.outerHTML + "<br></br>";
+    console.log("testcolor");
+    button.style.background = "#ff0000";
+  }
+
+  changeButtonColor(buttonID, color) {
+    var button = document.getElementById(buttonID);
+    if (button == null) {
+      console.log("add new button");
+      var ul = document.getElementById("userlist");
+      var button = ul.appendChild(document.createElement("button"));
+      button.id = buttonID;
+      button.innerHTML = buttonID;
+      button.outerHTML = button.outerHTML + "<br></br>";
+      console.log(color);
+      var property=document.getElementById(buttonID);
+      property.style.backgroundColor = color;
+      var buttons = document.getElementsByTagName('button');
+      for (var i = 0, len = buttons.length; i < len; i++) {
+        if (buttons[i].innerHTML == buttonID) {
+          buttons[i].addEventListener('click', mouseEvt => {
+            console.log("testclick");
+            this.userButtonClick(mouseEvt.toElement.id);
+          });
+        }
+      }
+    } else {
+      button.style.background = color;
+    }
   }
 
   userButtonClick(username) {
+    console.log("userbuttonclick()");
     this.props.location.state.dmUsername = username;
     this.props.location.state.topBar = false;
     this.currentRetrievedData = null;
+    this.changeButtonColor(username, "orangered");
+    this.removeUserFromUnseenList(username);
     this.getUsernameOfOtherUser();
     this.fillWithPreviousMessages();
     this.listenToPersistantMessages();
+  }
+
+  async removeUserFromUnseenList(username) {
+    firebase.database().ref().once('value', (snapshot)  => {
+      var retrievedUnseenDMUsers = snapshot.child("users").child(firebase.auth().currentUser.uid).child("unseenUsersDM").val();     
+      if (retrievedUnseenDMUsers != undefined || retrievedUnseenDMUsers != null) {
+        retrievedUnseenDMUsers.splice(retrievedUnseenDMUsers.indexOf(username), 1);
+        firebase.database().ref().child("users").child(firebase.auth().currentUser.uid).child("unseenUsersDM").set(retrievedUnseenDMUsers);
+      }
+    });
   }
 
   async getUsernameOfOtherUser() {
@@ -89,6 +143,7 @@ class Chat extends Component {
           this.fillWithPreviousMessages();
           this.listenToPersistantMessages();
         }
+        this.listenToUnseenUsersDM();
       }
     });
   }
@@ -216,7 +271,37 @@ class Chat extends Component {
     });
   }
 
+  listenToUnseenUsersDM() {
+    if (document.getElementById("messageslist") == null) {
+      return;
+    }
+
+    firebase.database().ref().child("users").child(firebase.auth().currentUser.uid).child("unseenUsersDM").on('value', (snapshot) => {
+      firebase.database().ref().once('value', (snapshot) => {
+        var retrievedUnseenDMUsers = snapshot.child("users").child(firebase.auth().currentUser.uid).child("unseenUsersDM").val();     
+        if (retrievedUnseenDMUsers != undefined || retrievedUnseenDMUsers != null) {
+          for (let i = 0; i < retrievedUnseenDMUsers.length; i++) {
+            console.log("listenToUnseenUsersDM changeButtonColor of : " + retrievedUnseenDMUsers[i]);
+            this.changeButtonColor(retrievedUnseenDMUsers[i], "#fff000");
+          }
+        }
+      });
+    });
+  }
+
   onSendMessage = message => {
+
+    firebase.database().ref().once('value', (snapshot)  => {
+      var retrievedUnseenDMUsers = snapshot.child("users").child(this.otherUID).child("unseenUsersDM").val();     
+      if (retrievedUnseenDMUsers != undefined || retrievedUnseenDMUsers != null) {
+        if (!retrievedUnseenDMUsers.includes(this.userData.username)) {
+          retrievedUnseenDMUsers.push(this.userData.username);
+          firebase.database().ref().child("users").child(this.otherUID).child("unseenUsersDM").set(retrievedUnseenDMUsers);
+        }
+      } else {
+        firebase.database().ref().child("users").child(this.otherUID).child("unseenUsersDM").set({"0": this.userData.username });
+      }
+    });
 
     this.appendMessageFromMe(message, true);
 
