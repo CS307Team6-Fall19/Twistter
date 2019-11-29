@@ -94,7 +94,8 @@ class User extends React.Component{
     directMessageUser() {
         this.props.history.push({
             pathname: "/chat",
-            state: { dmUsername: this.username }
+            state: { dmUsername: this.username,
+                    topBar: false }
         });
     }
 
