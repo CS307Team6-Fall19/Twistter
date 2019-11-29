@@ -66,8 +66,8 @@ class AutoCompleteSearchBar extends React.Component {
         }
         if (userexists) {
             this.props.history.push({
-                pathname: "/profile/" + text,
-                state: { userData: this.userData }
+                pathname: "/redirecttoaccount",
+                state: { userData: this.userData, text: text}
             });
         }
         else {

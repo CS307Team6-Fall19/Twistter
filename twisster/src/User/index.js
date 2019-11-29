@@ -169,10 +169,14 @@ class User extends React.Component{
         }
     }
 
-    async componentDidUpdate(){
+    async componentDidUpdate(prevProps){
 
         await this.downloadUserProfile(this.userProfile);
-        
+
+        if (this.props.userID !== prevProps.userID) {
+            this.fetchData(this.props.userID);
+        }
+
         if(this.state.mustUpdate == 1){
             this.setState({
                 mustUpdate : 0
