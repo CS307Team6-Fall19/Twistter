@@ -93,13 +93,38 @@ class Chat extends Component {
     }
   }
 
-  userButtonClick(username) {
-    this.setPlaceholderInputBar("Send message to " + username);
-    
+  async getUsersBlocked(inputUsername) {
+    var blockedFrom = [];
+    await firebase.database().ref().once('value', (snapshot) => {
+      let mapUsernameToUID = snapshot.child("mapUsernameToUID").val();
+      let otherUIDRetrieved = mapUsernameToUID[inputUsername];
+      if(snapshot.child("users").child(otherUIDRetrieved).hasChild("blockedUsers") === true)
+      {
+        blockedFrom = snapshot.child("users").child(otherUIDRetrieved).child("blockedUsers").val();
+      }
+    });
+    return blockedFrom;
+  }
 
-    document.getElementById("placeholder").disabled = false;
-    document.getElementById("placeholder").focus();
-    document.getElementById("send").disabled = false;
+  async userButtonClick(username) {   
+    this.props.location.state.dmUsername = username; 
+    var currBlocked = await helperfunctions.getBlockedUser();
+    var blockedFrom = await this.getUsersBlocked(username);
+    if(currBlocked.includes(username))
+    {
+      this.setPlaceholderInputBar("You are blocking " + username);
+      document.getElementById("placeholder").disabled = true;
+      document.getElementById("send").disabled = true;
+    } else if (blockedFrom.includes(this.userData.username)) {
+      this.setPlaceholderInputBar("You are being blocked by " + username);
+      document.getElementById("placeholder").disabled = true;
+      document.getElementById("send").disabled = true;
+    } else {
+      this.setPlaceholderInputBar("Send message to " + username);
+      document.getElementById("placeholder").disabled = false;
+      document.getElementById("placeholder").focus();
+      document.getElementById("send").disabled = false;
+    }
 
     console.log("userbuttonclick() " + username);
     this.props.location.state.dmUsername = username;
@@ -110,6 +135,7 @@ class Chat extends Component {
     this.getUsernameOfOtherUser();
     this.fillWithPreviousMessages();
     this.listenToPersistantMessages();
+    this.listenToUsersBlockedFrom();
   }
 
   async removeUserFromUnseenList(username) {
@@ -154,6 +180,7 @@ class Chat extends Component {
           this.setPlaceholderInputBar("Send message to " + this.props.location.state.dmUsername);
           document.getElementById("placeholder").disabled = false;
           document.getElementById("send").disabled = false;
+          this.listenToUsersBlockedFrom();
         } else {
           this.setPlaceholderInputBar("To send a message, click on a username");
           document.getElementById("placeholder").disabled = true;
@@ -287,6 +314,42 @@ class Chat extends Component {
             this.appendMessageFromOtherUser(retrievedData[retrievedData.length - 1].substr(retrievedData[retrievedData.length - 1].indexOf(',') + 1, retrievedData[retrievedData.length - 1].length - 1 - retrievedData[retrievedData.length - 1].indexOf(',')));
           }
         }
+      });
+    });
+  }
+
+  listenToUsersBlockedFrom() {
+    if (document.getElementById("messageslist") == null) {
+      return;
+    }
+
+    firebase.database().ref().child("users").child(firebase.auth().currentUser.uid).child("usersBlockedFrom").on('value', (snapshot) => {
+      firebase.database().ref().once('value', async (snapshot) => {
+        var retrievedData = snapshot.child("users").child(firebase.auth().currentUser.uid).child("usersBlockedFrom").val();
+        if (retrievedData == undefined || retrievedData == null) {
+          this.setPlaceholderInputBar("Send message to " + this.props.location.state.dmUsername);
+          document.getElementById("placeholder").disabled = false;
+          document.getElementById("placeholder").focus();
+          document.getElementById("send").disabled = false;
+          return;
+        }
+        
+        for (let i = 0; i < retrievedData.length; i++) {
+          if (this.props.location.state.dmUsername == retrievedData[i]) {
+            var blockedFrom = await this.getUsersBlocked(retrievedData[i]);
+            if (blockedFrom.includes(this.userData.username)) {
+              this.setPlaceholderInputBar("You are being blocked by " + retrievedData[i]);
+              document.getElementById("placeholder").disabled = true;
+              document.getElementById("send").disabled = true;
+            } else {
+              this.setPlaceholderInputBar("Send message to " + retrievedData[i]);
+              document.getElementById("placeholder").disabled = false;
+              document.getElementById("placeholder").focus();
+              document.getElementById("send").disabled = false;
+            }
+          }
+        }
+       
       });
     });
   }
