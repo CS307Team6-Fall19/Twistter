@@ -494,6 +494,24 @@ const helperfunctions =
 
         firebase.database().ref().child("users").child(firebase.auth().currentUser.uid).child("blockedUsers").set(blockedList);
 
+        for(var index = 0; index < blockedUsers.length; index++)
+        {
+          var mapUsernameToUID = snapshot.child("mapUsernameToUID").val();
+          var uid_blocked = mapUsernameToUID[blockedUsers[index]];
+          var blockedFromList = [];
+          if(snapshot.child("users").child(uid_blocked).hasChild("usersBlockedFrom") === true)
+          {
+            blockedFromList = snapshot.child("users").child(uid_blocked).child("usersBlockedFrom").val();
+          }
+          if(!blockedFromList.includes(currUserName))
+          {
+            blockedFromList.push(currUserName);
+          }
+
+          firebase.database().ref().child("users").child(uid_blocked).child("usersBlockedFrom").set(blockedFromList);
+          
+        }
+
       });
 
       resolve("done");
@@ -524,6 +542,28 @@ const helperfunctions =
 
         firebase.database().ref().child("users").child(firebase.auth().currentUser.uid).child("blockedUsers").set(blockedList);
 
+        for(var index = 0; index < blockedUsers.length; index++)
+        {
+          var mapUsernameToUID = snapshot.child("mapUsernameToUID").val();
+          var uid_blocked = mapUsernameToUID[blockedUsers[index]];
+          var blockedFromList = [];
+          var newBlockedFromList = [];
+          if(snapshot.child("users").child(uid_blocked).hasChild("usersBlockedFrom") === true)
+          {
+            blockedFromList = snapshot.child("users").child(uid_blocked).child("usersBlockedFrom").val();
+          }
+          for(var r = 0; r < blockedFromList.length; r++)
+          {
+            if(blockedFromList[r] !== currUserName)
+            {
+              newBlockedFromList.push(blockedFromList[r]);
+            }
+          }
+
+          firebase.database().ref().child("users").child(uid_blocked).child("usersBlockedFrom").set(newBlockedFromList);
+          
+        }
+
       });
 
       resolve("done");
@@ -542,6 +582,21 @@ const helperfunctions =
 
       resolve("done");
       return blockedList;
+    },
+
+    getUsersBlockedFrom: async function()
+    {
+      var blockedFrom = [];
+      await firebase.database().ref().once('value', (snapshot) => {
+        var currUserUID = firebase.auth().currentUser.uid;
+        if(snapshot.child("users").child(firebase.auth().currentUser.uid).hasChild("usersBlockedFrom") === true)
+        {
+          blockedFrom = snapshot.child("users").child(firebase.auth().currentUser.uid).child("usersBlockedFrom").val();
+        }
+      });
+
+      resolve("done");
+      return blockedFrom;
     },
     
     //Description: Method to add and remove topics from a followed user

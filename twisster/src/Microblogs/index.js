@@ -1,5 +1,7 @@
 import React, { PureComponent } from "react";
 import Microblog from "../Microblog";
+import helperfunctions from "../helperfunctions";
+import firebase from "firebase";
 
 class Microblogs extends React.Component {
   constructor(props) {
@@ -34,6 +36,7 @@ class Microblogs extends React.Component {
     }
     return <div className="body">{microblogs}</div>;
   };
+
 
   render() {
     if (this.props.microblogs != null) {

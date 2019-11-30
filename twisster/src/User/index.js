@@ -144,17 +144,35 @@ class User extends React.Component{
 
         var blockedUsers = await helperfunctions.getBlockedUser();
 
+        var usersBlockedFrom = await helperfunctions.getUsersBlockedFrom();
+
         if(this.loggedInViewingOwnProfile === false)
         {
-            if(blockedUsers !== undefined && blockedUsers.length !== 0 && blockedUsers.includes(this.username))
+            if(usersBlockedFrom !== undefined && usersBlockedFrom.length !== 0 && usersBlockedFrom.includes(this.username))
             {
                 document.getElementById("directmessagebutton").disabled = true;
-                document.getElementById("blockbutton").textContent = "Unblock";
+                if(blockedUsers !== undefined && blockedUsers.length !== 0 && blockedUsers.includes(this.username))
+                {
+                    document.getElementById("blockbutton").textContent = "Unblock";
+                }
+                else
+                {
+                    document.getElementById("blockbutton").textContent = "Block";
+                }
             }
             else
             {
-                document.getElementById("directmessagebutton").disabled = false;
-                document.getElementById("blockbutton").textContent = "Block";
+                if(blockedUsers !== undefined && blockedUsers.length !== 0 && blockedUsers.includes(this.username))
+                {
+                    document.getElementById("directmessagebutton").disabled = true;
+                    document.getElementById("blockbutton").textContent = "Unblock";
+                }
+                else
+                {
+                    document.getElementById("directmessagebutton").disabled = false;
+                    document.getElementById("blockbutton").textContent = "Block";
+                }
+
             }
         }
 
