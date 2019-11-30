@@ -142,17 +142,20 @@ class User extends React.Component{
             document.getElementById('profile').disabled = true;
         }
 
-        var blockedUsers = await helperfunctions.getBlockedUser();
+        if(this.viewingOwnProfile === false)
+        {
+            var blockedUsers = await helperfunctions.getBlockedUser();
 
-        if(blockedUsers !== undefined && blockedUsers.length !== 0 && blockedUsers.includes(this.username))
-        {
-            document.getElementById("directmessagebutton").disabled = true;
-            document.getElementById("blockbutton").textContent = "Unblock";
-        }
-        else
-        {
-            document.getElementById("directmessagebutton").disabled = false;
-            document.getElementById("blockbutton").textContent = "Block";
+            if(blockedUsers !== undefined && blockedUsers.length !== 0 && blockedUsers.includes(this.username))
+            {
+                document.getElementById("directmessagebutton").disabled = true;
+                document.getElementById("blockbutton").textContent = "Unblock";
+            }
+            else
+            {
+                document.getElementById("directmessagebutton").disabled = false;
+                document.getElementById("blockbutton").textContent = "Block";
+            }
         }
 
         //check if I am currently following the user I am viewing and if so, change button text to "unfollow"
