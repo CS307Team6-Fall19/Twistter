@@ -94,7 +94,7 @@ class Chat extends Component {
   }
 
   userButtonClick(username) {
-    console.log("userbuttonclick()");
+    console.log("userbuttonclick() " + username);
     this.props.location.state.dmUsername = username;
     this.props.location.state.topBar = false;
     this.currentRetrievedData = null;
@@ -109,8 +109,10 @@ class Chat extends Component {
     firebase.database().ref().once('value', (snapshot)  => {
       var retrievedUnseenDMUsers = snapshot.child("users").child(firebase.auth().currentUser.uid).child("unseenUsersDM").val();     
       if (retrievedUnseenDMUsers != undefined || retrievedUnseenDMUsers != null) {
-        retrievedUnseenDMUsers.splice(retrievedUnseenDMUsers.indexOf(username), 1);
-        firebase.database().ref().child("users").child(firebase.auth().currentUser.uid).child("unseenUsersDM").set(retrievedUnseenDMUsers);
+        if (retrievedUnseenDMUsers.indexOf(username) != -1) {
+          retrievedUnseenDMUsers.splice(retrievedUnseenDMUsers.indexOf(username), 1);
+          firebase.database().ref().child("users").child(firebase.auth().currentUser.uid).child("unseenUsersDM").set(retrievedUnseenDMUsers);
+        }
       }
     });
   }
@@ -281,8 +283,16 @@ class Chat extends Component {
         var retrievedUnseenDMUsers = snapshot.child("users").child(firebase.auth().currentUser.uid).child("unseenUsersDM").val();     
         if (retrievedUnseenDMUsers != undefined || retrievedUnseenDMUsers != null) {
           for (let i = 0; i < retrievedUnseenDMUsers.length; i++) {
-            console.log("listenToUnseenUsersDM changeButtonColor of : " + retrievedUnseenDMUsers[i]);
-            this.changeButtonColor(retrievedUnseenDMUsers[i], "#fff000");
+            console.log(this.props.location.state.dmUsername);
+            if (this.props.location.state.dmUsername != retrievedUnseenDMUsers[i]) {
+              console.log("listenToUnseenUsersDM changeButtonColor of : " + retrievedUnseenDMUsers[i]);
+              this.changeButtonColor(retrievedUnseenDMUsers[i], "#fff000");
+            } else {
+              if (retrievedUnseenDMUsers.indexOf(this.props.location.state.dmUsername) != -1) {
+                retrievedUnseenDMUsers.splice(retrievedUnseenDMUsers.indexOf(this.props.location.state.dmUsername), 1);
+                firebase.database().ref().child("users").child(firebase.auth().currentUser.uid).child("unseenUsersDM").set(retrievedUnseenDMUsers);
+              }
+            }
           }
         }
       });
@@ -302,6 +312,8 @@ class Chat extends Component {
         firebase.database().ref().child("users").child(this.otherUID).child("unseenUsersDM").set({"0": this.userData.username });
       }
     });
+
+    //this.changeButtonColor(this.props.location.state.dmUsername, "#fff000");
 
     this.appendMessageFromMe(message, true);
 
