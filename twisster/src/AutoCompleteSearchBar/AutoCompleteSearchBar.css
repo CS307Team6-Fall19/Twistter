@@ -2,7 +2,7 @@
     width: 300%;
     font-family: Arial, Helvetica, sans-serif;
     font-size: 10px;
-    margin-left: 100px;
+    margin-left: 130px;
     text-align: center;
     color: rgba(0, 0, 0, 0.73);
 }
@@ -13,7 +13,7 @@
     font-family: Arial, Helvetica, sans-serif;
     font-size: 10px;
     color: rgba(0, 0, 0, 0.73);
-    margin-top: 10px;
+    margin-top: 16px;
     padding: 6.5px 5px; 
     box-sizing: border-box;
     outline: none;
@@ -35,7 +35,7 @@
     position: sticky;
     width: 78.8%;
     border-radius: 4px;
-    margin-left: 5.5%;
+    margin-left: 5.85%;
     padding: 10px 5px;
     background-color: whitesmoke;
     cursor: pointer;

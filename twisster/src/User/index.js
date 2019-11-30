@@ -145,19 +145,40 @@ class User extends React.Component{
 
         var blockedUsers = await helperfunctions.getBlockedUser();
 
-        if(blockedUsers !== undefined && blockedUsers.length !== 0 && blockedUsers.includes(this.username))
+        var usersBlockedFrom = await helperfunctions.getUsersBlockedFrom();
+
+        if(this.loggedInViewingOwnProfile === false)
         {
-            document.getElementById("directmessagebutton").disabled = true;
-            document.getElementById("blockbutton").textContent = "Unblock";
-        }
-        else
-        {
-            document.getElementById("directmessagebutton").disabled = false;
-            document.getElementById("blockbutton").textContent = "Block";
+            if(usersBlockedFrom !== undefined && usersBlockedFrom.length !== 0 && usersBlockedFrom.includes(this.username))
+            {
+                document.getElementById("directmessagebutton").disabled = true;
+                if(blockedUsers !== undefined && blockedUsers.length !== 0 && blockedUsers.includes(this.username))
+                {
+                    document.getElementById("blockbutton").textContent = "Unblock";
+                }
+                else
+                {
+                    document.getElementById("blockbutton").textContent = "Block";
+                }
+            }
+            else
+            {
+                if(blockedUsers !== undefined && blockedUsers.length !== 0 && blockedUsers.includes(this.username))
+                {
+                    document.getElementById("directmessagebutton").disabled = true;
+                    document.getElementById("blockbutton").textContent = "Unblock";
+                }
+                else
+                {
+                    document.getElementById("directmessagebutton").disabled = false;
+                    document.getElementById("blockbutton").textContent = "Block";
+                }
+
+            }
         }
 
         //check if I am currently following the user I am viewing and if so, change button text to "unfollow"
-        if(this.viewingOwnProfile === false)
+        if(this.loggedInViewingOwnProfile === false)
         {
             await firebase.database().ref().once('value', (snapshot) => {
                 var mapUIDToUsername = snapshot.child("mapUIDtoUsername").val();
@@ -170,10 +191,14 @@ class User extends React.Component{
         }
     }
 
-    async componentDidUpdate(){
+    async componentDidUpdate(prevProps){
 
         await this.downloadUserProfile(this.userProfile);
-        
+
+        if (this.props.userID !== prevProps.userID) {
+            this.fetchData(this.props.userID);
+        }
+
         if(this.state.mustUpdate == 1){
             this.setState({
                 mustUpdate : 0

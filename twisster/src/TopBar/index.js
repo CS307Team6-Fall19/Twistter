@@ -34,8 +34,8 @@ class TopBar extends React.Component {
 
   goToProfile() {
     this.props.history.push({
-      pathname: "/profile",
-      state: { userData: this.userData }
+      pathname: "/redirecttoaccount",
+      state: { userData: this.userData}
     });
   }
 
