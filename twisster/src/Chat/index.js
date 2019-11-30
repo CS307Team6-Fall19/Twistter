@@ -94,6 +94,13 @@ class Chat extends Component {
   }
 
   userButtonClick(username) {
+    this.setPlaceholderInputBar("Send message to " + username);
+    
+
+    document.getElementById("placeholder").disabled = false;
+    document.getElementById("placeholder").focus();
+    document.getElementById("send").disabled = false;
+
     console.log("userbuttonclick() " + username);
     this.props.location.state.dmUsername = username;
     this.props.location.state.topBar = false;
@@ -144,6 +151,13 @@ class Chat extends Component {
         if (this.props.location.state.topBar == false) {
           this.fillWithPreviousMessages();
           this.listenToPersistantMessages();
+          this.setPlaceholderInputBar("Send message to " + this.props.location.state.dmUsername);
+          document.getElementById("placeholder").disabled = false;
+          document.getElementById("send").disabled = false;
+        } else {
+          this.setPlaceholderInputBar("To send a message, click on a username");
+          document.getElementById("placeholder").disabled = true;
+          document.getElementById("send").disabled = true;
         }
         this.listenToUnseenUsersDM();
       }
@@ -177,6 +191,10 @@ class Chat extends Component {
         <Input onSendMessage={this.onSendMessage} />
       </div>
     );
+  }
+
+  setPlaceholderInputBar(text) {
+    document.getElementById("placeholder").placeholder = text;
   }
 
   fillWithPreviousMessages() {
