@@ -142,10 +142,10 @@ class User extends React.Component{
             document.getElementById('profile').disabled = true;
         }
 
-        if(this.viewingOwnProfile === false)
-        {
-            var blockedUsers = await helperfunctions.getBlockedUser();
+        var blockedUsers = await helperfunctions.getBlockedUser();
 
+        if(this.loggedInViewingOwnProfile === false)
+        {
             if(blockedUsers !== undefined && blockedUsers.length !== 0 && blockedUsers.includes(this.username))
             {
                 document.getElementById("directmessagebutton").disabled = true;
@@ -159,7 +159,7 @@ class User extends React.Component{
         }
 
         //check if I am currently following the user I am viewing and if so, change button text to "unfollow"
-        if(this.viewingOwnProfile === false)
+        if(this.loggedInViewingOwnProfile === false)
         {
             await firebase.database().ref().once('value', (snapshot) => {
                 var mapUIDToUsername = snapshot.child("mapUIDtoUsername").val();
