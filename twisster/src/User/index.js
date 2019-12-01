@@ -142,6 +142,9 @@ class User extends React.Component{
         this.microblogs = await helperfunctions.getMicroblogsForUser(this.username);
         userProfile.microblogs = this.microblogs;
 
+        var loggedInUser = firebase.auth().currentUser;
+        this.userData = await helperfunctions.getUserdataOfUser(loggedInUser.uid, true);
+
         resolve("done");
 
     }
@@ -173,7 +176,11 @@ class User extends React.Component{
             return(
                 <div>
                     <LoggedInUserEditView userProfile={userProfile} deleteAccount={deleteAccount}/>
-                    <Microblogs microblogs={userProfile.microblogs} username={userProfile.username} />
+                    <Microblogs 
+                    microblogs={userProfile.microblogs} 
+                    username={userProfile.username} 
+                    loggedInUser={this.userData.username}
+                    />
                     
                 </div>
             );
@@ -184,7 +191,11 @@ class User extends React.Component{
                 <div>
                     <ProfilePicture visiting={false}/>
                     <LoggedInUserView userProfile={userProfile} deleteAccount={deleteAccount}/>
-                    <Microblogs microblogs={userProfile.microblogs} username={userProfile.username} />
+                    <Microblogs 
+                    microblogs={userProfile.microblogs} 
+                    username={userProfile.username} 
+                    loggedInUser={this.userData.username}
+                    />
                     
                 </div>
             );
@@ -197,7 +208,11 @@ class User extends React.Component{
             <div>
                 <ProfilePicture strangername={this.username} visiting={true}/>
                 <VisitedUserView userProfile={userProfile}/>
-                <Microblogs microblogs={userProfile.microblogs} username={userProfile.username} />
+                <Microblogs 
+                    microblogs={userProfile.microblogs} 
+                    username={userProfile.username} 
+                    loggedInUser={this.userData.username}
+                />
                
             </div>
         );
