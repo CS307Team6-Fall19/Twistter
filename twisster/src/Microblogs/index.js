@@ -9,15 +9,17 @@ class Microblogs extends React.Component{
 
         this.microblogs = props.microblogs;
         this.username = props.username;
+        this.loggedInUser = props.loggedInUser;
     }
 
     createMicroblogs = (microblogsArray, username) =>{
         var microblogs = [];
+        
         for (var i = 0; i < microblogsArray.length; i++) {
             // note: we add a key prop here to allow react to uniquely identify each
             // element in this array. see: https://reactjs.org/docs/lists-and-keys.html
             var liked = false;
-            if(microblogsArray[i].userLikes !== undefined && microblogsArray[i].userLikes.includes(username))
+            if(microblogsArray[i].userLikes !== undefined && microblogsArray[i].userLikes.includes(this.loggedInUser))
             {
               liked = true;
             }
