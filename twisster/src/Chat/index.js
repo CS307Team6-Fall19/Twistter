@@ -333,6 +333,32 @@ class Chat extends Component {
           document.getElementById("send").disabled = false;
           return;
         }
+
+        var currBlocked = await helperfunctions.getBlockedUser();
+        var blockedFrom = await this.getUsersBlocked(this.props.location.state.dmUsername);
+        if(currBlocked.includes(this.props.location.state.dmUsername))
+        {
+          this.setPlaceholderInputBar("You are blocking " + this.props.location.state.dmUsername);
+          document.getElementById("placeholder").disabled = true;
+          document.getElementById("send").disabled = true;
+        } else if (blockedFrom.includes(this.userData.username)) {
+          this.setPlaceholderInputBar("You are being blocked by " + this.props.location.state.dmUsername);
+          document.getElementById("placeholder").disabled = true;
+          document.getElementById("send").disabled = true;
+        } else {
+          this.setPlaceholderInputBar("Send message to " + this.props.location.state.dmUsername);
+          document.getElementById("placeholder").disabled = false;
+          document.getElementById("placeholder").focus();
+          document.getElementById("send").disabled = false;
+        }
+
+        /*
+        if (!retrievedData.includes(this.props.location.state.dmUsername)) {
+          this.setPlaceholderInputBar("Send message to " + this.props.location.state.dmUsername);
+          document.getElementById("placeholder").disabled = false;
+          document.getElementById("placeholder").focus();
+          document.getElementById("send").disabled = false;
+        }
         
         for (let i = 0; i < retrievedData.length; i++) {
           if (this.props.location.state.dmUsername == retrievedData[i]) {
@@ -348,7 +374,7 @@ class Chat extends Component {
               document.getElementById("send").disabled = false;
             }
           }
-        }
+        }*/
        
       });
     });
@@ -394,7 +420,7 @@ class Chat extends Component {
       }
     });
 
-    //this.changeButtonColor(this.props.location.state.dmUsername, "#fff000");
+    this.changeButtonColor(this.props.location.state.dmUsername, "orangered");
 
     this.appendMessageFromMe(message, true);
 
