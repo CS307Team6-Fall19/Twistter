@@ -1,6 +1,6 @@
 import React from "react";
 
-const LoggedInUserView = ({ userProfile, deleteAccount})=> {  
+const LoggedInUserView = ({ userProfile, deleteAccount, submitRestrictDM})=> {  
   
     return(
         <div>
@@ -18,6 +18,10 @@ const LoggedInUserView = ({ userProfile, deleteAccount})=> {
           
           <div>
             <label> Following :  </label><label id='following'>{userProfile.followersAndFollowing.following}</label>
+          </div>
+
+          <div>
+            Restrict direct messages to those you follow: <input type="checkbox" id="checkRestrictDM" onClick={submitRestrictDM}/>
           </div>
 
         </div>
