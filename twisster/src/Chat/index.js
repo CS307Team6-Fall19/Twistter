@@ -336,7 +336,8 @@ class Chat extends Component {
         }
         
         var retrievedData = snapshot.child("users").child(firebase.auth().currentUser.uid).child("usersBlockedFrom").val();
-        if (retrievedData == undefined || retrievedData == null) {
+        var retrievedData2 = snapshot.child("users").child(firebase.auth().currentUser.uid).child("blockedUsers").val();
+        if ((retrievedData == undefined || retrievedData == null) && (retrievedData2 == undefined || retrievedData2 == null)) {
           this.setPlaceholderInputBar("Send message to " + this.props.location.state.dmUsername);
           document.getElementById("placeholder").disabled = false;
           document.getElementById("placeholder").focus();
