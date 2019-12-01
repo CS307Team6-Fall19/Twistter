@@ -303,6 +303,11 @@ class Chat extends Component {
 
     firebase.database().ref().child("users").child(firebase.auth().currentUser.uid).child("persistantmessages").child(this.props.location.state.dmUsername).on('value', (snapshot) => {
       firebase.database().ref().once('value', (snapshot) => {
+        
+        if (document.getElementById("messageslist") == null) {
+          return;
+        }
+
         var retrievedData = snapshot.child("users").child(firebase.auth().currentUser.uid).child("persistantmessages").child(this.props.location.state.dmUsername).val();
         if (this.currentRetrievedData == null || retrievedData == null || this.currentRetrievedData[this.currentRetrievedData.length - 1] == retrievedData[retrievedData.length - 1]) {
           return;
@@ -325,6 +330,11 @@ class Chat extends Component {
 
     firebase.database().ref().child("users").child(firebase.auth().currentUser.uid).child("usersBlockedFrom").on('value', (snapshot) => {
       firebase.database().ref().once('value', async (snapshot) => {
+        
+        if (document.getElementById("messageslist") == null) {
+          return;
+        }
+        
         var retrievedData = snapshot.child("users").child(firebase.auth().currentUser.uid).child("usersBlockedFrom").val();
         if (retrievedData == undefined || retrievedData == null) {
           this.setPlaceholderInputBar("Send message to " + this.props.location.state.dmUsername);
@@ -351,30 +361,6 @@ class Chat extends Component {
           document.getElementById("placeholder").focus();
           document.getElementById("send").disabled = false;
         }
-
-        /*
-        if (!retrievedData.includes(this.props.location.state.dmUsername)) {
-          this.setPlaceholderInputBar("Send message to " + this.props.location.state.dmUsername);
-          document.getElementById("placeholder").disabled = false;
-          document.getElementById("placeholder").focus();
-          document.getElementById("send").disabled = false;
-        }
-        
-        for (let i = 0; i < retrievedData.length; i++) {
-          if (this.props.location.state.dmUsername == retrievedData[i]) {
-            var blockedFrom = await this.getUsersBlocked(retrievedData[i]);
-            if (blockedFrom.includes(this.userData.username)) {
-              this.setPlaceholderInputBar("You are being blocked by " + retrievedData[i]);
-              document.getElementById("placeholder").disabled = true;
-              document.getElementById("send").disabled = true;
-            } else {
-              this.setPlaceholderInputBar("Send message to " + retrievedData[i]);
-              document.getElementById("placeholder").disabled = false;
-              document.getElementById("placeholder").focus();
-              document.getElementById("send").disabled = false;
-            }
-          }
-        }*/
        
       });
     });
@@ -387,6 +373,11 @@ class Chat extends Component {
 
     firebase.database().ref().child("users").child(firebase.auth().currentUser.uid).child("unseenUsersDM").on('value', (snapshot) => {
       firebase.database().ref().once('value', (snapshot) => {
+
+        if (document.getElementById("messageslist") == null) {
+          return;
+        }
+
         var retrievedUnseenDMUsers = snapshot.child("users").child(firebase.auth().currentUser.uid).child("unseenUsersDM").val();     
         if (retrievedUnseenDMUsers != undefined || retrievedUnseenDMUsers != null) {
           for (let i = 0; i < retrievedUnseenDMUsers.length; i++) {
