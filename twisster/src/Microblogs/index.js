@@ -3,12 +3,15 @@ import Microblog from "../Microblog";
 import helperfunctions from "../helperfunctions";
 import firebase from "firebase";
 
+import QuotedMicroblog from "../QuotedMicroblog"
+
 class Microblogs extends React.Component {
   constructor(props) {
     super(props);
 
     this.microblogs = props.microblogs;
     this.username = props.username;
+    this.loggedInUser = props.loggedInUser;
   }
 
   createMicroblogs = (microblogsArray, username) => {
@@ -17,22 +20,45 @@ class Microblogs extends React.Component {
       // note: we add a key prop here to allow react to uniquely identify each
       // element in this array. see: https://reactjs.org/docs/lists-and-keys.html
       var liked = false;
-      if (
-        microblogsArray[i].userLikes !== undefined &&
-        microblogsArray[i].userLikes.includes(username)
-      ) {
+      if(microblogsArray[i].userLikes !== undefined && microblogsArray[i].userLikes.includes(this.loggedInUser))
+      {
         liked = true;
       }
-      microblogs.push(
-        <Microblog
-          key={i}
-          data={microblogsArray[i]}
-          username={microblogsArray[i].user}
-          id={microblogsArray[i].id}
-          liked={liked}
-          numLikes={microblogsArray[i].numLikes}
-        />
-      );
+
+      if(microblogsArray[i].quote){
+        microblogs.push(
+          <QuotedMicroblog 
+            key={i} 
+            numOfMicroblog={i}
+            data={microblogsArray[i]} 
+            username={microblogsArray[i].user} 
+            id={microblogsArray[i].id} 
+            liked={liked} 
+            numLikes={microblogsArray[i].numLikes}
+
+            quotedContent={microblogsArray[i].quotedContent}
+            quotedNumLikes={microblogsArray[i].numLikes}
+            quotedTopics={microblogsArray[i].quotedTopics}
+            quotedUserLikes={microblogsArray[i].quotedUserLikes}
+            quotedUser={microblogsArray[i].quotedUser}
+          />
+        );
+      }
+
+      else{
+        microblogs.push(
+          <Microblog
+            key={i}
+            numOfMicroblog={i}
+            data={microblogsArray[i]}
+            username={microblogsArray[i].user}
+            id={microblogsArray[i].id}
+            liked={liked}
+            numLikes={microblogsArray[i].numLikes}
+          />
+        );
+      }
+      
     }
     return <div className="body">{microblogs}</div>;
   };

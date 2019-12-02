@@ -1,5 +1,6 @@
 import React from "react";
-import { BrowserRouter as Router, Route } from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { Redirect } from "react-router-dom"
 
 import Home from "./Home";
 import Login from "./LogIn";
@@ -11,13 +12,15 @@ import DeleteAccountAuthentication from "./DeleteAccountAuthentication"
 import Chat from "./Chat";
 import { toast } from "react-toastify";
 
+import PageNotFound from "./PageNotFound"
+
 toast.configure();
 
 const App = () => {
   const notify = () => toast("Wow so easy !");
   return (
-    <Router>
-      <div>
+    <Switch>
+    
         <Route exact path="/" component={Home} />
         <Route exact path="/login" component={Login} />
         <Route exact path="/signup" component={SignUp} />
@@ -26,8 +29,13 @@ const App = () => {
         <Route path="/redirecttoaccount" component={ProfilePageRouting} />
         <Route path="/DeleteAccount" component={DeleteAccountAuthentication} />
         <Route path="/chat" component={Chat} />
-      </div>
-    </Router>
+
+     
+
+        <Route component={PageNotFound} />
+
+  
+    </Switch>
   );
 };
 

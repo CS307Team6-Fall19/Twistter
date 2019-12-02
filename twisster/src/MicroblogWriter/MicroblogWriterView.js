@@ -52,7 +52,7 @@ const MicroblogWriterView = props => {
             {/* <textarea id="content" className="new-tweet" placeholder="Hello" /> */}
 
             <NewTweet
-              id="content"
+              id={props.contentId}
               placeholder="How are you feeling today?"
               rows="5"
               multiline
@@ -63,7 +63,7 @@ const MicroblogWriterView = props => {
             <ListedTopics
               disableUnderline
               disabled
-              id="showTopics"
+              id={props.showTopicsId}
               label="Added Topics"
               placeholder="Added Topics Show Up Here"
               onSubmit={props.addTopic}
@@ -80,7 +80,7 @@ const MicroblogWriterView = props => {
           <div className="body" style={{ minHeight: "48px" }}>
             <div className="inner-body">
               <AddTopics
-                id="addTopics"
+                id={props.addTopicsId}
                 style={{ width: "300px" }}
                 placeholder="Add Topics Here"
                 endAdornment={
