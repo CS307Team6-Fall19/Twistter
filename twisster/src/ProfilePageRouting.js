@@ -8,7 +8,6 @@ class ProfilePageRouting extends React.Component {
     constructor(props) {
         super(props);
         this.goToProfile = this.goToProfile.bind(this);
-        this.goBack = this.goBack.bind(this);
     }
 
     goToProfile() {
@@ -26,11 +25,6 @@ class ProfilePageRouting extends React.Component {
                 state: { userData: userData }
             }); 
         }
-    }
-
-    goBack()
-    {
-        console.log("Reached here");
     }
 
     render() {
