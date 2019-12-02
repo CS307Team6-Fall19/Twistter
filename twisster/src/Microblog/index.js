@@ -225,6 +225,7 @@ class Microblog extends React.Component {
           quoteButtonClicked={quoteButtonClicked}
   
           topics={topics}
+          
         />
       );
     }

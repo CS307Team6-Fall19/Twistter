@@ -52,6 +52,7 @@ class QuotedMicroblog extends Microblog{
                 {super.render()}
                 
                 <Topics topics={this.quotedTopics} />
+                <br></br>
                 
             </div>
         );

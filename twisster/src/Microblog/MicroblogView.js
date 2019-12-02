@@ -6,6 +6,8 @@ import IconButton from "@material-ui/core/IconButton";
 import Badge from "@material-ui/core/Badge";
 import FavoriteBorderIcon from "@material-ui/icons/FavoriteBorder";
 import FavoriteIcon from "@material-ui/icons/Favorite";
+
+import Topics from "../Topics"
 import {
   createMuiTheme,
   withStyles,
@@ -40,9 +42,9 @@ const Tweet = props => {
   return <div className="tweet">{props.tweet}</div>;
 };
 
-const Topics = props => {
+/* const Topics = props => {
   return <div className="topics">{props.topics}</div>;
-};
+}; */
 const ListedTopics = withStyles(theme => ({
   root: {
     // color: theme.palette.getContrastText(blue[500]),
@@ -75,6 +77,7 @@ const MicroblogView = props => {
             <Tweet tweet={props.tweet} />
             <div className="inner-body">
               <Topics topics={props.topics} />
+              <br></br>
               <IconButton aria-label="cart" onClick={props.likeButtonClicked}>
                 <StyledBadge1 badgeContent={props.numLikes} color="primary">
                   {GetIcon(props.likeButtonText)}
