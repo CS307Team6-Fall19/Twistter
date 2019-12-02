@@ -328,7 +328,7 @@ class User extends React.Component{
                 }
             }
             else{
-                return null;
+                return this.renderVisitedUser(this.userProfile);
             }
 
         } else{
