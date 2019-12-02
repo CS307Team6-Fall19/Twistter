@@ -28,6 +28,11 @@ class ProfilePageRouting extends React.Component {
         }
     }
 
+    goBack()
+    {
+        console.log("Reached here");
+    }
+
     render() {
             return(
                 <div>

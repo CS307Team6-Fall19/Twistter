@@ -124,19 +124,37 @@ class CheckboxContainer extends React.Component {
   render() {
     if(this.state.loaded)
     {
-      return (
-        <React.Fragment>
-          {
-            checkboxes.map(item => (
-              <label key={item.key}>
-                {item.name}
-                <Checkbox name={item.name} checked={this.state.checkedItems.get(item.name)} onChange={this.handleChange} />
-              </label>
-            ))
-          }
-          <button type="button" onClick={this.save}>Save</button>
-        </React.Fragment>
-      );
+      if(checkboxes.length > 0)
+      {
+        return (
+          <React.Fragment>
+            {
+              checkboxes.map(item => (
+                <label key={item.key}>
+                  {item.name}
+                  <Checkbox name={item.name} checked={this.state.checkedItems.get(item.name)} onChange={this.handleChange} />
+                </label>
+              ))
+            }
+            <button type="button" onClick={this.save}>Save</button>
+          </React.Fragment>
+        );
+      }
+      else
+      {
+        return (
+          <React.Fragment>
+            {
+              checkboxes.map(item => (
+                <label key={item.key}>
+                  {item.name}
+                  <Checkbox name={item.name} checked={this.state.checkedItems.get(item.name)} onChange={this.handleChange} />
+                </label>
+              ))
+            }
+          </React.Fragment>
+        );
+      }
     }
     else
     {
