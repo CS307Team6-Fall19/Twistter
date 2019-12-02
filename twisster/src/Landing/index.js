@@ -99,6 +99,8 @@ class Landing extends Component {
           <MicroblogWriter
             username={this.userData.username}
             microblogPosted={this.microblogPosted}
+            quotedMicroblog={false}
+
           />
           <Microblogs
             microblogs={this.microblogs}

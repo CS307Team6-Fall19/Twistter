@@ -47,6 +47,8 @@ class CheckboxContainer extends React.Component {
   {
     this.topics = await helperfunctions.getFollowedAndUnfollowedTopics(this.username);
     
+    checkboxes.length = 0
+
     for(var index = 0; index < this.topics.followedTopicsList.length; index++)
     {
       const isChecked = true;

@@ -12,6 +12,13 @@ class MicroblogWriter extends React.Component {
 
     this.microblogData = new Object();
 
+    this.isQuoted = props.isQuoted;
+    if(this.isQuoted){
+      this.quotedMicroblog = props.quotedMicroblog;
+      this.numOfMicroblog = props.numOfMicroblog;
+    }
+
+   
     this.microblogPosted = props.microblogPosted;
 
     this.microblogData.name = props.username;
@@ -23,46 +30,67 @@ class MicroblogWriter extends React.Component {
 
     this.topics = [];
     this.numTopics = 0;
+
+    if(this.isQuoted){
+      this.addTopicsId = "addTopicsQuoted" + this.numOfMicroblog
+      this.showTopicsId = "showTopicsQuoted" + this.numOfMicroblog
+      this.contentId = "contentQuoted" + this.numOfMicroblog
+    }
+    else{
+      this.addTopicsId = "addTopics"
+      this.showTopicsId = "showTopics"
+      this.contentId = "content"
+    }
   }
 
   addTopic(event) {
     if (
-      document.getElementById("addTopics").value != "" &&
-      document.getElementById("addTopics").value != ","
+      document.getElementById(this.addTopicsId).value != "" &&
+      document.getElementById(this.addTopicsId).value != ","
     ) {
-      this.topics.push(document.getElementById("addTopics").value);
-      if (document.getElementById("showTopics").value == "") {
-        document.getElementById("showTopics").value = document.getElementById(
-          "addTopics"
+      this.topics.push(document.getElementById(this.addTopicsId).value);
+      if (document.getElementById(this.showTopicsId).value == "") {
+        document.getElementById(this.showTopicsId).value = document.getElementById(
+          this.addTopicsId
         ).value;
       } else {
-        document.getElementById("showTopics").value =
-          document.getElementById("showTopics").value +
+        document.getElementById(this.showTopicsId).value =
+          document.getElementById(this.showTopicsId).value +
           ", " +
-          document.getElementById("addTopics").value;
+          document.getElementById(this.addTopicsId).value;
       }
-      document.getElementById("addTopics").value = "";
+      document.getElementById(this.addTopicsId).value = "";
     }
   }
 
   async submitMicroblog(event) {
-    var content = document.getElementById("content").value;
+    var content = document.getElementById(this.contentId).value;
     console.log(content);
     if (content.length > 250 || content.length <= 0) {
       //toast("Cannot post microblog");
-      toast(
-        "Cannot post microblog. Make sure the content is 250 characters or less"
-      );
-    } else {
-      await helperfunctions.addMicroBlogToCurrentUser(content, this.topics);
-      //await helperfunctions.addMicroBlogToCurrentUser(content, this.topics);
-      this.microblogPosted();
+        toast(
+          "Cannot post microblog. Make sure the content is 250 characters or less"
+        );
+
+    }  
+    else 
+    {
+
+      if(this.isQuoted){
+        await helperfunctions.addQuotedMicroblogToCurrentUser(this.quotedMicroblog, content, this.topics);
+      }
+
+      else {
+        await helperfunctions.addMicroBlogToCurrentUser(content, this.topics);
+        this.microblogPosted();
+      }
+    
       this.topics = [];
     }
 
-    document.getElementById("content").value = "";
-    document.getElementById("showTopics").value = "";
-    document.getElementById("addTopics").value = "";
+    document.getElementById(this.contentId).value = "";
+    document.getElementById(this.showTopicsId).value = "";
+    document.getElementById(this.contentId).value = "";
   }
 
   render() {
@@ -77,6 +105,10 @@ class MicroblogWriter extends React.Component {
         image={image}
         submitMicroblog={this.submitMicroblog}
         addTopic={this.addTopic}
+
+        addTopicsId={this.addTopicsId}
+        showTopicsId={this.showTopicsId}
+        contentId={this.contentId}
       />
     );
   }
