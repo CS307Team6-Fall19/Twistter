@@ -670,9 +670,11 @@ const helperfunctions =
       firebase.database().ref().child("mapUsernameToEmail").child(username).remove();
       firebase.database().ref().child("mapUsernameToUID").child(username).remove();
 
+      var profilePic;
       await firebase.database().ref().once('value', (snapshot) => {
         var followingUsers = snapshot.child("users").child(firebase.auth().currentUser.uid).child('followers').val();
         var followedUsers =  snapshot.child("users").child(firebase.auth().currentUser.uid).child('following').val();
+        profilePic =  snapshot.child("users").child(firebase.auth().currentUser.uid).child('picture').val();
         //remove users name from the following list of the users who follow them
         for (var key in followingUsers) {
           console.log(followingUsers[key])
@@ -697,7 +699,9 @@ const helperfunctions =
         }
       });
 
-      
+      if(profilePic.localeCompare("default.jpg") != 0) {
+        firebase.storage().child(profilePic).remove();
+      }
       firebase.auth().currentUser.delete();
       firebase.database().ref().child("users").child(firebase.auth().currentUser.uid).remove();
     },
