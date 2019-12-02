@@ -198,6 +198,12 @@ class User extends React.Component{
 
     async componentDidMount() {
 
+        if(!this.loggedIn){
+            document.getElementById('followbutton').disabled = true;
+            document.getElementById('logout').disabled = true;
+            document.getElementById('profile').disabled = true;
+        }
+
         this.userProfile = new Object();
         this.userProfile.saveChanges = this.saveChanges;
         this.userProfile.editProfile = this.editProfile;
@@ -206,12 +212,6 @@ class User extends React.Component{
         this.userProfile.blockUser = this.blockUser;
         await this.downloadUserProfile(this.userProfile);
         this.setState({loaded : true});
-
-        if(!this.loggedIn){
-            document.getElementById('followbutton').disabled = true;
-            document.getElementById('logout').disabled = true;
-            document.getElementById('profile').disabled = true;
-        }
 
         if(this.loggedInViewingOwnProfile === true)
         {
@@ -328,7 +328,7 @@ class User extends React.Component{
                 }
             }
             else{
-                return this.renderVisitedUser(this.userProfile);
+                return null;
             }
 
         } else{
