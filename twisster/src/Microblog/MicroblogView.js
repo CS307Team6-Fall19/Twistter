@@ -84,9 +84,7 @@ const MicroblogView = props => {
                 </StyledBadge1>
               </IconButton>
 
-              <div className="quote">
-                <button class="quote-button" onClick={props.quoteButtonClicked}>{props.quoteButtonText}</button>
-              </div>
+              
               {/* <div class="likes">
                 <button class="like-button" onClick={props.likeButtonClicked}>
                   {props.likeButtonText}
@@ -94,6 +92,9 @@ const MicroblogView = props => {
                 <label class="num-likes">{}</label>
               </div> */}
             </div>
+              <div className="quote">
+                <button class="quote-button" onClick={props.quoteButtonClicked}>{props.quoteButtonText}</button>
+              </div>
           </div>
         </div>
       </div>
