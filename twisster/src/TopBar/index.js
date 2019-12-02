@@ -42,7 +42,7 @@ class TopBar extends React.Component {
   goToChat() {
     this.props.history.push({
       pathname: "/chat",
-      state: { userData: this.userData }
+      state: { topBar: true }
     });
   }
 

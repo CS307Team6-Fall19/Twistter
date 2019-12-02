@@ -37,6 +37,7 @@ class User extends React.Component{
         this.followOrUnfollowUser = this.followOrUnfollowUser.bind(this);
         this.directMessageUser = this.directMessageUser.bind(this);
         this.blockUser = this.blockUser.bind(this);
+        this.submitRestrictDM = this.submitRestrictDM.bind(this);
         
         this.renderLoggedInUser = this.renderLoggedInUser.bind(this);
         this.renderVisitedUser = this.renderVisitedUser.bind(this);
@@ -46,6 +47,41 @@ class User extends React.Component{
         }
         
         this.editMode = false;
+    }
+
+    async submitRestrictDM()
+    {
+        if(document.getElementById("checkRestrictDM").checked === true)
+        {
+            var usernames = await helperfunctions.getAllUsers(this.username);
+            var objList = await helperfunctions.getFollowersAndFollowing(this.username);
+            var following = objList.following;
+            var blockUsers = [];
+            for(var index = 0; index < usernames.length; index++)
+            {
+                if(!following.includes(usernames[index]))
+                {
+                    blockUsers.push(usernames[index]);
+                }
+            }
+            await helperfunctions.removeBlockedUser(usernames);
+            await helperfunctions.addBlockedUser(blockUsers);
+        }
+        else if(document.getElementById("checkRestrictDM").checked === false)
+        {
+            var usernames = await helperfunctions.getAllUsers(this.username);
+            var objList = await helperfunctions.getFollowersAndFollowing(this.username);
+            var following = objList.following;
+            var blockUsers = [];
+            for(var index = 0; index < usernames.length; index++)
+            {
+                if(!following.includes(usernames[index]))
+                {
+                    blockUsers.push(usernames[index]);
+                }
+            }
+            await helperfunctions.removeBlockedUser(blockUsers);
+        }
     }
 
     editProfile(){
@@ -77,10 +113,44 @@ class User extends React.Component{
     
         if (document.getElementById('followbutton').textContent ==  "Follow") {
             await helperfunctions.followUserIAmViewing(this.username);
+            var objList = await helperfunctions.getFollowersAndFollowingForCurrentUser();
+            var following = objList.following;
+            var blockedUsers = await helperfunctions.getBlockedUser();
+            var check = true;
+            for(var index = 0; index < blockedUsers.length; index++)
+            {
+                if(following.includes(blockedUsers[index]))
+                {
+                    check = false;
+                }
+            }
+            if(blockedUsers.length !== 0 && check === true)
+            {
+                var unblockedUsers = [];
+                unblockedUsers.push(this.username);
+                await helperfunctions.removeBlockedUser(unblockedUsers);
+            }
             document.getElementById('followbutton').textContent = "Unfollow";
             this.setState({ follow : 0});
         } else {
             await helperfunctions.unfollowUserIAmViewing(this.username);
+            var objList = await helperfunctions.getFollowersAndFollowingForCurrentUser();
+            var following = objList.following;
+            var blockedUsers = await helperfunctions.getBlockedUser();
+            var check = true;
+            for(var index = 0; index < blockedUsers.length; index++)
+            {
+                if(following.includes(blockedUsers[index]))
+                {
+                    check = false;
+                }
+            }
+            if(blockedUsers.length !== 0 && check === true)
+            {
+                var blockedUsers = [];
+                blockedUsers.push(this.username);
+                await helperfunctions.addBlockedUser(blockedUsers);
+            }
             document.getElementById('followbutton').textContent = "Unfollow";
             this.setState({ follow : 1});
             document.getElementById('followbutton').textContent = "Follow";
@@ -94,7 +164,8 @@ class User extends React.Component{
     directMessageUser() {
         this.props.history.push({
             pathname: "/chat",
-            state: { dmUsername: this.username }
+            state: { dmUsername: this.username,
+                    topBar: false }
         });
     }
 
@@ -142,21 +213,65 @@ class User extends React.Component{
             document.getElementById('profile').disabled = true;
         }
 
+        if(this.loggedInViewingOwnProfile === true)
+        {
+            var objList = await helperfunctions.getFollowersAndFollowing(this.username);
+            var following = objList.following;
+            var blockedUsers = await helperfunctions.getBlockedUser();
+            var check = true;
+            for(var index = 0; index < blockedUsers.length; index++)
+            {
+                if(following.includes(blockedUsers[index]))
+                {
+                    check = false;
+                }
+            }
+            if(check === false || blockedUsers.length === 0)
+            {
+                document.getElementById("checkRestrictDM").checked = false;
+            }
+            else if(check === true)
+            {
+                document.getElementById("checkRestrictDM").checked = true;
+            }
+
+        }
         var blockedUsers = await helperfunctions.getBlockedUser();
 
-        if(blockedUsers !== undefined && blockedUsers.length !== 0 && blockedUsers.includes(this.username))
+        var usersBlockedFrom = await helperfunctions.getUsersBlockedFrom();
+
+        if(this.loggedInViewingOwnProfile === false)
         {
-            document.getElementById("directmessagebutton").disabled = true;
-            document.getElementById("blockbutton").textContent = "Unblock";
-        }
-        else
-        {
-            document.getElementById("directmessagebutton").disabled = false;
-            document.getElementById("blockbutton").textContent = "Block";
+            if(usersBlockedFrom !== undefined && usersBlockedFrom.length !== 0 && usersBlockedFrom.includes(this.username))
+            {
+                document.getElementById("directmessagebutton").disabled = true;
+                if(blockedUsers !== undefined && blockedUsers.length !== 0 && blockedUsers.includes(this.username))
+                {
+                    document.getElementById("blockbutton").textContent = "Unblock";
+                }
+                else
+                {
+                    document.getElementById("blockbutton").textContent = "Block";
+                }
+            }
+            else
+            {
+                if(blockedUsers !== undefined && blockedUsers.length !== 0 && blockedUsers.includes(this.username))
+                {
+                    document.getElementById("directmessagebutton").disabled = true;
+                    document.getElementById("blockbutton").textContent = "Unblock";
+                }
+                else
+                {
+                    document.getElementById("directmessagebutton").disabled = false;
+                    document.getElementById("blockbutton").textContent = "Block";
+                }
+
+            }
         }
 
         //check if I am currently following the user I am viewing and if so, change button text to "unfollow"
-        if(this.viewingOwnProfile === false)
+        if(this.loggedInViewingOwnProfile === false)
         {
             await firebase.database().ref().once('value', (snapshot) => {
                 var mapUIDToUsername = snapshot.child("mapUIDtoUsername").val();
@@ -206,7 +321,7 @@ class User extends React.Component{
 
             if(this.loggedIn){
                 if (this.loggedInViewingOwnProfile) {
-                    return this.renderLoggedInUser(this.userProfile, this.deleteAccount);
+                    return this.renderLoggedInUser(this.userProfile, this.deleteAccount, this.submitRestrictDM);
                 } else {
 
                     return this.renderVisitedUser(this.userProfile);
@@ -222,12 +337,12 @@ class User extends React.Component{
         
     }
 
-    renderLoggedInUser(userProfile, deleteAccount){
+    renderLoggedInUser(userProfile, deleteAccount, submitRestrictDM){
 
         if(this.editMode){
             return(
                 <div>
-                    <LoggedInUserEditView userProfile={userProfile} deleteAccount={deleteAccount}/>
+                    <LoggedInUserEditView userProfile={userProfile} deleteAccount={deleteAccount} submitRestrictDM={submitRestrictDM}/>
                     <Microblogs microblogs={userProfile.microblogs} username={userProfile.username} />
                     
                 </div>
@@ -238,7 +353,7 @@ class User extends React.Component{
             return (
                 <div>
                     <ProfilePicture strangername={this.username} visiting={false}/>
-                    <LoggedInUserView userProfile={userProfile} deleteAccount={deleteAccount}/>
+                    <LoggedInUserView userProfile={userProfile} deleteAccount={deleteAccount} submitRestrictDM={submitRestrictDM}/>
                     <Microblogs microblogs={userProfile.microblogs} username={userProfile.username} />
                     
                 </div>

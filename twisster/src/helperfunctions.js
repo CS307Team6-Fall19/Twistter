@@ -73,6 +73,25 @@ const helperfunctions =
       return username;
     },
 
+    getAllUsers: async function(username)
+    {
+      var usernames = [];
+      await firebase.database().ref().once('value', (snapshot) => {
+        var mapUIDtoUsername = snapshot.child("mapUIDtoUsername").val();
+        snapshot.child("users").forEach(function(childSnapshot)
+        {
+          var currUsername = mapUIDtoUsername[childSnapshot.key];
+          if(currUsername !== username)
+          {
+            usernames.push(currUsername);
+          }
+        });
+      });
+
+      resolve("done");
+      return usernames;
+    },
+
     //Description: Add a user to follow to the current user's list of followers
     //@Params
     //usernameFollow: username of the individual you want to follow
@@ -364,6 +383,53 @@ const helperfunctions =
         return result;
     },
 
+    getFollowersAndFollowingForCurrentUser: async function()
+    {
+        var result;
+        await firebase.database().ref().once('value', (snapshot) => {
+    
+          var mapUsernameToUID = snapshot.child("mapUsernameToUID").val();
+          var UIDofUserIAmViewing = firebase.auth().currentUser.uid;
+          var usersTheUserIsFollowing = [];
+          snapshot.child("users").child(UIDofUserIAmViewing).child("following").forEach((function(child)
+          {
+            usersTheUserIsFollowing.push(child.key);
+          }));
+          var followersTheUserHas = snapshot.child("users").child(UIDofUserIAmViewing).child("followers").val();
+          var followers = "";
+          if(followersTheUserHas == null)
+          {
+            followers = "";
+          }
+          else
+          {
+            for(var i = 0; i < followersTheUserHas.length - 1; i++)
+            {
+              followers += followersTheUserHas[i] + ", ";
+            }
+            followers += followersTheUserHas[followersTheUserHas.length - 1];
+          }
+          var following = "";
+          if(usersTheUserIsFollowing == null || usersTheUserIsFollowing === undefined || usersTheUserIsFollowing.length === 0)
+          {
+            following = "";
+          }
+          else
+          {
+            for(var i = 0; i < usersTheUserIsFollowing.length - 1; i++)
+            {
+              following += usersTheUserIsFollowing[i] + ", ";
+            }
+            following += usersTheUserIsFollowing[usersTheUserIsFollowing.length - 1];
+          }
+          result = {followers, following};
+          
+        });
+
+        resolve("done");
+        return result;
+    },
+
     //Method to follow user I am viewing
     followUserIAmViewing: async function(username){
         
@@ -494,6 +560,24 @@ const helperfunctions =
 
         firebase.database().ref().child("users").child(firebase.auth().currentUser.uid).child("blockedUsers").set(blockedList);
 
+        for(var index = 0; index < blockedUsers.length; index++)
+        {
+          var mapUsernameToUID = snapshot.child("mapUsernameToUID").val();
+          var uid_blocked = mapUsernameToUID[blockedUsers[index]];
+          var blockedFromList = [];
+          if(snapshot.child("users").child(uid_blocked).hasChild("usersBlockedFrom") === true)
+          {
+            blockedFromList = snapshot.child("users").child(uid_blocked).child("usersBlockedFrom").val();
+          }
+          if(!blockedFromList.includes(currUserName))
+          {
+            blockedFromList.push(currUserName);
+          }
+
+          firebase.database().ref().child("users").child(uid_blocked).child("usersBlockedFrom").set(blockedFromList);
+          
+        }
+
       });
 
       resolve("done");
@@ -524,6 +608,28 @@ const helperfunctions =
 
         firebase.database().ref().child("users").child(firebase.auth().currentUser.uid).child("blockedUsers").set(blockedList);
 
+        for(var index = 0; index < blockedUsers.length; index++)
+        {
+          var mapUsernameToUID = snapshot.child("mapUsernameToUID").val();
+          var uid_blocked = mapUsernameToUID[blockedUsers[index]];
+          var blockedFromList = [];
+          var newBlockedFromList = [];
+          if(snapshot.child("users").child(uid_blocked).hasChild("usersBlockedFrom") === true)
+          {
+            blockedFromList = snapshot.child("users").child(uid_blocked).child("usersBlockedFrom").val();
+          }
+          for(var r = 0; r < blockedFromList.length; r++)
+          {
+            if(blockedFromList[r] !== currUserName)
+            {
+              newBlockedFromList.push(blockedFromList[r]);
+            }
+          }
+
+          firebase.database().ref().child("users").child(uid_blocked).child("usersBlockedFrom").set(newBlockedFromList);
+          
+        }
+
       });
 
       resolve("done");
@@ -542,6 +648,21 @@ const helperfunctions =
 
       resolve("done");
       return blockedList;
+    },
+
+    getUsersBlockedFrom: async function()
+    {
+      var blockedFrom = [];
+      await firebase.database().ref().once('value', (snapshot) => {
+        var currUserUID = firebase.auth().currentUser.uid;
+        if(snapshot.child("users").child(firebase.auth().currentUser.uid).hasChild("usersBlockedFrom") === true)
+        {
+          blockedFrom = snapshot.child("users").child(firebase.auth().currentUser.uid).child("usersBlockedFrom").val();
+        }
+      });
+
+      resolve("done");
+      return blockedFrom;
     },
     
     //Description: Method to add and remove topics from a followed user
