@@ -261,6 +261,8 @@ class Microblog extends React.Component {
                       isQuoted={true}
                       quotedMicroblog={this.microblogData}
                       numOfMicroblog={this.numOfMicroblog}
+
+                      image={nullLiteral}
                   />
                   
               </QuotingMicroblogBox>
