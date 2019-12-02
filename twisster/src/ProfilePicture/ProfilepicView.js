@@ -1,18 +1,14 @@
 import React from "react"
-import './ProfilepicView.css'
 
-const ProfilepicView = ({image, changeProfPic, deletePic, name}) =>   {
-    console.log(name);
+const ProfilepicView = ({image, changeProfPic, deletePic}) =>   {
+
     return (
         <div>
-        <img id = "img1" height="125" width="125"/>
-            <div className="hold_text">
-            <text className="user_name" thename={name}> {name} </text>
-            </div>
+        <img height="125" width="125"/>
             <div>
             <button onClick={changeProfPic}>Change profile picture </button>
             </div>
-            <div className="del_bt">
+            <div>
             <button onClick={deletePic}>Delete Picture / Change to default</button>
             </div>
 

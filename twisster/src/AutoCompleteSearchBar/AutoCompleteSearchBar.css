@@ -1,9 +1,12 @@
 .AutoCompleteSearchBar {
-    width: 300%;
+    width: 80%;
+    border: 1px solid grey;
+    box-shadow: 0 0 0 1px rgba(0,0,0,.1), 0 2px 4px 1px rgba(0,0,0,.18);
     font-family: Arial, Helvetica, sans-serif;
-    font-size: 10px;
-    margin-left: 130px;
+    font-size: 14px;
     text-align: center;
+    margin-block-end: 10px;
+    margin-left: 130px;
     color: rgba(0, 0, 0, 0.73);
 }
 
@@ -11,10 +14,9 @@
     width: 80%;
     border: none;
     font-family: Arial, Helvetica, sans-serif;
-    font-size: 10px;
+    font-size: 14px;
     color: rgba(0, 0, 0, 0.73);
-    margin-top: 16px;
-    padding: 6.5px 5px; 
+    padding: 10px 5px; 
     box-sizing: border-box;
     outline: none;
 }
@@ -24,6 +26,8 @@
     text-align: left;
     margin: 0;
     padding: 0;
+    border-top: 1px solid grey;
+
 }
 
 .AutoCompleteSearchBar ul::before {
@@ -31,19 +35,13 @@
 }
 
 .AutoCompleteSearchBar li {
-    position: -webkit-sticky;
-    position: sticky;
-    width: 78.8%;
-    border-radius: 4px;
-    margin-left: 5.85%;
     padding: 10px 5px;
-    background-color: whitesmoke;
     cursor: pointer;
 }
 
 .AutoCompleteSearchBar li:hover {
     text-decoration: underline;
-    background-color: rgba(128, 128, 128, 1);
+    background-color: rgba(128, 128, 128, 0.20);
 }
 
 

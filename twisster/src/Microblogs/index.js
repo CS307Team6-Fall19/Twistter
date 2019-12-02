@@ -2,15 +2,15 @@ import React, { PureComponent } from 'react'
 import Microblog from "../Microblog"
 import QuotedMicroblog from "../QuotedMicroblog"
 
-class Microblogs extends React.Component {
-  constructor(props) {
-    super(props);
+class Microblogs extends React.Component{
 
-    this.microblogs = props.microblogs;
-    this.username = props.username;
-  
-    this.loggedInUser = props.loggedInUser;
-  }
+    constructor(props){
+        super(props);
+
+        this.microblogs = props.microblogs;
+        this.username = props.username;
+        this.loggedInUser = props.loggedInUser;
+    }
 
     createMicroblogs = (microblogsArray, username) =>{
         var microblogs = [];
@@ -59,21 +59,20 @@ class Microblogs extends React.Component {
             }
             
         }
-        return <div className="body">{microblogs}</div>;    
-      
-    
-  };
-
-  render() {
-    if (this.props.microblogs != null) {
-      return (
-        <div className="body">
-          {this.createMicroblogs(this.props.microblogs, this.username)}
-        </div>
-      );
-    } else {
-      return null;
+        return <div>{microblogs}</div>;
     }
-  }
+
+    render() {
+      if(this.props.microblogs != null){
+        return(
+          <div>
+            {this.createMicroblogs(this.props.microblogs, this.username)}
+          </div>
+        )
+      }
+      else{
+        return null;
+      }
+    }
 }
 export default Microblogs;

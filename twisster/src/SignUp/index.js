@@ -85,17 +85,13 @@ class SignUpContainer extends Component {
           toast(error.message);
         });
 
-      //add timestamp for when they first signed up (used for automatic deletion)
-      var date = new Date();
-      var timestamp = date.getTime();
-
       //create a new user from the data and set default fields and arrays
       var database = firebase.database();
       var newUserRef = database
         .ref()
         .child("users")
         .child(firebase.auth().currentUser.uid);
-      newUserRef.set({ email: email.value, signupTimestamp: timestamp, picture: "default.jpg" });
+      newUserRef.set({ email: email.value, picture: "default.jpg" });
 
       firebase.auth().signOut();
 

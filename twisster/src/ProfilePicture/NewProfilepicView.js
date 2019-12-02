@@ -6,7 +6,7 @@ const NewProfilepicView = ({image, changeProfPic}) =>   {
     return (
         <div>
         
-        <img id = "img1" height="125" width="125"/>
+        <img height="125" width="125"/>
             <div>
             <button onClick={changeProfPic}>Change profile picture</button>
             <input type="file" name = "input" id = "input" onChange={changeProfPic}></input>

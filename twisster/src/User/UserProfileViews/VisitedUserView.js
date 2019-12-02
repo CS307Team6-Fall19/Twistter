@@ -13,10 +13,6 @@ const VisitedUserView = ({ userProfile })=> {
           <br></br>
           <button type='button' id="followbutton" onClick={userProfile.followUser}>Follow</button>
           <br></br>
-          <button type='button' id="directmessagebutton" onClick={userProfile.dmUser}>Direct Message</button>
-          <br></br>
-          <button type="button" id="blockbutton" onClick={userProfile.blockUser}>Block</button>
-          <br></br>
           <label>Bio:</label><label id='bio'>{userProfile.bio}</label>
           <br></br>
           </form>

@@ -1,12 +1,17 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 import './MicroblogBox.css'
-class MicroblogBox extends React.Component {
-  constructor(props) {
-    super(props);
-  }
+class MicroblogBox extends React.Component{
 
-  render() {
-    return <div className="tweet-body">{this.props.children}</div>;
-  }
+    constructor(props) {
+      super(props);
+    }
+
+    render(){        
+        return(
+            <div className="tweet-body">
+                {this.props.children}
+            </div>
+        );
+    }
 }
 export default MicroblogBox;
