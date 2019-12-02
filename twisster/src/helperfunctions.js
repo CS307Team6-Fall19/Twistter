@@ -423,13 +423,13 @@ const helperfunctions =
         return bio_text;
     },
 
-    fetchImageForCurrentUser: async function()
+    fetchImageForCurrentUser: async function(username)
     {
       var picname;
       await firebase.database().ref().once('value', (snapshot) =>
       {
-        this.username = snapshot.child("mapUIDtoUsername").child(firebase.auth().currentUser.uid).val();
-        picname = snapshot.child("users").child(firebase.auth().currentUser.uid).child("picture").val();
+        var uid_curr = snapshot.child("mapUsernametoUid").child(username).val();
+        picname = snapshot.child("users").child(uid_curr).child("picture").val();
       });
       return picname;
     },
