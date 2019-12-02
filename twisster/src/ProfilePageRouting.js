@@ -14,13 +14,13 @@ class ProfilePageRouting extends React.Component {
         var userData = this.props.location.state.userData;
         var text = this.props.location.state.text;
         if (text != undefined) {
-            this.props.history.push({
+            this.props.history.replace({
                 pathname: "/profile/" + text,
                 state: { userData: userData }
             });
         }
         else {
-            this.props.history.push({
+            this.props.history.replace({
                 pathname: "/profile",
                 state: { userData: userData }
             }); 
@@ -28,11 +28,11 @@ class ProfilePageRouting extends React.Component {
     }
 
     render() {
-        return(
-            <div>
-                {this.goToProfile()}
-            </div>
-        );
+            return(
+                <div>
+                    {this.goToProfile()}
+                </div>
+            );
     }
 
 }

@@ -21,6 +21,7 @@ class ProfilePage extends React.Component {
       loaded: false
     };
     //this.handleChange = this.handleChange.bind(this);
+    this.userLoginCheck = this.userLoginCheck.bind(this);
   }
 
   async componentDidMount() {
@@ -74,6 +75,16 @@ class ProfilePage extends React.Component {
     resolve("done");
   }
 
+  userLoginCheck() {
+    var user = firebase.auth().currentUser;
+
+    if (!user) {
+      this.props.history.replace({
+        pathname: "/login"
+      });
+    }
+  }
+
   //getUser(username){
   //this.userData = new UserData(username, false, false);
   //}
@@ -85,6 +96,7 @@ class ProfilePage extends React.Component {
   // }
 
   render() {
+    this.userLoginCheck();
     if (this.state.loaded) {
       return (
         <div>
