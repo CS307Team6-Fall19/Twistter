@@ -423,6 +423,17 @@ const helperfunctions =
         return bio_text;
     },
 
+    fetchImageForCurrentUser: async function()
+    {
+      var picname;
+      await firebase.database().ref().once('value', (snapshot) =>
+      {
+        this.username = snapshot.child("mapUIDtoUsername").child(firebase.auth().currentUser.uid).val();
+        picname = snapshot.child("users").child(firebase.auth().currentUser.uid).child("picture").val();
+      });
+      return picname;
+    },
+
     //Method to get list of followers and following
     getFollowersAndFollowing: async function(username){
 
