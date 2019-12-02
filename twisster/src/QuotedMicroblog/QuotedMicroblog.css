@@ -1,7 +1,7 @@
 .quoted-microblog {
-    display: flex;
-    flex-direction: column;
-    width: 610px;
+    /* display: flex;
+    flex-direction: column;*/
+    width: 615px; 
     /* height: 520px; */
     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.5);
     background-color: #213649;
@@ -9,8 +9,9 @@
     align-self: center;
     margin-bottom: 0.1rem;
     color: #ffffff;
-    border-style: solid;
-    border-color: rgb(255, 121, 80);
+    /* border-style: solid;
+    border-color: rgb(255, 121, 80); */
+    background-color: #498291;
 
 }
 
