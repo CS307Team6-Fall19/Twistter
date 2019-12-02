@@ -11,8 +11,13 @@ class AutoCompleteSearchBar extends React.Component {
         this.state = {
             suggestions: [],
             text: '',
+            onFocus: false,
+            clickoption: false,
         }
         this.searchForUser = this.searchForUser.bind(this);
+        this.checkIfFocused = this.checkIfFocused.bind(this);
+        this.changeFocus = this.changeFocus.bind(this);
+        this.keyPress = this.keyPress.bind(this);
     }
 
     onTextChanged = (e) => {
@@ -21,16 +26,17 @@ class AutoCompleteSearchBar extends React.Component {
         let suggestions = [];
         if (value.length > 0) {
             const regex  = new RegExp(`^${value}`, 'i');
-            console.log(items);
             suggestions = items.sort().filter(v => regex.test(v));
         }
         this.setState(() => ({ suggestions, text: value }));
     }
 
-    suggestionSelected (value) {
+    suggestionSelected (value) {    
         this.setState(() => ({
             text: value,
             suggestions: [],
+            onFocus: false,
+            clickoption: true,
         }))
     }
 
@@ -41,7 +47,7 @@ class AutoCompleteSearchBar extends React.Component {
         }
         return (
             <ul>
-                {suggestions.map((item) => <li onClick ={() => this.suggestionSelected(item)}>{item}</li>)}
+                {suggestions.map((item) => <li key={item} onMouseDown ={() => this.suggestionSelected(item)}>{item}</li>)}
             </ul>
         )
     }
@@ -74,15 +80,41 @@ class AutoCompleteSearchBar extends React.Component {
         }
     }
 
+    checkIfFocused() {
+        console.log("checking focus");
+        this.setState(() => ({
+            onFocus: false,
+        }))
+        var onFocus = false;
+        const {clickoption} = this.state;
+        if(onFocus == false && clickoption == false) {
+            this.setState(() => ({ suggestions: []}));
+        }
+        this.setState(() => ({
+            onFocus: false,
+            clickoption: false,
+        }))
+    }
+
+    changeFocus() {
+        this.setState(() => ({
+            onFocus: true,
+        }))
+    }
+
+    keyPress(e) {
+        if(e.keyCode == 13){
+            this.searchForUser();
+        }
+    }
+
     render ()  {
         const {text} = this.state;
         return (
             <div>
-                <div className="AutoCompleteSearchBar" >
-                    <input value={text} onChange={this.onTextChanged} type="text" /> <button onClick={this.searchForUser}>Search</button>
-                    <ul>
+                <div className="AutoCompleteSearchBar" onBlur={this.checkIfFocused}>
+                    <input value={text} onClick={this.changeFocus} onKeyDown={this.keyPress} onChange={this.onTextChanged} type="text"/><button onClick={this.searchForUser}>Search</button>
                         {this.renderSuggestions()}
-                    </ul>
                 </div>
             </div>
         )

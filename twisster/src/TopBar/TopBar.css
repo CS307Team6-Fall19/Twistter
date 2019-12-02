@@ -13,21 +13,12 @@
   color: #ffffff;
 }
 
-.top-bar-search {
-  margin-left: 27%;
-  margin-top: 15px;
-  width: 676px;
-  height: 25px;
-  border-radius: 7px;
-  background-color: #ffffff;
-}
 
 .top-bar-button {
   margin-left: 28%;
   margin-top: 5px;
   width: 48px;
   height: 48px;
-
 }
 
 .top-bar-logout {
@@ -41,26 +32,19 @@
   color: #11171d;
 }
 
-.top-bar-profile {
-  position: absolute;
-  right: 8%;
-  float: right;
-  width: 5%;
-  height: 48px;
-  background-color: #ffffff;
-  top: 0.5%;
-  color: #11171d;
+.top-bar-chat {
+  margin-top: 0px;
+  margin-left: 56%;
 }
 
-.top-bar-chat {
-  position: absolute;
-  right: 14%;
-  float: right;
-  width: 5%;
-  height: 48px;
-  background-color: #ffffff;
-  top: 0.5%;
-  color: #11171d;
+.top_bar_home {
+  margin-top: 0px;
+  margin-left: 1%;
+}
+
+.top-bar-profile {
+  margin-top: 0px;
+  margin-left: 1%;
 }
 
 .picture {

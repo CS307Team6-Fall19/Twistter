@@ -1,16 +1,18 @@
-import React, { Component } from 'react';
-import {MicroblogWriterView} from "./MicroblogWriterView"
+import React, { Component } from "react";
+import { MicroblogWriterView } from "./MicroblogWriterView";
 import helperfunctions from "../helperfunctions";
 
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
+class MicroblogWriter extends React.Component {
+  constructor(props) {
+    //TODO: THIS
+    super(props);
 
-class MicroblogWriter extends React.Component{
+    this.microblogData = new Object();
 
-    constructor(props) {
-        //TODO: THIS
-      super(props);
+    this.microblogPosted = props.microblogPosted;
 
       this.isQuoted = props.isQuoted;
       if(this.isQuoted){
@@ -18,17 +20,50 @@ class MicroblogWriter extends React.Component{
         this.numOfMicroblog = props.numOfMicroblog;
       }
 
-      this.microblogData = new Object();
+    /* this.microblogData = new Object();
+    this.microblogData.name = props.username;
+    this.microblogData.handle = props.username;
+    this.microblogData.image = "props.image"; */
 
-      this.microblogPosted = props.microblogPosted;
+    this.submitMicroblog = this.submitMicroblog.bind(this);
+    this.addTopic = this.addTopic.bind(this);
 
-      this.microblogData.name = props.username;
-      this.microblogData.handle = props.username;
-      this.microblogData.image = "props.image";
+    this.topics = [];
+    this.numTopics = 0;
+  }
 
-      this.submitMicroblog = this.submitMicroblog.bind(this);
-      this.addTopic = this.addTopic.bind(this);
+  addTopic(event) {
+    if (
+      document.getElementById("addTopics").value != "" &&
+      document.getElementById("addTopics").value != ","
+    ) {
+      this.topics.push(document.getElementById("addTopics").value);
+      if (document.getElementById("showTopics").value == "") {
+        document.getElementById("showTopics").value = document.getElementById(
+          "addTopics"
+        ).value;
+      } else {
+        document.getElementById("showTopics").value =
+          document.getElementById("showTopics").value +
+          ", " +
+          document.getElementById("addTopics").value;
+      }
+      document.getElementById("addTopics").value = "";
+    }
+  }
 
+  async submitMicroblog(event) {
+    var content = document.getElementById("content").value;
+    console.log(content);
+    if (content.length > 250 || content.length <= 0) {
+      //toast("Cannot post microblog");
+      toast(
+        "Cannot post microblog. Make sure the content is 250 characters or less"
+      );
+    } else {
+      await helperfunctions.addMicroBlogToCurrentUser(content, this.topics);
+      //await helperfunctions.addMicroBlogToCurrentUser(content, this.topics);
+      this.microblogPosted();
       this.topics = [];
       this.numTopics = 0;
 
@@ -45,6 +80,7 @@ class MicroblogWriter extends React.Component{
         this.contentId = "content"
       }
     }
+  }
 
     addTopic(event) {
       

@@ -12,7 +12,7 @@ class ProfilePicture extends Component {
 
     constructor(props) {
         super(props);
-        var username;
+        this.username = this.props.strangername;
         this.visiting = this.props.visiting;
         this.strangername = this.props.strangername;
         this.toUpload = false;
@@ -81,7 +81,11 @@ class ProfilePicture extends Component {
 
             await firebase.storage().ref().child(picname).getDownloadURL().then(function(url) {
                 var toReturn = url;
-                document.querySelector('img').src = toReturn;
+                document.querySelectorAll('img').forEach(function(item){
+                    if (item.id == "img1") {
+                        item.src = toReturn;
+                    }
+                })
                 //return toReturn;
 
             }).catch(function(error) {
@@ -180,7 +184,7 @@ class ProfilePicture extends Component {
                 console.log("here first");
                 return(
                 <div>
-                    <ProfilepicView image = {this.fetchImage()} changeProfPic = {this.changePic} deletePic = {this.deletePicture}/>
+                    <ProfilepicView image = {this.fetchImage()} changeProfPic = {this.changePic} deletePic = {this.deletePicture} name={this.username}/>
                 </div>
                 );
             }

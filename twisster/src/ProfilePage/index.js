@@ -4,92 +4,98 @@ import { withRouter } from "react-router";
 import ProfilePageView from "./ProfilePageView";
 import UserData from "../DataObjects/UserData";
 import TopBar from "../TopBar";
-import ProfilePicture from "../ProfilePicture"
+import ProfilePicture from "../ProfilePicture";
 import firebase from "firebase";
-import { resolve } from 'q';
-import CheckboxContainer from './checkBox.jsx'
+import { resolve } from "q";
+import CheckboxContainer from "./checkBox.jsx";
 
 class ProfilePage extends React.Component {
-  
-    constructor(props){
-      super(props); 
+  constructor(props) {
+    super(props);
 
-      //this.getUser = this.getUser.bind(this);
-      this.localProps = props;
-    
-      this.state = {
-        //checkedItems: new Map(),
-        loaded: false
-      }
-      //this.handleChange = this.handleChange.bind(this);
-    }
-    
-    async componentDidMount() {
-      await this.setUsername();
-      this.setState({loaded : true});
-    }
+    //this.getUser = this.getUser.bind(this);
+    this.localProps = props;
 
-    async setUsername(){
+    this.state = {
+      //checkedItems: new Map(),
+      loaded: false
+    };
+    //this.handleChange = this.handleChange.bind(this);
+  }
 
-      await firebase.database().ref().once('value', (snapshot) => {
-        var UIDtoUsername = snapshot.child('mapUIDtoUsername').val();
+  async componentDidMount() {
+    await this.setUsername();
+    this.setState({ loaded: true });
+  }
 
-        if (firebase.auth().currentUser == undefined || firebase.auth().currentUser == null) {
+  async setUsername() {
+    await firebase
+      .database()
+      .ref()
+      .once("value", snapshot => {
+        var UIDtoUsername = snapshot.child("mapUIDtoUsername").val();
 
-          if(this.localProps.location.pathname != "/profile"){
+        if (
+          firebase.auth().currentUser == undefined ||
+          firebase.auth().currentUser == null
+        ) {
+          if (this.localProps.location.pathname != "/profile") {
             this.path = this.localProps.location.pathname;
             this.username = this.path.substring(9, this.path.length);
             this.userData = new UserData(this.username, false);
-          }
-          else{
+          } else {
             this.localProps.history.push({
-              pathname: "/login"});
-              return;
+              pathname: "/login"
+            });
+            return;
           }
-
         } else {
-          if(this.localProps.location.pathname != "/profile"){
+          if (this.localProps.location.pathname != "/profile") {
             this.path = this.localProps.location.pathname;
             this.username = this.path.substring(9, this.path.length);
 
-            if (this.username == UIDtoUsername[firebase.auth().currentUser.uid]) {
+            if (
+              this.username == UIDtoUsername[firebase.auth().currentUser.uid]
+            ) {
               this.userData = new UserData(this.username, true, true);
             } else {
               this.userData = new UserData(this.username, true, false);
             }
           } else {
-            this.userData = new UserData(UIDtoUsername[firebase.auth().currentUser.uid], true, true);
+            this.userData = new UserData(
+              UIDtoUsername[firebase.auth().currentUser.uid],
+              true,
+              true
+            );
           }
         }
-
       });
 
-      resolve("done");
+    resolve("done");
   }
 
-    //getUser(username){
-      //this.userData = new UserData(username, false, false);
-    //}
+  //getUser(username){
+  //this.userData = new UserData(username, false, false);
+  //}
 
-    // handleChange(e) {
-    //   const item = e.target.name;
-    //   const isChecked = e.target.checked;
-    //   this.setState(prevState => ({ checkedItems: prevState.checkedItems.set(item, isChecked) }));
-    // }
+  // handleChange(e) {
+  //   const item = e.target.name;
+  //   const isChecked = e.target.checked;
+  //   this.setState(prevState => ({ checkedItems: prevState.checkedItems.set(item, isChecked) }));
+  // }
 
-    render(){
-      if(this.state.loaded){
-        return (
-          <div>
-            <TopBar/>
+  render() {
+    if (this.state.loaded) {
+      return (
+        <div>
+          <TopBar />
 
-            <ProfilePageView userData={this.userData}/>
-            <CheckboxContainer username={this.username}/>
-          </div>
-        );
-
-    } else{
-        return null;
+          <ProfilePageView userData={this.userData} />
+          <CheckboxContainer username={this.username} />
+        </div>
+      );
+    } else {
+      return null;
     }
   }
 }
