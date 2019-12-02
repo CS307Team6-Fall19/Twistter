@@ -210,3 +210,23 @@
   display: flex;
   flex-direction: row;
 }
+
+.quote {
+  display: flex;
+  flex-direction: column;
+}
+
+.quote-button {
+
+  float: right;
+  margin-top: 1%;
+  margin-left: 90%;
+  margin-bottom: 10%;
+
+  width: 90px;
+  height: 30px;
+  border-radius: 25px;
+  border-color: #cc4100;
+  box-shadow: 0 0 10px 0 #00000080;
+  background-color: #cc4100;
+}
