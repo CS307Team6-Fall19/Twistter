@@ -12,6 +12,12 @@ class MicroblogWriter extends React.Component {
 
     this.microblogData = new Object();
 
+    this.isQuoted = props.isQuoted;
+    if(this.isQuoted){
+      this.quotedMicroblog = props.quotedMicroblog;
+      this.numOfMicroblog = props.numOfMicroblog;
+    }
+
     this.microblogPosted = props.microblogPosted;
 
     this.microblogData.name = props.username;
@@ -23,6 +29,17 @@ class MicroblogWriter extends React.Component {
 
     this.topics = [];
     this.numTopics = 0;
+
+    if(this.isQuoted){
+      this.addTopicsId = "addTopicsQuoted" + this.numOfMicroblog
+      this.showTopicsId = "showTopicsQuoted" + this.numOfMicroblog
+      this.contentId = "contentQuoted" + this.numOfMicroblog
+    }
+    else{
+      this.addTopicsId = "addTopics"
+      this.showTopicsId = "showTopics"
+      this.contentId = "content"
+    }
   }
 
   addTopic(event) {
@@ -50,13 +67,23 @@ class MicroblogWriter extends React.Component {
     console.log(content);
     if (content.length > 250 || content.length <= 0) {
       //toast("Cannot post microblog");
-      toast(
-        "Cannot post microblog. Make sure the content is 250 characters or less"
-      );
-    } else {
-      await helperfunctions.addMicroBlogToCurrentUser(content, this.topics);
-      //await helperfunctions.addMicroBlogToCurrentUser(content, this.topics);
-      this.microblogPosted();
+        toast(
+          "Cannot post microblog. Make sure the content is 250 characters or less"
+        );
+
+    }  
+    else 
+    {
+
+      if(this.isQuoted){
+        await helperfunctions.addQuotedMicroblogToCurrentUser(this.quotedMicroblog, content, this.topics);
+      }
+
+      else {
+        await helperfunctions.addMicroBlogToCurrentUser(content, this.topics);
+        this.microblogPosted();
+      }
+    
       this.topics = [];
     }
 
@@ -77,6 +104,10 @@ class MicroblogWriter extends React.Component {
         image={image}
         submitMicroblog={this.submitMicroblog}
         addTopic={this.addTopic}
+
+        addTopicsId={this.addTopicsId}
+        showTopicsId={this.showTopicsId}
+        contentId={this.contentId}
       />
     );
   }

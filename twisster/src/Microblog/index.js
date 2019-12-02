@@ -6,6 +6,10 @@ import helperfunctions from "../helperfunctions";
 import firebase from "firebase";
 import { nullLiteral } from "@babel/types";
 
+import QuotingMicroblogBox from "../QuotingMicroblogBox"
+import { toast } from 'react-toastify';
+import MicroblogWriter from "../MicroblogWriter"
+
 class Microblog extends React.Component {
   // static counter;
 
@@ -16,9 +20,13 @@ class Microblog extends React.Component {
     if (Microblog.counter == undefined) {
       Microblog.counter = 0;
     }
+
+
     this.counter = Microblog.counter;
     this.blogid = "blogid" + this.counter;
     Microblog.counter++;
+
+    this.userLikes = props.userLikes;
 
     this.microblogData.name = props.username;
     this.microblogData.handle = props.username;
@@ -34,8 +42,12 @@ class Microblog extends React.Component {
     this.microblogData.numLikes = props.numLikes;
 
     this.state = {
-      like: props.liked
-    };
+      like: props.liked,
+      quote: false
+    }
+
+    this.numOfMicroblog = props.numOfMicroblog;
+    this.quoteButtonClicked = this.quoteButtonClicked.bind(this);
   }
 
   async likeButtonClicked() {
@@ -155,6 +167,20 @@ class Microblog extends React.Component {
     console.log("ends now");
   }
 
+  async quoteButtonClicked(){
+    toast("Quote!");
+
+    this.loggedInUser = await helperfunctions.retrieveUsername(firebase.auth().currentUser.uid);
+
+    if(this.state.quote){
+        this.setState({quote : false});
+    }
+    else{
+        this.setState({quote : true});
+    }
+    
+}
+
   componentDidMount() {
     this.fetchImage();
   }
@@ -168,6 +194,8 @@ class Microblog extends React.Component {
       likeText = "Like";
     }
 
+    let quoteButtonText = "Quote"
+
     let likeButtonText = likeText;
     let name = `${this.microblogData.name}`;
     let handle = `@${this.microblogData.name}`;
@@ -177,20 +205,69 @@ class Microblog extends React.Component {
     let numLikes = this.microblogData.numLikes;
 
     let likeButtonClicked = this.likeButtonClicked;
-    return (
-      <MicroblogView
-        key={this.microblogData.key}
-        name={name}
-        handle={handle}
-        image={nullLiteral}
-        unitid={this.blogid}
-        tweet={tweet}
-        likeButtonClicked={likeButtonClicked}
-        likeButtonText={this.state.like}
-        numLikes={numLikes}
-        topics={topics}
-      />
-    );
+    let quoteButtonClicked = this.quoteButtonClicked;
+
+    if(!this.state.quote){
+      return (
+        <MicroblogView
+          key={this.microblogData.key}
+          name={name}
+          handle={handle}
+          image={nullLiteral}
+          unitid={this.blogid}
+          tweet={tweet}
+  
+          likeButtonClicked={likeButtonClicked}
+          likeButtonText={this.state.like}
+          numLikes={numLikes}
+  
+          quoteButtonText={quoteButtonText}
+          quoteButtonClicked={quoteButtonClicked}
+  
+          topics={topics}
+        />
+      );
+    }
+
+    else{
+      return(
+          <div>
+              <QuotingMicroblogBox>
+                  <MicroblogView 
+                      key={this.microblogData.key}
+                      name={name}
+                      handle={handle}
+                      image={nullLiteral}
+                      unitid={this.blogid}
+                      tweet={tweet}
+              
+                      likeButtonClicked={likeButtonClicked}
+                      likeButtonText={this.state.like}
+                      numLikes={numLikes}
+              
+                      quoteButtonText={quoteButtonText}
+                      quoteButtonClicked={quoteButtonClicked}
+              
+                      topics={topics}
+
+                  /> 
+
+                  
+
+                  <MicroblogWriter 
+                      username={this.loggedInUser} 
+                      microblogPosted={this.microblogPosted}
+                      isQuoted={true}
+                      quotedMicroblog={this.microblogData}
+                      numOfMicroblog={this.numOfMicroblog}
+                  />
+                  
+              </QuotingMicroblogBox>
+          </div>
+      );
+  }
+
+    
   }
 }
 export default Microblog;
