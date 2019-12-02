@@ -18,15 +18,28 @@ class ProfilePage extends React.Component {
 
     this.state = {
       //checkedItems: new Map(),
-      loaded: false
+      loaded: false,
     };
     //this.handleChange = this.handleChange.bind(this);
-    this.userLoginCheck = this.userLoginCheck.bind(this);
   }
 
   async componentDidMount() {
-    await this.setUsername();
-    this.setState({ loaded: true });
+    var loggedin = firebase.auth().currentUser;
+    if (!loggedin) {
+      firebase.auth().onAuthStateChanged( async user => {
+        if (!user) {
+          this.props.history.replace({
+            pathname: "/login"
+          });
+        }
+        await this.setUsername();
+        this.setState({ loaded: true });
+      });
+    }
+    else {
+      await this.setUsername();
+      this.setState({ loaded: true });
+    }
   }
 
   async setUsername() {
@@ -75,15 +88,6 @@ class ProfilePage extends React.Component {
     resolve("done");
   }
 
-  userLoginCheck() {
-    var user = firebase.auth().currentUser;
-
-    if (!user) {
-      this.props.history.replace({
-        pathname: "/login"
-      });
-    }
-  }
 
   //getUser(username){
   //this.userData = new UserData(username, false, false);
@@ -96,7 +100,6 @@ class ProfilePage extends React.Component {
   // }
 
   render() {
-    this.userLoginCheck();
     if (this.state.loaded) {
       return (
         <div>
