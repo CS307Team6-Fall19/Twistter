@@ -205,7 +205,7 @@ class Chat extends Component {
   render() {
       return (
       <div className="App">
-              <TopBar userData={this.userData} />
+        <TopBar userData={this.userData} />
 
 
         <ul id="userlist">
