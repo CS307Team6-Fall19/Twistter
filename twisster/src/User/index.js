@@ -332,7 +332,7 @@ class User extends React.Component{
             }
 
         } else{
-            return null;
+            return this.renderVisitedUser(this.userProfile);
         }
         
     }
@@ -350,6 +350,16 @@ class User extends React.Component{
         }
 
         else{
+            if(userProfile.microblogs == undefined)
+            {
+                return(
+                    <div>
+                        <ProfilePicture strangername={this.username} visiting={false}/>
+                        <LoggedInUserView userProfile={userProfile} deleteAccount={deleteAccount} submitRestrictDM={submitRestrictDM}/>
+                    </div>
+                );
+            }
+            else {
             return (
                 <div>
                     <ProfilePicture strangername={this.username} visiting={false}/>
@@ -358,6 +368,7 @@ class User extends React.Component{
                     
                 </div>
             );
+            }
         }
     }
 

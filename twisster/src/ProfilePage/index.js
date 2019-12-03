@@ -24,22 +24,8 @@ class ProfilePage extends React.Component {
   }
 
   async componentDidMount() {
-    var loggedin = firebase.auth().currentUser;
-    if (!loggedin) {
-      firebase.auth().onAuthStateChanged( async user => {
-        if (!user) {
-          this.props.history.replace({
-            pathname: "/login"
-          });
-        }
-        await this.setUsername();
-        this.setState({ loaded: true });
-      });
-    }
-    else {
-      await this.setUsername();
-      this.setState({ loaded: true });
-    }
+    await this.setUsername();
+    this.setState({ loaded: true });
   }
 
   async setUsername() {
