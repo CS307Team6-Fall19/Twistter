@@ -70,7 +70,7 @@ class SignUpContainer extends Component {
 
       //set redirect page
       var actionCodeSettings = {
-        url: "http://localhost:3000/login",
+        url: "https://twistter.firebaseapp.com/login",
         handleCodeInApp: true
       };
 
