@@ -7,6 +7,8 @@ import firebase from "firebase";
 import { withRouter } from "react-router";
 import helperfunctions from "../helperfunctions";
 import { timeout } from "q";
+import TopBar from "../TopBar";
+
 
 // Current Issues ----
 // Refresh does not work well
@@ -49,7 +51,7 @@ class Chat extends Component {
 
     var buttons = document.getElementsByTagName('button');
     for (var i = 0, len = buttons.length; i < len; i++) {
-      if (buttons[i].innerHTML != "Send") {
+      if (buttons[i].innerHTML != "Send" && buttons[i].innerHTML != "Search" && buttons[i].id != "profile" && buttons[i].id != "Home" && buttons[i].id != "chat") {
         buttons[i].addEventListener('click', mouseEvt => {
           this.userButtonClick(mouseEvt.toElement.id);
         });
@@ -203,9 +205,8 @@ class Chat extends Component {
   render() {
       return (
       <div className="App">
-        <div className="App-header">
-          <h1>Twisster Chat</h1>
-        </div>
+        <TopBar userData={this.userData} />
+
 
         <ul id="userlist">
         
