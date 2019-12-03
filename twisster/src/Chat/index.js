@@ -109,7 +109,11 @@ class Chat extends Component {
     return blockedFrom;
   }
 
-  async userButtonClick(username) {   
+  async userButtonClick(username) {  
+    if (document.getElementById("messageslist") == undefined || document.getElementById("messageslist") == null) {
+      return;
+    }
+    
     this.props.location.state.dmUsername = username; 
     var currBlocked = await helperfunctions.getBlockedUser();
     var blockedFrom = await this.getUsersBlocked(username);
@@ -162,6 +166,10 @@ class Chat extends Component {
   }
 
   async updateUserName() {
+    if (document.getElementById("messageslist") == undefined || document.getElementById("messageslist") == null) {
+      return;
+    }
+
     firebase.auth().onAuthStateChanged(async user => {
       if (!user) {
         this.props.history.push({
@@ -177,19 +185,21 @@ class Chat extends Component {
         );
         this.state.member.username = this.userData.username;
         this.state.member.id = this.userData.username;
-        if (this.props.location.state.topBar == false) {
-          this.fillWithPreviousMessages();
-          this.listenToPersistantMessages();
-          this.setPlaceholderInputBar("Send message to " + this.props.location.state.dmUsername);
-          document.getElementById("placeholder").disabled = false;
-          document.getElementById("send").disabled = false;
-          this.listenToUsersBlockedFrom();
-        } else {
-          this.setPlaceholderInputBar("To send a message, click on a username");
-          document.getElementById("placeholder").disabled = true;
-          document.getElementById("send").disabled = true;
+        if (document.getElementById("messageslist") != undefined && document.getElementById("messageslist") != null) {
+          if (this.props.location.state.topBar == false) {
+            this.fillWithPreviousMessages();
+            this.listenToPersistantMessages();
+            this.setPlaceholderInputBar("Send message to " + this.props.location.state.dmUsername);
+            document.getElementById("placeholder").disabled = false;
+            document.getElementById("send").disabled = false;
+            this.listenToUsersBlockedFrom();
+          } else {
+            this.setPlaceholderInputBar("To send a message, click on a username");
+            document.getElementById("placeholder").disabled = true;
+            document.getElementById("send").disabled = true;
+          }
+          this.listenToUnseenUsersDM();
         }
-        this.listenToUnseenUsersDM();
       }
     });
   }
@@ -231,6 +241,9 @@ class Chat extends Component {
   }
 
   setPlaceholderInputBar(text) {
+    if (document.getElementById("messageslist") == undefined || document.getElementById("messageslist") == null) {
+      return;
+    }
     document.getElementById("placeholder").placeholder = text;
   }
 
