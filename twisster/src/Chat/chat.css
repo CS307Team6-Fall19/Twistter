@@ -24,6 +24,10 @@
   overflow: scroll;
 }
 
+.Messages-list::-webkit-scrollbar {
+  display: none;
+}
+
 .Messages-message {
   display: flex;
   margin-top: 10px;
@@ -37,6 +41,7 @@
 
 .Message-content {
   display: inline-block;
+  word-wrap: break-word;
 }
 
 .currentMember > .Message-content {

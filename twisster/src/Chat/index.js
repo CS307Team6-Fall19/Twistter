@@ -8,6 +8,7 @@ import { withRouter } from "react-router";
 import helperfunctions from "../helperfunctions";
 import { timeout } from "q";
 import TopBar from "../TopBar";
+import { minHeight } from "@material-ui/system";
 
 
 // Current Issues ----
@@ -108,7 +109,11 @@ class Chat extends Component {
     return blockedFrom;
   }
 
-  async userButtonClick(username) {   
+  async userButtonClick(username) {  
+    if (document.getElementById("messageslist") == undefined || document.getElementById("messageslist") == null) {
+      return;
+    }
+    
     this.props.location.state.dmUsername = username; 
     var currBlocked = await helperfunctions.getBlockedUser();
     var blockedFrom = await this.getUsersBlocked(username);
@@ -161,6 +166,10 @@ class Chat extends Component {
   }
 
   async updateUserName() {
+    if (document.getElementById("messageslist") == undefined || document.getElementById("messageslist") == null) {
+      return;
+    }
+
     firebase.auth().onAuthStateChanged(async user => {
       if (!user) {
         this.props.history.push({
@@ -176,19 +185,21 @@ class Chat extends Component {
         );
         this.state.member.username = this.userData.username;
         this.state.member.id = this.userData.username;
-        if (this.props.location.state.topBar == false) {
-          this.fillWithPreviousMessages();
-          this.listenToPersistantMessages();
-          this.setPlaceholderInputBar("Send message to " + this.props.location.state.dmUsername);
-          document.getElementById("placeholder").disabled = false;
-          document.getElementById("send").disabled = false;
-          this.listenToUsersBlockedFrom();
-        } else {
-          this.setPlaceholderInputBar("To send a message, click on a username");
-          document.getElementById("placeholder").disabled = true;
-          document.getElementById("send").disabled = true;
+        if (document.getElementById("messageslist") != undefined && document.getElementById("messageslist") != null) {
+          if (this.props.location.state.topBar == false) {
+            this.fillWithPreviousMessages();
+            this.listenToPersistantMessages();
+            this.setPlaceholderInputBar("Send message to " + this.props.location.state.dmUsername);
+            document.getElementById("placeholder").disabled = false;
+            document.getElementById("send").disabled = false;
+            this.listenToUsersBlockedFrom();
+          } else {
+            this.setPlaceholderInputBar("To send a message, click on a username");
+            document.getElementById("placeholder").disabled = true;
+            document.getElementById("send").disabled = true;
+          }
+          this.listenToUnseenUsersDM();
         }
-        this.listenToUnseenUsersDM();
       }
     });
   }
@@ -204,24 +215,35 @@ class Chat extends Component {
 
   render() {
       return (
-      <div className="App">
+      <div className="main-body">
+
         <TopBar userData={this.userData} />
 
-
+        <div className="inner-body">
+        <div className="body" style={{minWidth:"300px"}}>
         <ul id="userlist">
         
         </ul>
+        </div>
 
+        <div className="body" style={{width:"800px", height:"600px"}}>
         <Messages
           messages={this.state.messages}
           currentMember={this.state.member}
         />
         <Input onSendMessage={this.onSendMessage} />
+        </div>
+        </div>
+
+        
       </div>
     );
   }
 
   setPlaceholderInputBar(text) {
+    if (document.getElementById("messageslist") == undefined || document.getElementById("messageslist") == null) {
+      return;
+    }
     document.getElementById("placeholder").placeholder = text;
   }
 
@@ -400,6 +422,10 @@ class Chat extends Component {
   }
 
   onSendMessage = message => {
+
+    if (message == "") {
+      return;
+    }
 
     firebase.database().ref().once('value', (snapshot)  => {
       var retrievedUnseenDMUsers = snapshot.child("users").child(this.otherUID).child("unseenUsersDM").val();     
