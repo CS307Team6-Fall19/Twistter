@@ -8,6 +8,7 @@ import { withRouter } from "react-router";
 import helperfunctions from "../helperfunctions";
 import { timeout } from "q";
 import TopBar from "../TopBar";
+import { minHeight } from "@material-ui/system";
 
 
 // Current Issues ----
@@ -204,19 +205,27 @@ class Chat extends Component {
 
   render() {
       return (
-      <div className="App">
+      <div className="main-body">
+
         <TopBar userData={this.userData} />
 
-
+        <div className="inner-body">
+        <div className="body" style={{minWidth:"300px"}}>
         <ul id="userlist">
         
         </ul>
+        </div>
 
+        <div className="body" style={{width:"800px", height:"600px"}}>
         <Messages
           messages={this.state.messages}
           currentMember={this.state.member}
         />
         <Input onSendMessage={this.onSendMessage} />
+        </div>
+        </div>
+
+        
       </div>
     );
   }
