@@ -8,6 +8,8 @@ import ProfilePicture from "../ProfilePicture";
 import firebase from "firebase";
 import { resolve } from "q";
 import CheckboxContainer from "./checkBox.jsx";
+import PageNotFound from "../PageNotFound.js";
+import helperfunctions from "../helperfunctions";
 
 class ProfilePage extends React.Component {
   constructor(props) {
@@ -20,11 +22,22 @@ class ProfilePage extends React.Component {
       //checkedItems: new Map(),
       loaded: false,
     };
+
+    this.doesNotExist = false;
     //this.handleChange = this.handleChange.bind(this);
   }
 
   async componentDidMount() {
+    this.doesNotExist = false;
     await this.setUsername();
+    var allUsers = await helperfunctions.getAllOtherUsers();
+    if(this.username !== undefined)
+    {
+      if(!allUsers.includes(this.username))
+      {
+      this.doesNotExist = true;
+      }
+    }
     this.setState({ loaded: true });
   }
 
@@ -87,14 +100,24 @@ class ProfilePage extends React.Component {
 
   render() {
     if (this.state.loaded) {
-      return (
-        <div>
-          <TopBar />
+      if(this.doesNotExist === false)
+      {
+        return (
+          <div>
+            <TopBar />
 
-          <ProfilePageView userData={this.userData} />
-          <CheckboxContainer username={this.username} />
-        </div>
-      );
+            <ProfilePageView userData={this.userData} />
+            <CheckboxContainer username={this.username} />
+          </div>
+        ) ;
+      }
+      else
+      {
+        return (
+          <PageNotFound/>
+        );
+      }
+      
     } else {
       return null;
     }
