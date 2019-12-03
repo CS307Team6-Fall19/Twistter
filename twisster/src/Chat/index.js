@@ -423,6 +423,10 @@ class Chat extends Component {
 
   onSendMessage = message => {
 
+    if (message == "") {
+      return;
+    }
+
     firebase.database().ref().once('value', (snapshot)  => {
       var retrievedUnseenDMUsers = snapshot.child("users").child(this.otherUID).child("unseenUsersDM").val();     
       if (retrievedUnseenDMUsers != undefined || retrievedUnseenDMUsers != null) {
