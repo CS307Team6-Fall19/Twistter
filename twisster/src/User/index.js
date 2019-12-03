@@ -33,6 +33,7 @@ class User extends React.Component{
 
         this.editProfile = this.editProfile.bind(this);
         this.deleteAccount = this.deleteAccount.bind(this);
+        this.logout = this.logout.bind(this);
         this.saveChanges = this.saveChanges.bind(this);
         this.followOrUnfollowUser = this.followOrUnfollowUser.bind(this);
         this.directMessageUser = this.directMessageUser.bind(this);
@@ -95,6 +96,22 @@ class User extends React.Component{
     this.loggedIn = false;
     this.props.history.push({
         pathname: "/DeleteAccount"
+    });
+  }
+
+  logout() {
+    firebase
+    .auth()
+    .signOut()
+    .then(function() {
+      console.log("Signout succesful");
+    })
+    .catch(function(error) {
+      console.log("Error");
+    });
+
+    this.props.history.push({
+        pathname: "/login"
     });
   }
   
@@ -312,6 +329,9 @@ class User extends React.Component{
         this.microblogs = await helperfunctions.getMicroblogsForUser(this.username);
         userProfile.microblogs = this.microblogs;
 
+        var loggedInUser = firebase.auth().currentUser;
+        this.userData = await helperfunctions.getUserdataOfUser(loggedInUser.uid, true);
+
         resolve("done");
 
     }
@@ -321,7 +341,7 @@ class User extends React.Component{
 
             if(this.loggedIn){
                 if (this.loggedInViewingOwnProfile) {
-                    return this.renderLoggedInUser(this.userProfile, this.deleteAccount, this.submitRestrictDM);
+                    return this.renderLoggedInUser(this.userProfile, this.deleteAccount, this.submitRestrictDM, this.logout);
                 } else {
 
                     return this.renderVisitedUser(this.userProfile);
@@ -337,13 +357,17 @@ class User extends React.Component{
         
     }
 
-    renderLoggedInUser(userProfile, deleteAccount, submitRestrictDM){
+    renderLoggedInUser(userProfile, deleteAccount, submitRestrictDM, logout){
 
         if(this.editMode){
             return(
                 <div>
                     <LoggedInUserEditView userProfile={userProfile} deleteAccount={deleteAccount} submitRestrictDM={submitRestrictDM}/>
-                    <Microblogs microblogs={userProfile.microblogs} username={userProfile.username} />
+                    <Microblogs 
+                        microblogs={userProfile.microblogs} 
+                        username={userProfile.username} 
+                        loggedInUser={this.userData.username}
+                    />
                     
                 </div>
             );
@@ -363,9 +387,12 @@ class User extends React.Component{
             return (
                 <div>
                     <ProfilePicture strangername={this.username} visiting={false}/>
-                    <LoggedInUserView userProfile={userProfile} deleteAccount={deleteAccount} submitRestrictDM={submitRestrictDM}/>
-                    <Microblogs microblogs={userProfile.microblogs} username={userProfile.username} />
-                    
+                    <LoggedInUserView userProfile={userProfile} deleteAccount={deleteAccount} submitRestrictDM={submitRestrictDM} logout={logout}/>
+                    <Microblogs 
+                        microblogs={userProfile.microblogs} 
+                        username={userProfile.username} 
+                        loggedInUser={this.userData.username}
+                    />                    
                 </div>
             );
             }
@@ -378,8 +405,11 @@ class User extends React.Component{
             <div>
                 <ProfilePicture strangername={this.username} visiting={true}/>
                 <VisitedUserView userProfile={userProfile}/>
-                <Microblogs microblogs={userProfile.microblogs} username={userProfile.username} />
-               
+                <Microblogs 
+                        microblogs={userProfile.microblogs} 
+                        username={userProfile.username} 
+                        loggedInUser={this.userData.username}
+                    />               
             </div>
         );
     }

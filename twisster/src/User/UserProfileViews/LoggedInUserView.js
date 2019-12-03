@@ -1,6 +1,8 @@
 import React from "react";
+import IconButton from '@material-ui/core/IconButton';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 
-const LoggedInUserView = ({ userProfile, deleteAccount, submitRestrictDM})=> {  
+const LoggedInUserView = ({ userProfile, deleteAccount, submitRestrictDM, logout})=> {  
   
     return(
         <div>
@@ -10,6 +12,8 @@ const LoggedInUserView = ({ userProfile, deleteAccount, submitRestrictDM})=> {
           <button onClick={userProfile.editProfile}>Edit</button>
           <br></br>
           <button type='button' style={{marginLeft: "365px"}} onClick={deleteAccount}>Delete account</button>
+          <IconButton><ExitToAppIcon fontSize="large" onClick={logout}></ExitToAppIcon></IconButton>
+          
           </form>
 
           <div>

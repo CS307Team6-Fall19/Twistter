@@ -6,10 +6,7 @@ import TopBarLoginSignup from "../TopBarLoginSignup";
 import LogInView from "./LogInView";
 import firebase from "firebase";
 
-import { ToastContainer, toast } from "react-toastify";
-
-import "react-toastify/dist/ReactToastify.css";
-
+import { toast } from 'react-toastify';
 // goLogIn = async event => {
 
 //   this.props.history.push({
@@ -26,6 +23,7 @@ class LogInContainer extends Component {
   }
 
   handleLogIn = async event => {
+
     event.preventDefault();
     const { email, password } = event.target.elements;
     try {
@@ -65,6 +63,10 @@ class LogInContainer extends Component {
         .auth()
         .signInWithEmailAndPassword(username_or_email, password.value);
 
+        if(!this.user){
+          toast("Error")
+        }
+
       if (!this.user.user.emailVerified) {
         toast("email is not verified! resending verification link...");
         firebase
@@ -75,6 +77,7 @@ class LogInContainer extends Component {
           })
           .then(function() {
             console.log("sent verification email");
+            toast("sent verification email");
           })
           .catch(function(error) {
             toast(error);
@@ -86,7 +89,8 @@ class LogInContainer extends Component {
         pathname: "/landing"
       });
     } catch (error) {
-      toast(error);
+      toast(error.message);
+      
     }
   };
 
@@ -99,12 +103,7 @@ class LogInContainer extends Component {
   render() {
     return (
       <div>
-        <ToastContainer
-          color="danger"
-          enableMultiContainer
-          containerId={"B"}
-          position={toast.POSITION.TOP_RIGHT}
-        />
+        
 
         {/* <TopBarLoginSignup /> */}
         <LogInView onSubmit={this.handleLogIn} onClick={this.goSignUp} />
