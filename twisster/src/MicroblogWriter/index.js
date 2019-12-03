@@ -4,6 +4,7 @@ import helperfunctions from "../helperfunctions";
 
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import firebase from "firebase";
 
 class MicroblogWriter extends React.Component {
   constructor(props) {
@@ -27,6 +28,7 @@ class MicroblogWriter extends React.Component {
 
     this.submitMicroblog = this.submitMicroblog.bind(this);
     this.addTopic = this.addTopic.bind(this);
+    this.fetchImage = this.fetchImage.bind(this);
 
     this.topics = [];
     this.numTopics = 0;
@@ -92,6 +94,76 @@ class MicroblogWriter extends React.Component {
     document.getElementById(this.showTopicsId).value = "";
     document.getElementById(this.contentId).value = "";
   }
+
+
+  async fetchImage() {
+    var picname;
+    var picname2;
+    var strangeruid;
+    console.log("fetchImage running");
+
+    await firebase
+      .database()
+      .ref()
+      .once("value", snapshot => {
+        /*var userList = snapshot.child("users").val();
+            let user = userList[firebase.auth().currentUser.id];*/
+        console.log(this.microblogData.name);
+        picname2 = snapshot
+          .child("users")
+          .child(firebase.auth().currentUser.uid)
+          .child("picture")
+          .val();
+        //picname = user["picture"].val();
+        console.log("was here hello world");
+      });
+
+ 
+    console.log(picname2);
+    //console.log(this.blogid);
+    var toMatch = this.blogid;
+
+    if (true) {
+ 
+
+      await firebase
+        .storage()
+        .ref()
+        .child(picname2)
+        .getDownloadURL()
+        .then(function(url) {
+          var toReturn = url;
+          document.querySelectorAll("img").forEach(function(item) {
+            if (item.id == "img3") {
+              item.src = toReturn;
+            }
+          });
+          //return toReturn;
+        })
+        .catch(function(error) {
+          switch (error.code) {
+            case "storage/object-not-found":
+              console.log("object not found");
+              break;
+            case "storage/unauthorized":
+              console.log("unauthorized");
+              break;
+            case "storage/unknown":
+              console.log("unknown");
+              break;
+          }
+        });
+    } else {
+      return firebase.storage().ref(picname);
+    }
+
+    console.log("ends now");
+  }
+
+  componentDidMount() {
+    this.fetchImage();
+  }
+
 
   render() {
     let name = `${this.microblogData.name}`;
