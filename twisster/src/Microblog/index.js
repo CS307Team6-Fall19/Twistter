@@ -51,13 +51,16 @@ class Microblog extends React.Component {
   }
 
   async likeButtonClicked() {
+
     var username = await helperfunctions.retrieveUsername(
       firebase.auth().currentUser.uid
     );
+
     if (this.state.like) {
       this.microblogData.numLikes--;
       await helperfunctions.unlikeMicroblog(this.microblogData, username);
       this.setState({ like: false });
+
     } else {
       this.microblogData.numLikes++;
       await helperfunctions.likeMicroblog(this.microblogData, username);
@@ -194,6 +197,8 @@ class Microblog extends React.Component {
       likeText = "Like";
     }
 
+
+    let isLiked = this.state.like;
     let quoteButtonText = "Quote"
 
     let likeButtonText = likeText;
@@ -218,7 +223,7 @@ class Microblog extends React.Component {
           tweet={tweet}
   
           likeButtonClicked={likeButtonClicked}
-          likeButtonText={this.state.like}
+          isLiked={isLiked}
           numLikes={numLikes}
   
           quoteButtonText={quoteButtonText}
@@ -243,7 +248,7 @@ class Microblog extends React.Component {
                       tweet={tweet}
               
                       likeButtonClicked={likeButtonClicked}
-                      likeButtonText={this.state.like}
+                      isLiked={isLiked}                      
                       numLikes={numLikes}
               
                       quoteButtonText={quoteButtonText}

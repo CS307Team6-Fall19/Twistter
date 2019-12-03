@@ -80,7 +80,7 @@ const MicroblogView = props => {
               <br></br>
               <IconButton aria-label="cart" onClick={props.likeButtonClicked}>
                 <StyledBadge1 badgeContent={props.numLikes} color="primary">
-                  {GetIcon(props.likeButtonText)}
+                  {GetIcon(props.isLiked)}
                 </StyledBadge1>
               </IconButton>
 
