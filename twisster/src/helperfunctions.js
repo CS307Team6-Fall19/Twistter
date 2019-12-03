@@ -92,6 +92,22 @@ const helperfunctions =
       return usernames;
     },
 
+    getAllOtherUsers: async function()
+    {
+      var usernames = [];
+      await firebase.database().ref().once('value', (snapshot) => {
+        var mapUIDtoUsername = snapshot.child("mapUIDtoUsername").val();
+        snapshot.child("users").forEach(function(childSnapshot)
+        {
+          var currUsername = mapUIDtoUsername[childSnapshot.key];
+          usernames.push(currUsername);
+        });
+      });
+
+      resolve("done");
+      return usernames;
+    },
+
     //Description: Add a user to follow to the current user's list of followers
     //@Params
     //usernameFollow: username of the individual you want to follow

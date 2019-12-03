@@ -4,13 +4,20 @@ import TopBarLoginSignup from "./TopBarLoginSignup"
 
 
 class PageNotFound extends Component {
-
-  goLogIn = event => {
     
+  constructor(props)
+  {
+    super(props);
+    this.goLogIn = this.goLogIn.bind(this);
+  }
+
+  async goLogIn()
+  {
     this.props.history.push({
       pathname: "/login"
     });
-  };
+  }
+    
 
   render() {
     return (
@@ -26,4 +33,4 @@ class PageNotFound extends Component {
   
 }
 
-export default PageNotFound;
+export default withRouter(PageNotFound);

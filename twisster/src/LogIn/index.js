@@ -72,7 +72,7 @@ class LogInContainer extends Component {
         firebase
           .auth()
           .currentUser.sendEmailVerification({
-            url: "http://localhost:3000/login",
+            url: "https://twistter.firebaseapp.com/login",
             handleCodeInApp: true
           })
           .then(function() {
