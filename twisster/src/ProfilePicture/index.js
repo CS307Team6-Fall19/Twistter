@@ -6,6 +6,7 @@ import {withRouter } from "react-router"
 
 import firebase from 'firebase'
 import VisitedUserView from '../User/UserProfileViews/VisitedUserView'
+import { toast } from 'react-toastify'
 
 
 class ProfilePicture extends Component {

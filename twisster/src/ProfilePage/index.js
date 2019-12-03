@@ -28,6 +28,14 @@ class ProfilePage extends React.Component {
     this.setState({ loaded: true });
   }
 
+  async componentDidUpdate(prevProps) {
+    if (this.props.location.pathname !== prevProps.location.pathname) {
+      console.log('Route change!');
+      this.setState({ loaded: false });
+      this.setState({ loaded: true });
+    }
+  }
+
   async setUsername() {
     await firebase
       .database()

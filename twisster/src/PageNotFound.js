@@ -5,7 +5,7 @@ import TopBarLoginSignup from "./TopBarLoginSignup"
 
 class PageNotFound extends Component {
 
-  goLogIn = async event => {
+  goLogIn = event => {
     
     this.props.history.push({
       pathname: "/login"
