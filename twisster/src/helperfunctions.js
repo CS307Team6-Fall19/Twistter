@@ -942,7 +942,7 @@ const helperfunctions =
       });
 
       if(profilePic.localeCompare("default.jpg") != 0) {
-        firebase.storage().child(profilePic).remove();
+        firebase.storage().ref().child(profilePic).delete();
       }
       firebase.auth().currentUser.delete();
       firebase.database().ref().child("users").child(firebase.auth().currentUser.uid).remove();

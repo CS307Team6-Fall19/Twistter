@@ -387,7 +387,7 @@ class User extends React.Component{
                 return(
                     <div>
                         <ProfilePicture strangername={this.username} visiting={false}/>
-                        <LoggedInUserView userProfile={userProfile} deleteAccount={deleteAccount} submitRestrictDM={submitRestrictDM}/>
+                        <LoggedInUserView userProfile={userProfile} deleteAccount={deleteAccount} submitRestrictDM={submitRestrictDM} logout={logout}/>
                     </div>
                 );
             }
