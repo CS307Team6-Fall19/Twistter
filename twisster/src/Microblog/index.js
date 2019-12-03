@@ -4,7 +4,7 @@ import Topics from "../Topics";
 import MicroblogBox from "../MicroblogBox/index.js";
 import helperfunctions from "../helperfunctions";
 import firebase from "firebase";
-import { nullLiteral } from "@babel/types";
+import { nullLiteral, isReferenced } from "@babel/types";
 
 import QuotingMicroblogBox from "../QuotingMicroblogBox"
 import { toast } from 'react-toastify';
@@ -52,6 +52,11 @@ class Microblog extends React.Component {
 
   async likeButtonClicked() {
 
+    if(firebase.auth().currentUser == null)
+    {
+      toast("Cannot like post");
+      return;
+    }
     var username = await helperfunctions.retrieveUsername(
       firebase.auth().currentUser.uid
     );
@@ -90,11 +95,14 @@ class Microblog extends React.Component {
           .child(strangeruid)
           .child("picture")
           .val();
-        picname2 = snapshot
-          .child("users")
-          .child(firebase.auth().currentUser.uid)
-          .child("picture")
-          .val();
+          if(firebase.auth().currentUser != null)
+          {
+            picname2 = snapshot
+            .child("users")
+            .child(firebase.auth().currentUser.uid)
+            .child("picture")
+            .val();
+          }
         //picname = user["picture"].val();
         console.log("was here hello world");
       });
@@ -171,9 +179,19 @@ class Microblog extends React.Component {
   }
 
   async quoteButtonClicked(){
-    toast("Quote!");
+    
+
+    if(firebase.auth().currentUser == null)
+    {
+      toast("Cannot Quote");
+      return;
+    }
+
+    toast("Quote");
 
     this.loggedInUser = await helperfunctions.retrieveUsername(firebase.auth().currentUser.uid);
+
+    
 
     if(this.state.quote){
         this.setState({quote : false});

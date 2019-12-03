@@ -83,18 +83,25 @@ class TopBar extends React.Component {
   }
 
   render() {
-    return (
-      <div className="top-bar">
-        <TopBarTwisster
-          getAllUsernames={this.getAllUsernames()}
-          getCurrentUsername={this.getCurrentUsername()}
-          goLogout={this.goLogout}
-          goToProfile={this.goToProfile}
-          goToChat={this.goToChat}
-          goToLanding={this.goToLanding}
-        />
-      </div>
-    );
+    if(firebase.auth().currentUser !== null)
+    {
+      return (
+        <div className="top-bar">
+          <TopBarTwisster
+            getAllUsernames={this.getAllUsernames()}
+            getCurrentUsername={this.getCurrentUsername()}
+            goLogout={this.goLogout}
+            goToProfile={this.goToProfile}
+            goToChat={this.goToChat}
+            goToLanding={this.goToLanding}
+          />
+        </div>
+      );
+    }
+    else
+    {
+      return null;
+    }
   }
 }
 export default withRouter(TopBar);

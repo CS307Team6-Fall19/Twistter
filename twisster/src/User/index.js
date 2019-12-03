@@ -215,12 +215,6 @@ class User extends React.Component{
 
     async componentDidMount() {
 
-        if(!this.loggedIn){
-            document.getElementById('followbutton').disabled = true;
-            document.getElementById('logout').disabled = true;
-            document.getElementById('profile').disabled = true;
-        }
-
         this.userProfile = new Object();
         this.userProfile.saveChanges = this.saveChanges;
         this.userProfile.editProfile = this.editProfile;
@@ -229,6 +223,13 @@ class User extends React.Component{
         this.userProfile.blockUser = this.blockUser;
         await this.downloadUserProfile(this.userProfile);
         this.setState({loaded : true});
+
+        if(!this.loggedIn){
+            document.getElementById('followbutton').disabled = true;
+            document.getElementById('directmessagebutton').disabled = true;
+            document.getElementById('blockbutton').disabled = true;
+            return;
+        }
 
         if(this.loggedInViewingOwnProfile === true)
         {
@@ -330,7 +331,14 @@ class User extends React.Component{
         userProfile.microblogs = this.microblogs;
 
         var loggedInUser = firebase.auth().currentUser;
-        this.userData = await helperfunctions.getUserdataOfUser(loggedInUser.uid, true);
+        if(loggedInUser !== null)
+        {
+            this.userData = await helperfunctions.getUserdataOfUser(loggedInUser.uid, true);
+        }
+        else
+        {
+            this.userData = await helperfunctions.getUserdataOfUserDiff(this.username, true);
+        }
 
         resolve("done");
 
@@ -352,7 +360,7 @@ class User extends React.Component{
             }
 
         } else{
-            return this.renderVisitedUser(this.userProfile);
+            return null;
         }
         
     }
@@ -400,9 +408,20 @@ class User extends React.Component{
     }
 
     renderVisitedUser(userProfile){
-
-        return(
-            <div>
+        if(userProfile === undefined)
+        {
+            return(
+                <div>
+                <ProfilePicture strangername={this.username} visiting={true}/>
+                <VisitedUserView userProfile={userProfile}/>     
+                </div>
+            );
+        }
+        else
+        {
+            console.log("Reached here 2");
+            return (
+                <div>
                 <ProfilePicture strangername={this.username} visiting={true}/>
                 <VisitedUserView userProfile={userProfile}/>
                 <Microblogs 
@@ -410,8 +429,9 @@ class User extends React.Component{
                         username={userProfile.username} 
                         loggedInUser={this.userData.username}
                     />               
-            </div>
-        );
+                </div>
+            );
+        }
     }
 
     

@@ -809,9 +809,13 @@ const helperfunctions =
     {
       var result;
       await firebase.database().ref().once('value', (snapshot) => {
-        var currUserUID = firebase.auth().currentUser.uid;
-        var mapUIDToUsername = snapshot.child("mapUIDtoUsername").val();
-        var currUserName = mapUIDToUsername[firebase.auth().currentUser.uid];
+        var currUserUID = "";
+        if(firebase.auth().currentUser != null)
+        {
+          currUserUID = firebase.auth().currentUser.uid;
+          var mapUIDToUsername = snapshot.child("mapUIDtoUsername").val();
+          var currUserName = mapUIDToUsername[firebase.auth().currentUser.uid];
+        }
         var followedUserName = username;
         var mapUsernameToUID = snapshot.child("mapUsernameToUID").val();
         var followedUserUID = mapUsernameToUID[followedUserName];
@@ -829,41 +833,43 @@ const helperfunctions =
           }
         }
         console.log("WRITTEN TOPICS", tList);
-        var followedTopics = snapshot.child("users").child(currUserUID).child("following").child(followedUserName).val();
         var followedTopicsList = [];
-        if(followedTopics != null && followedTopics.length !== 0)
-        {
-          for(var index = 0; index < followedTopics.length; index++)
-          {
-            if(followedTopics[index] !== "None")
-            {
-              followedTopicsList.push(followedTopics[index]);
-            }
-          }
-        }
         var unfollowedTopics = [];
-        if(tList != null && tList.length !== 0 && followedTopicsList != null && followedTopicsList.length !== 0)
+        if(currUserUID !== "")
         {
-          for(var i = 0; i < tList.length; i++)
+          var followedTopics = snapshot.child("users").child(currUserUID).child("following").child(followedUserName).val();
+          if(followedTopics != null && followedTopics.length !== 0)
           {
-            if(followedTopicsList.includes(tList[i]) === false)
+            for(var index = 0; index < followedTopics.length; index++)
             {
-              if(tList[i] !== undefined)
+              if(followedTopics[index] !== "None")
               {
-                unfollowedTopics.push(tList[i]);
+                followedTopicsList.push(followedTopics[index]);
               }
             }
           }
-        }
-        else
-        {
-          for(var i = 0; i < tList.length; i++)
+          if(tList != null && tList.length !== 0 && followedTopicsList != null && followedTopicsList.length !== 0)
           {
-            unfollowedTopics.push(tList[i]);
+            for(var i = 0; i < tList.length; i++)
+            {
+              if(followedTopicsList.includes(tList[i]) === false)
+              {
+                if(tList[i] !== undefined)
+                {
+                  unfollowedTopics.push(tList[i]);
+                }
+              }
+            }
           }
-          followedTopicsList = [];
+          else
+          {
+            for(var i = 0; i < tList.length; i++)
+            {
+              unfollowedTopics.push(tList[i]);
+            }
+            followedTopicsList = [];
+          }
         }
-
         console.log("FOLLOWED TOPICS", followedTopicsList);
         console.log("UNFOLLOWED TOPICS", unfollowedTopics);
 
@@ -1103,7 +1109,21 @@ const helperfunctions =
 
         resolve("done");
         return userData;
+      },
+
+      getUserdataOfUserDiff : async function(username, loggedIn) {
+        var userData;
+
+        
+        await firebase.database().ref().once('value', (snapshot) => {
+          userData = new UserData(username, loggedIn, true);
+          //this.email = user.email;
+        });
+
+        resolve("done");
+        return userData;
       }
+
 
 
 
